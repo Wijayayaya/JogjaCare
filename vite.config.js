@@ -12,7 +12,6 @@ export default defineConfig({
                 'resources/sass/app-backend.scss',
                 'resources/js/app-backend.js',
             ],
-            // refresh: true,
             refresh: [
                 'app/View/Components/**',
                 'lang/**',
@@ -29,5 +28,13 @@ export default defineConfig({
         alias: {
             '~coreui': path.resolve(__dirname, 'node_modules/@coreui/coreui'),
         }
+    },
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: 'localhost',
+        },
     },
 });

@@ -571,6 +571,44 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
+    /* Hide Tawk.to elements */
+iframe[title*="chat"] {
+    bottom: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    z-index: -999 !important;
+    position: fixed !important;
+}
+
+/* Only show the iframe when chat is active */
+iframe[title*="chat"].chat-active {
+    height: 600px !important;
+    width: 360px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10000 !important;
+    right: 20px !important;
+}
+
+/* Hide all tawk elements that could appear as bubbles */
+.tawk-min-container,
+[data-testid="tawkCard"],
+button[data-text="Open chat widget"],
+div[id*="tawk-bubble"],
+div[class*="tawk-bubble"],
+div[style*="tawk-min-container"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    z-index: -9999 !important;
+    pointer-events: none !important;
+}
+
 </style>
 
 <!-- HTML Structure -->
@@ -641,9 +679,24 @@
         </div>
     </div>
 </div>
+<div id="tawk-container"></div>
+
+<!-- Tawk.to initialization -->
+<script type="text/javascript">
+// Initialize Tawk variables but don't load script yet
+var Tawk_API = Tawk_API || {};
+var Tawk_LoadStart = new Date();
+
+// We'll load it on demand when the user selects live chat
+document.addEventListener('DOMContentLoaded', function() {
+    // Add debug console log
+    console.log('Chat widget DOM loaded');
+});
+</script>
 
 <!-- Load all required JavaScript files -->
 <script src="js/chat-bot.js"></script>
 <script src="js/chat-cs.js"></script>
 <script src="js/chat-ai.js"></script>
+<script src="js/chat-tawk.js"></script>
 <script src="js/chat-main.js"></script>

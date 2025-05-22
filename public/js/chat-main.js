@@ -75,6 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="welcome-option-icon">🧠</div>
                         <div>AI Assistant</div>
                     </div>
+                    <div class="welcome-option" id="welcomeLiveChat">
+                        <div class="welcome-option-icon">💬</div>
+                        <div>Live Chat</div>
+                    </div>
                 </div>
             </div>
         `;
@@ -119,6 +123,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
+        // Add Live Chat option
+        document.getElementById('welcomeLiveChat').addEventListener('click', function() {
+            initializeTawkChat();
+            currentChatMode = 'tawk';
+            
+            // Update header
+            document.getElementById('chatHeader').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> &nbsp;Live Chat <div class="chat-close" id="chatClose">×</div>';
+            
+            // Rebind close button
+            document.getElementById('chatClose').addEventListener('click', function() {
+                chatWindow.style.display = 'none';
+                
+                // Hide Tawk.to widget if it's visible
+                if (window.Tawk_API) {
+                    Tawk_API.hideWidget();
+                }
+            });
+        });
+        
         // Rebind close button
         document.getElementById('chatClose').addEventListener('click', function() {
             chatWindow.style.display = 'none';
@@ -131,6 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close button for chat window
     chatClose.addEventListener('click', function() {
         chatWindow.style.display = 'none';
+        
+        // Hide Tawk.to widget if it's visible
+        if (window.Tawk_API && currentChatMode === 'tawk') {
+            Tawk_API.hideWidget();
+        }
     });
     
     // Open FAQ Bot
@@ -188,6 +216,41 @@ document.addEventListener('DOMContentLoaded', function() {
         chatOptions.style.display = 'none';
     });
     
+    // Add new Live Chat Option 
+    // Create the new option in the chat bubble options menu
+    const chatOptionsDiv = document.getElementById('chatOptions');
+    const liveChatOption = document.createElement('div');
+    liveChatOption.className = 'chat-option';
+    liveChatOption.id = 'openLiveChat';
+    liveChatOption.innerHTML = `
+        <div class="chat-option-icon">💬</div>
+        <div>Live Chat</div>
+    `;
+    chatOptionsDiv.appendChild(liveChatOption);
+    
+    // Add event listener for the new Live Chat option
+    document.getElementById('openLiveChat').addEventListener('click', function() {
+        initializeTawkChat();
+        currentChatMode = 'tawk';
+        
+        // Update header
+        document.getElementById('chatHeader').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> &nbsp;Live Chat <div class="chat-close" id="chatClose">×</div>';
+        
+        // Rebind close button
+        document.getElementById('chatClose').addEventListener('click', function() {
+            chatWindow.style.display = 'none';
+            
+            // Hide Tawk.to widget if it's visible
+            if (window.Tawk_API) {
+                Tawk_API.hideWidget();
+            }
+        });
+        
+        // Show chat window and hide options
+        chatWindow.style.display = 'flex';
+        chatOptions.style.display = 'none';
+    });
+    
     // Handle send button click based on current mode
     document.getElementById('chatSend').addEventListener('click', function() {
         const chatInput = document.getElementById('chatInput');
@@ -204,6 +267,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'ai':
                 handleAiChatMessage(message);
+                break;
+            case 'tawk':
+                handleTawkChatMessage(message);
                 break;
         }
         
@@ -332,4 +398,24 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('chatInput').disabled = disabled;
         document.getElementById('chatSend').disabled = disabled;
     };
+});
+
+document.getElementById('welcomeLiveChat').addEventListener('click', function() {
+    console.log('Live Chat button clicked');
+    initializeTawkChat();
+    currentChatMode = 'tawk';
+    
+    // Update header
+    document.getElementById('chatHeader').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> &nbsp;Live Chat <div class="chat-close" id="chatClose">×</div>';
+    
+    // Rebind close button with proper Tawk.to handling
+    document.getElementById('chatClose').addEventListener('click', function() {
+        chatWindow.style.display = 'none';
+        
+        // Hide Tawk.to widget when closing chat
+        if (window.Tawk_API && typeof Tawk_API.hideWidget === 'function') {
+            console.log('Hiding Tawk widget');
+            Tawk_API.hideWidget();
+        }
+    });
 });
