@@ -33,7 +33,7 @@
                         <a href="{{ route('frontend.partner') }}">{{ __('Our Partnership') }}</a>
                     </div>
                 </x-frontend.nav-item-dropdown>
-                <x-frontend.nav-item-dropdown :active="request()->routeIs('frontend.medicalcares.index') || request()->routeIs('frontend.medicalpoints.index') || request()->routeIs('frontend.medicalcenters.index') || request()->routeIs('frontend.medicalcosts.index') || request()->routeIs('frontend.medicalalters.index')" title="{{ __('Services') }}">
+                <x-frontend.nav-item-dropdown :active="request()->routeIs('frontend.medicalcares.index') || request()->routeIs('frontend.medicalpoints.index') || request()->routeIs('frontend.medicalcenters.index') || request()->routeIs('frontend.medicalcosts.index') || request()->routeIs('frontend.medicalalters.index') || request()->routeIs('frontend.medicaleducation.index')" title="{{ __('Services') }}">
                     <div class="px-7 py-4 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         <a href="{{ route('frontend.medicalcares.index') }}">{{ __('Medical Cares') }}</a>
                     </div>
@@ -48,6 +48,9 @@
                     </div>
                     <div class="px-7 py-4 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         <a href="{{ route('frontend.medicalalters.index') }}">{{ __('Medical Alternative') }}</a>
+                    </div>
+                    <div class="px-7 py-4 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <a href="{{ route('frontend.medicaleducation.index') }}">{{ __('Medical Education') }}</a>
                     </div>
                 </x-frontend.nav-item-dropdown>
                 <x-frontend.nav-item :href="route('frontend.contact')" :active="request()->routeIs('frontend.contact')">

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aadc83f9b8b554a75712847c2d515bc6",
+    "content-hash": "9e9b75e7aa8d8bcb145743158e867754",
     "packages": [
         {
             "name": "abbasudo/laravel-purity",

@@ -409,7 +409,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 220px 15px;
+        padding: 250px 15px;
         text-align: center;
         height: 100%;
     }

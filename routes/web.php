@@ -7,26 +7,25 @@ use App\Livewire\Terms;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\Frontend\ChatAIController;
-
-
+use App\Http\Controllers\Frontend\MedicalEducationController;
+use App\Http\Controllers\Frontend\DeepSeekChatController;
+use App\Http\Controllers\Frontend\ContactController;
 
 /*
-*
-* Auth Routes
-*
-* --------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| Auth Routes
+|--------------------------------------------------------------------------
 */
 
 require __DIR__.'/auth.php';
 
 /*
-*
-* Frontend Routes
-*
-* --------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| Frontend Routes
+|--------------------------------------------------------------------------
 */
 
-// home route
+// Home route
 Route::get('home', [FrontendController::class, 'index'])->name('home');
 
 // Language Switch
@@ -39,7 +38,7 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::get('dashboard', 'App\Http\Controllers\Frontend\FrontendController@index')->name('dashboard');
 
-// pages
+// Pages
 Route::get('terms', Terms::class)->name('terms');
 Route::get('privacy', Privacy::class)->name('privacy');
 
@@ -48,10 +47,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend', 'as' => 'frontend.
 
     Route::group(['middleware' => ['auth']], function () {
         /*
-        *
-        *  Users Routes
-        *
-        * ---------------------------------------------------------------------
+        |--------------------------------------------------------------------------
+        | Users Routes
+        |--------------------------------------------------------------------------
         */
         $module_name = 'users';
         $controller_name = 'UserController';
@@ -66,10 +64,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend', 'as' => 'frontend.
 });
 
 /*
-*
-* Backend Routes
-* These routes need view-backend permission
-* --------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| Backend Routes
+| These routes need view-backend permission
+|--------------------------------------------------------------------------
 */
 Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin', 'as' => 'backend.', 'middleware' => ['auth', 'can:view_backend']], function () {
     /**
@@ -80,11 +78,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get('dashboard', 'BackendController@index')->name('dashboard');
 
     /*
-     *
-     *  Settings Routes
-     *
-     * ---------------------------------------------------------------------
-     */
+    |--------------------------------------------------------------------------
+    | Settings Routes
+    |--------------------------------------------------------------------------
+    */
     Route::group(['middleware' => ['can:edit_settings']], function () {
         $module_name = 'settings';
         $controller_name = 'SettingController';
@@ -93,10 +90,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     });
 
     /*
-    *
-    *  Notification Routes
-    *
-    * ---------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Notification Routes
+    |--------------------------------------------------------------------------
     */
     $module_name = 'notifications';
     $controller_name = 'NotificationsController';
@@ -106,10 +102,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get("{$module_name}/{id}", ['as' => "{$module_name}.show", 'uses' => "{$controller_name}@show"]);
 
     /*
-    *
-    *  Backup Routes
-    *
-    * ---------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Backup Routes
+    |--------------------------------------------------------------------------
     */
     $module_name = 'backups';
     $controller_name = 'BackupController';
@@ -119,20 +114,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get("{$module_name}/delete/{file_name}", ['as' => "{$module_name}.delete", 'uses' => "{$controller_name}@delete"]);
 
     /*
-    *
-    *  Roles Routes
-    *
-    * ---------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Roles Routes
+    |--------------------------------------------------------------------------
     */
     $module_name = 'roles';
     $controller_name = 'RolesController';
     Route::resource("{$module_name}", "{$controller_name}");
 
     /*
-    *
-    *  Users Routes
-    *
-    * ---------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Users Routes
+    |--------------------------------------------------------------------------
     */
     $module_name = 'users';
     $controller_name = 'UserController';
@@ -156,26 +149,20 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth',
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
-Route::get('/aboutus', [App\Http\Controllers\Frontend\FrontendController::class, 'aboutus'])->name('frontend.aboutus');
-Route::get('/contact', [App\Http\Controllers\Frontend\FrontendController::class, 'contact'])->name('frontend.contact');
-Route::post('/contact', [App\Http\Controllers\Frontend\ContactController::class, 'sendEmail'])->name('frontend.contact.send');
-Route::get('/partner', [App\Http\Controllers\Frontend\FrontendController::class, 'partner'])->name('frontend.partner');
+Route::get('/aboutus', [FrontendController::class, 'aboutus'])->name('frontend.aboutus');
+Route::get('/contact', [FrontendController::class, 'contact'])->name('frontend.contact');
+Route::post('/contact', [ContactController::class, 'sendEmail'])->name('frontend.contact.send');
+Route::get('/partner', [FrontendController::class, 'partner'])->name('frontend.partner');
 
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
+Route::get('/botman/tinker', [BotManController::class, 'tinker']);
 
 // ChatAI Routes
-Route::get('/chatai', [ChatAIController::class, 'index'])
-    ->name('frontend.chatai');
+Route::get('/chatai', [ChatAIController::class, 'index'])->name('frontend.chatai');
+Route::post('/chatai/message', [ChatAIController::class, 'processMessage'])->name('frontend.chatai.message');
+Route::post('/chatai/clear', [ChatAIController::class, 'clearHistory'])->name('frontend.chatai.clear');
 
-Route::post('/chatai/message', [ChatAIController::class, 'processMessage'])
-    ->name('frontend.chatai.message');
+Route::get('/deepseek-chat', [DeepSeekChatController::class, 'index'])->name('frontend.deepseek-chat');
 
-Route::post('/chatai/clear', [ChatAIController::class, 'clearHistory'])
-    ->name('frontend.chatai.clear');
+Route::get('/medical-education', [MedicalEducationController::class, 'index'])->name('frontend.medicaleducation.index');
 
-Route::get('/deepseek-chat', [App\Http\Controllers\Frontend\DeepSeekChatController::class, 'index'])
-    ->name('frontend.deepseek-chat');
-
-    
-    Route::match(['get', 'post'], '/botman', 'App\Http\Controllers\BotManController@handle');
-    Route::get('/botman/tinker', 'App\Http\Controllers\BotManController@tinker');
