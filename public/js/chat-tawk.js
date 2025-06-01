@@ -9,7 +9,7 @@ function initializeTawkChat() {
     chatBody.innerHTML = '';
     
     // Add welcome message
-    addMessage('bot', 'Welcome to Live Chat! Connecting you with our customer service representative...');
+    addMessage('bot', 'Selamat datang di Live Chat! Menghubungkan Anda dengan customer service kami...');
     
     // Show typing indicator while we load the chat
     showTypingIndicator();
@@ -27,7 +27,7 @@ function initializeTawkChat() {
     // Hide the typing indicator after a short delay and show instructions
     setTimeout(() => {
         hideTypingIndicator();
-        addMessage('bot', 'Live chat is connected. You can now chat with our customer service representatives.');
+        addMessage('bot', 'Live chat telah terhubung. Anda sekarang dapat chat dengan customer service kami.');
         
         // Enable the chat input
         setInputState(false);
@@ -62,7 +62,7 @@ function handleTawkChatMessage(message) {
         // We can't directly get responses from Tawk.to, so we'll show a generic message after a brief delay
         setTimeout(() => {
             hideTypingIndicator();
-            addMessage('bot', 'Message received. Our agent will respond shortly.');
+            addMessage('bot', 'Pesan diterima. Agent kami akan merespons segera.');
         }, 1000);
     } else {
         // If Tawk_API is not available, show an error and try to reload
@@ -70,7 +70,7 @@ function handleTawkChatMessage(message) {
         
         setTimeout(() => {
             hideTypingIndicator();
-            addMessage('bot', 'Our chat service is currently having trouble connecting. Please try again in a moment.');
+            addMessage('bot', 'Layanan chat kami sedang mengalami masalah koneksi. Silakan coba lagi dalam beberapa saat.');
             
             // Try loading Tawk.to again
             if (tawkAttempts < 3) {
@@ -176,7 +176,7 @@ function loadTawkTo() {
         
         // Track when chat ends
         Tawk_API.onChatEnded = function() {
-            addMessage('bot', 'The chat session has ended. Thank you for contacting us!');
+            addMessage('bot', 'Sesi chat telah berakhir. Terima kasih telah menghubungi kami!');
         };
         
         // Create and insert Tawk.to script
@@ -312,3 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 });
+
+// Make functions available globally
+window.initializeTawkChat = initializeTawkChat;
+window.handleTawkChatMessage = handleTawkChatMessage;

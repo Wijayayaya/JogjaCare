@@ -135,23 +135,23 @@
         color: white;
         font-size: 12px;
     }
+
     .dark .chat-options {
-    background-color: #2d2d2d;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-    color: #ddd;
-    border: 1px solid #444;
-}
+        background-color: #2d2d2d;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        color: #ddd;
+        border: 1px solid #444;
+    }
 
-.dark .chat-option {
-    color: #ddd;
-    border-bottom: 1px solid #444;
-}
+    .dark .chat-option {
+        color: #ddd;
+        border-bottom: 1px solid #444;
+    }
 
-.dark .chat-option:hover {
-    background-color: #44475a;
-    color: #fff;
-}
-
+    .dark .chat-option:hover {
+        background-color: #44475a;
+        color: #fff;
+    }
 
     /* Chat Window */
     .chat-window {
@@ -403,13 +403,18 @@
         animation-delay: 0.4s;
     }
 
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-10px); }
+    }
+
     /* Welcome Screen Styles */
     .welcome-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 250px 15px;
+        padding: 220px 20px;
         text-align: center;
         height: 100%;
     }
@@ -417,17 +422,17 @@
     .welcome-robot {
         margin-bottom: 20px;
         background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
-        width: 120px;
-        height: 120px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 8px 24px rgba(71, 118, 230, 0.3);
+        box-shadow:0 8px 24px rgba(71, 118, 230, 0.3);
     }
     
     .robot-icon-large {
-        transform: scale(1.5);
+        transform: scale(1.2);
     }
     
     .welcome-title {
@@ -481,26 +486,6 @@
         color: white;
         font-size: 16px;
     }
-    
-    /* Speech bubble animation for welcome screen */
-    .speech-bubble {
-        position: absolute;
-        top: -40px;
-        right: -20px;
-        background-color: #1E90FF;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 18px 18px 4px 18px;
-        font-weight: bold;
-        animation: bobbing 2s ease-in-out infinite;
-        box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
-        font-size: 16px;
-    }
-    
-    @keyframes bobbing {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
-    }
 
     /* Dark Mode */
     .dark .chat-window,
@@ -549,14 +534,14 @@
     }
 
     .dark .bot-message {
-    background-color: #9ca3af;
-    color: #1f2937;
+        background-color: #9ca3af;
+        color: #1f2937;
     }
 
     .dark .back-button {
-    background-color: #9ca3af;
-    color: #1f2937;
-    border: #1f2937;
+        background-color: #9ca3af;
+        color: #1f2937;
+        border: #1f2937;
     }
 
     .dark .welcome-option {
@@ -564,6 +549,7 @@
         color: #fff;
         border: 1px solid #4b5563;
     }
+    
     .dark .welcome-option:hover {
         background-color: #4b5563;
         border-color: #6b7280;
@@ -572,43 +558,42 @@
     }
 
     /* Hide Tawk.to elements */
-iframe[title*="chat"] {
-    bottom: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    z-index: -999 !important;
-    position: fixed !important;
-}
+    iframe[title*="chat"] {
+        bottom: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        z-index: -999 !important;
+        position: fixed !important;
+    }
 
-/* Only show the iframe when chat is active */
-iframe[title*="chat"].chat-active {
-    height: 600px !important;
-    width: 360px !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    z-index: 10000 !important;
-    right: 20px !important;
-}
+    /* Only show the iframe when chat is active */
+    iframe[title*="chat"].chat-active {
+        height: 600px !important;
+        width: 360px !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 10000 !important;
+        right: 20px !important;
+    }
 
-/* Hide all tawk elements that could appear as bubbles */
-.tawk-min-container,
-[data-testid="tawkCard"],
-button[data-text="Open chat widget"],
-div[id*="tawk-bubble"],
-div[class*="tawk-bubble"],
-div[style*="tawk-min-container"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    position: absolute !important;
-    z-index: -9999 !important;
-    pointer-events: none !important;
-}
-
+    /* Hide all tawk elements that could appear as bubbles */
+    .tawk-min-container,
+    [data-testid="tawkCard"],
+    button[data-text="Open chat widget"],
+    div[id*="tawk-bubble"],
+    div[class*="tawk-bubble"],
+    div[style*="tawk-min-container"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: absolute !important;
+        z-index: -9999 !important;
+        pointer-events: none !important;
+    }
 </style>
 
 <!-- HTML Structure -->
@@ -643,22 +628,6 @@ div[style*="tawk-min-container"] {
         </div>
     </div>
 
-    <!-- Chat Options Menu -->
-    <div class="chat-options" id="chatOptions">
-        <div class="chat-option" id="openFaqBot">
-            <div class="chat-option-icon">🤖</div>
-            <div>FAQ Bot</div>
-        </div>
-        <div class="chat-option" id="openCustomerService">
-            <div class="chat-option-icon">👨‍💼</div>
-            <div>Customer Service</div>
-        </div>
-        <div class="chat-option" id="openAiChat">
-            <div class="chat-option-icon">🧠</div>
-            <div>AI Assistant</div>
-        </div>
-    </div>
-
     <!-- Chat Window - will be populated by JS -->
     <div class="chat-window" id="chatWindow">
         <div class="chat-header" id="chatHeader">
@@ -669,7 +638,7 @@ div[style*="tawk-min-container"] {
             <!-- Messages will appear here -->
         </div>
         <div class="chat-footer" id="chatFooter">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Tulis pesan Anda...">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Tulis pesan Anda atau pilih kategori FAQ...">
             <button class="chat-send" id="chatSend">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -695,8 +664,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- Load all required JavaScript files -->
-<script src="js/chat-bot.js"></script>
-<script src="js/chat-cs.js"></script>
-<script src="js/chat-ai.js"></script>
+<script src="js/chat-faq-ai.js"></script>
 <script src="js/chat-tawk.js"></script>
 <script src="js/chat-main.js"></script>
+<script src="js/ambulance-service.js"></script>
+<script src="css/ambulance-styles.css"></script>

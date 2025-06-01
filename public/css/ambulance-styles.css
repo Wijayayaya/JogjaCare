@@ -1,0 +1,175 @@
+/* Additional CSS for Ambulance Service */
+.ambulance-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .ambulance-option {
+    padding: 14px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid #e4e7f2;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .ambulance-option:hover {
+    background-color: #f8f9fd;
+    border-color: #8e54e9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ambulance-option-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: white;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  
+  .hospital-ambulance-card,
+  .private-ambulance-card {
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px !important;
+  }
+  
+  .hospital-ambulance-card:hover,
+  .private-ambulance-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hospital-ambulance-card a,
+  .private-ambulance-card a {
+    transition: all 0.2s ease;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+  }
+  
+  .hospital-ambulance-card a:hover,
+  .private-ambulance-card a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Emergency styling with better visibility */
+  .emergency-highlight {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    margin: 12px 0;
+    animation: pulse-emergency 2s infinite;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+  }
+  
+  @keyframes pulse-emergency {
+    0% {
+      box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+  }
+  
+  /* Dark mode support for ambulance features */
+  .dark .ambulance-option {
+    background-color: #374151;
+    color: #fff;
+    border: 1px solid #4b5563;
+  }
+  
+  .dark .ambulance-option:hover {
+    background-color: #4b5563;
+    border-color: #6b7280;
+  }
+  
+  .dark .hospital-ambulance-card,
+  .dark .private-ambulance-card {
+    background-color: #374151 !important;
+    color: #fff;
+    border-color: #4b5563;
+  }
+  
+  /* Responsive design for mobile */
+  @media (max-width: 480px) {
+    .chat-window {
+      width: calc(100vw - 40px);
+      height: calc(100vh - 120px);
+      bottom: 20px;
+      right: 20px;
+    }
+  
+    .ambulance-option {
+      padding: 12px;
+    }
+  
+    .ambulance-option-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+    }
+  
+    .hospital-ambulance-card,
+    .private-ambulance-card {
+      padding: 10px;
+    }
+  
+    .hospital-ambulance-card a,
+    .private-ambulance-card a {
+      padding: 6px 8px !important;
+      font-size: 11px !important;
+    }
+  }
+  
+  /* Improve the back button styling */
+  .back-button {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 14px;
+    background-color: #f0f2fa;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    color: #5a5a5a;
+    font-weight: 500;
+  }
+  
+  .back-button:hover {
+    background-color: #e4e7f2;
+    color: #333;
+    transform: translateY(-1px);
+  }
+  
+  /* Make sure all clickable elements have proper pointer cursor */
+  .ambulance-option,
+  .back-button,
+  .hospital-ambulance-card a,
+  .private-ambulance-card a {
+    cursor: pointer !important;
+  }
+  

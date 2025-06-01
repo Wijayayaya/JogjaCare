@@ -32,7 +32,7 @@
                     Medical <span class="text-blue-200">Education</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Tingkatkan pengetahuan medis Anda dengan kuis interaktif dan artikel terkini dari para ahli kesehatan terpercaya
+                    Tingkatkan pengetahuan medis Anda dengan kuis interaktif, artikel terkini, dan sistem pakar deteksi penyakit
                 </p>
                 
                 <!-- CTA Buttons -->
@@ -45,6 +45,14 @@
                             Mulai Kuis
                         </span>
                     </button>
+                    <a href="{{ route('expert-system') }}" class="group bg-emerald-500 text-white px-10 py-4 rounded-xl font-semibold text-lg hover:bg-emerald-600 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                        <span class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                            Sistem Pakar
+                        </span>
+                    </a>
                     <button onclick="scrollToArticles()" class="group border-2 border-white text-white px-10 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">
                         <span class="flex items-center">
                             <svg class="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
@@ -76,6 +84,73 @@
                 <div id="articles-section">
                     @include('frontend.medicaleducation.articles-section')
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expert System Preview Section -->
+    <section class="py-20 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white relative overflow-hidden">
+        <!-- Background Animation -->
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-600/80 to-cyan-600/80"></div>
+            <div class="absolute top-0 left-0 w-full h-full">
+                <div class="animate-pulse absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full"></div>
+                <div class="animate-pulse absolute bottom-20 right-20 w-24 h-24 bg-white/5 rounded-full" style="animation-delay: 1s;"></div>
+                <div class="animate-pulse absolute top-1/2 left-1/3 w-16 h-16 bg-white/5 rounded-full" style="animation-delay: 2s;"></div>
+            </div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-8">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Sistem Pakar Deteksi Penyakit</h2>
+                <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
+                    Dapatkan analisis awal kondisi kesehatan berdasarkan gejala yang Anda alami dengan teknologi sistem pakar medis terpercaya
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Analisis Gejala</h3>
+                        <p class="text-emerald-100 text-sm">Pilih gejala yang dialami untuk mendapat analisis kondisi kesehatan</p>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Tingkat Kepercayaan</h3>
+                        <p class="text-emerald-100 text-sm">Sistem memberikan persentase kepercayaan untuk setiap diagnosis</p>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Rekomendasi</h3>
+                        <p class="text-emerald-100 text-sm">Dapatkan saran tindakan dan rekomendasi perawatan</p>
+                    </div>
+                </div>
+                
+                <a href="{{ route('expert-system') }}" class="inline-flex items-center bg-white text-emerald-600 px-12 py-5 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    Coba Sistem Pakar Sekarang
+                </a>
             </div>
         </div>
     </section>
@@ -124,9 +199,9 @@
                 </div>
                 <div class="text-center group">
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-                        <div class="text-5xl font-bold mb-2 text-pink-200 group-hover:text-white transition-colors">98%</div>
-                        <div class="text-lg text-blue-100 group-hover:text-white transition-colors">Kepuasan Pengguna</div>
-                        <div class="mt-4 w-12 h-1 bg-pink-300 rounded-full mx-auto group-hover:w-16 transition-all duration-300"></div>
+                        <div class="text-5xl font-bold mb-2 text-emerald-200 group-hover:text-white transition-colors">6</div>
+                        <div class="text-lg text-blue-100 group-hover:text-white transition-colors">Penyakit Terdeteksi</div>
+                        <div class="mt-4 w-12 h-1 bg-emerald-300 rounded-full mx-auto group-hover:w-16 transition-all duration-300"></div>
                     </div>
                 </div>
             </div>
@@ -148,7 +223,7 @@
                     Mulai Perjalanan Pembelajaran Medis Anda
                 </h2>
                 <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-                    Uji pengetahuan Anda dengan kuis komprehensif kami dan tetap update dengan penelitian medis dan wawasan terbaru dari para ahli.
+                    Uji pengetahuan dengan kuis, baca artikel terkini, dan gunakan sistem pakar untuk analisis gejala kesehatan.
                 </p>
                 
                 <!-- Enhanced CTA Buttons -->
@@ -161,6 +236,14 @@
                             Ambil Kuis Pertama Anda
                         </span>
                     </button>
+                    <a href="{{ route('expert-system') }}" class="group bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-12 py-5 rounded-xl font-bold text-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                        <span class="flex items-center">
+                            <svg class="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                            Coba Sistem Pakar
+                        </span>
+                    </a>
                     <button onclick="scrollToArticles()" class="group border-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 px-12 py-5 rounded-xl font-bold text-lg hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
                         <span class="flex items-center">
                             <svg class="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
@@ -168,7 +251,7 @@
                             </svg>
                             Jelajahi Artikel
                         </span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
