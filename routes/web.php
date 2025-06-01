@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\ChatAIController;
 use App\Http\Controllers\Frontend\MedicalEducationController;
 use App\Http\Controllers\Frontend\DeepSeekChatController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Auth\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -171,3 +172,7 @@ Route::get('/medical-education', [MedicalEducationController::class, 'index'])->
 Route::get('/expert-system', function () {
     return view('frontend.medicaleducation.expert-system');
 })->name('expert-system');
+
+// Add these routes for Google authentication
+Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);

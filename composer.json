@@ -25,7 +25,7 @@
         "laracasts/flash": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.1",
-        "laravel/socialite": "^5.12",
+        "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.4",
         "nasirkhan/module-manager": "^2.7",
