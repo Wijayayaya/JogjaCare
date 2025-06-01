@@ -79,39 +79,76 @@
         </div>
     </section>
 
+    <!-- Medical Education Section -->
     <section class="bg-white dark:bg-gray-800 text-gray-600 body-font">
         <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
             <div class="animate-description lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Costs')}}
+                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Education')}}
                 </h1>
-                <p class="mb-8 leading-relaxed dark:text-gray-400">{{__('Medical Costs Descriptions')}}</p>
+                <p class="mb-4 leading-relaxed dark:text-gray-400">Tingkatkan pengetahuan medis Anda dengan platform pembelajaran interaktif yang komprehensif.</p>
+                <div class="mb-6 space-y-2">
+                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Kuis interaktif dengan 150+ topik medis
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Sistem pakar deteksi penyakit dengan AI
+                    </div>
+                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Artikel medis terkini dari para ahli
+                    </div>
+                </div>
                 <div class="flex justify-center">
-                    <a class="inline-flex text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg" href="{{ route('frontend.medicalcosts.index') }}">{{__('Read more')}}</a>
+                    <a class="inline-flex text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg" href="{{ route('frontend.medicaleducation.index') }}">{{__('Read more')}}</a>
                 </div>
             </div>
             <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-            <img class="object-cover object-center rounded animate-smooth-bounce" alt="hero" src="{{ asset('img/asset/Medical-cost.png') }}">
-            </div>
+    <img class="object-cover object-center rounded animate-smooth-bounce" alt="Medical Education" src="{{ asset('img/asset/education.png') }}">
+</div>
         </div>
     </section>
 
     <section class="bg-blue-100 text-gray-600 body-font dark:bg-gray-700 dark:text-gray-400">
         <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
             <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
-            <img class="object-cover object-center rounded animate-smooth-bounce" alt="hero" src="{{ asset('img/asset/Medical-alter.png') }}">
+            <img class="object-cover object-center rounded animate-smooth-bounce" alt="hero" src="{{ asset('img/asset/Medical-cost.png') }}">
             </div>
             <div class="animate-description lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Alternative')}}
+                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Costs')}}
                 </h1>
-                <p class="mb-8 leading-relaxed">{{__('Medical Alternative Descriptions')}}</p>
+                <p class="mb-8 leading-relaxed">{{__('Medical Costs Descriptions')}}</p>
                 <div class="flex justify-center">
-                    <a class="inline-flex text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg" href="{{ route('frontend.medicalalters.index') }}">{{__('Read more')}}</a>
+                    <a class="inline-flex text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg" href="{{ route('frontend.medicalcosts.index') }}">{{__('Read more')}}</a>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="bg-white dark:bg-gray-800 text-gray-600 body-font">
+        <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+            <div class="animate-description lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Alternative')}}
+                </h1>
+                <p class="mb-8 leading-relaxed dark:text-gray-400">{{__('Medical Alternative Descriptions')}}</p>
+                <div class="flex justify-center">
+                    <a class="inline-flex text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg" href="{{ route('frontend.medicalalters.index') }}">{{__('Read more')}}</a>
+                </div>
+            </div>
+            <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+            <img class="object-cover object-center rounded animate-smooth-bounce" alt="hero" src="{{ asset('img/asset/Medical-alter.png') }}">
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-blue-100 dark:bg-gray-700 text-gray-600 body-font">
         <div class="container px-5 py-24 mx-auto">
             <div class="flex flex-col text-center w-full mb-20">
             <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900 dark:text-white">{{__('Recommended Destinations')}}</h1>
@@ -185,6 +222,19 @@
 
     .destination-card:hover .destination-info {
         transform: translateY(0);
+    }
+
+    .animate-smooth-bounce {
+        animation: smoothBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes smoothBounce {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
     }
 </style>
 
