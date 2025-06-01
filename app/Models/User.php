@@ -112,6 +112,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'email',
         'password',
         'username',
+        'google_id',
+        'avatar',
         'last_login',
         'last_ip',
         'login_count',
