@@ -1,27 +1,11 @@
-{{-- resources/views/frontend/medicaleducation/expert-system.blade.php --}}
 @extends('frontend.layouts.app')
 
 @section('title')
-    {{ __('Sistem Pakar Deteksi Penyakit') }}
+    {{ __('Informasi Kesehatan & Edukasi Gejala') }}
 @endsection
 
 @push('after-styles')
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    animation: {
-                        'fade-in': 'fadeIn 0.6s ease-in-out',
-                        'slide-up': 'slideUp 0.8s ease-out',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-                        'bounce-in': 'bounceIn 0.5s ease-out'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -29,26 +13,25 @@
             font-family: 'Inter', sans-serif;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .disclaimer-box {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px solid #ef4444;
+            animation: pulse 2s infinite;
         }
         
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
         }
         
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
+        .info-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
         
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
         .symptom-card {
@@ -57,8 +40,8 @@
         }
         
         .symptom-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
         .symptom-card.selected {
@@ -67,179 +50,114 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
         }
-        
-        .progress-step {
-            transition: all 0.5s ease;
-        }
-        
-        .progress-step.active {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            transform: scale(1.1);
-        }
-        
-        .progress-step.completed {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-        }
-        
-        .disease-result {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-        
-        .disease-result:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
-        }
-        
-        .floating-icon {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
     </style>
 @endpush
 
 @section('content')
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 text-white py-24 overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
-                    </pattern>
-                </defs>
-                <rect width="100" height="100" fill="url(#grid)" />
-            </svg>
-        </div>
-        
+    <!-- Hero Section dengan Disclaimer Kuat -->
+    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white py-24 overflow-hidden">
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-5xl mx-auto text-center">
-                <!-- Medical Icon -->
-                <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+                <!-- Medical Education Icon -->
+                <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-8">
                     <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
                 </div>
                 
                 <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                    Sistem <span class="text-green-200">Pakar</span>
+                    Informasi <span class="text-blue-200">Kesehatan</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Deteksi dini penyakit berdasarkan gejala yang Anda alami dengan teknologi sistem pakar medis
+                    Platform edukasi kesehatan untuk memahami gejala dan kapan harus mencari bantuan medis profesional
                 </p>
                 
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                    <button onclick="startDiagnosis()" class="group bg-white text-green-600 px-10 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                        <span class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                            </svg>
-                            Mulai Diagnosis
-                        </span>
-                    </button>
-                    <a href="{{ url('/medical-education') }}" class="group border-2 border-white text-white px-10 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-green-600 transition-all duration-300 transform hover:scale-105">
-                        <span class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            Kembali ke Edukasi
-                        </span>
-                    </a>
+                <!-- Disclaimer Utama -->
+                <div class="disclaimer-box rounded-xl p-6 mb-8 text-left max-w-4xl mx-auto">
+                    <div class="flex items-start">
+                        <svg class="w-8 h-8 text-red-600 mt-1 mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <h3 class="font-bold text-red-800 text-xl mb-3">⚠️ PENTING - BUKAN PENGGANTI KONSULTASI MEDIS</h3>
+                            <div class="text-red-800 space-y-2">
+                                <p class="font-semibold">• Platform ini HANYA untuk edukasi kesehatan dan informasi umum</p>
+                                <p class="font-semibold">• TIDAK memberikan diagnosis medis atau saran pengobatan</p>
+                                <p class="font-semibold">• SELALU konsultasi dengan dokter untuk kondisi kesehatan Anda</p>
+                                <p class="font-semibold">• Jika mengalami gejala serius, segera cari bantuan medis darurat</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Floating Elements -->
-        <div class="absolute top-20 left-10 w-6 h-6 bg-green-400 rounded-full opacity-50 animate-bounce" style="animation-delay: 0s;"></div>
-        <div class="absolute top-40 right-20 w-4 h-4 bg-green-300 rounded-full opacity-40 animate-bounce" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-20 left-20 w-5 h-5 bg-green-200 rounded-full opacity-30 animate-bounce" style="animation-delay: 2s;"></div>
     </section>
 
     <div class="container mx-auto px-4 py-8 max-w-6xl">
         
-        <!-- Welcome Section -->
-        <div id="welcomeSection" class="animate-fade-in">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
-                <div class="flex items-start space-x-6 mb-6">
-                    <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex-shrink-0 flex items-center justify-center shadow-lg floating-icon">
-                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
+        <!-- Persetujuan Pengguna -->
+        <div id="consentSection" class="mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+                    Persetujuan Penggunaan Platform Edukasi Kesehatan
+                </h2>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex items-start">
+                        <input type="checkbox" id="consent1" class="mt-1 mr-3" required>
+                        <label for="consent1" class="text-gray-700 dark:text-gray-300">
+                            Saya memahami bahwa platform ini hanya untuk edukasi kesehatan dan BUKAN pengganti konsultasi medis profesional
+                        </label>
                     </div>
-                    <div class="flex-1">
-                        <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">
-                            Sistem Pakar Deteksi Penyakit
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
-                            Sistem pakar ini akan membantu Anda mengidentifikasi kemungkinan penyakit berdasarkan gejala yang Anda alami. 
-                            Sistem menggunakan basis pengetahuan medis untuk memberikan diagnosis awal.
-                        </p>
-                        
-                        <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
-                            <div class="flex items-start">
-                                <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                </svg>
-                                <div>
-                                    <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-1">Penting untuk Diingat</h4>
-                                    <p class="text-sm text-yellow-700 dark:text-yellow-400">
-                                        Hasil dari sistem ini hanya sebagai referensi awal dan tidak menggantikan konsultasi dengan dokter profesional. 
-                                        Selalu konsultasikan kondisi kesehatan Anda dengan tenaga medis yang qualified.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button onclick="startDiagnosis()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-105 animate-pulse-glow">
-                            🔍 Mulai Diagnosis
-                        </button>
+                    <div class="flex items-start">
+                        <input type="checkbox" id="consent2" class="mt-1 mr-3" required>
+                        <label for="consent2" class="text-gray-700 dark:text-gray-300">
+                            Saya akan tetap berkonsultasi dengan dokter untuk diagnosis dan pengobatan yang akurat
+                        </label>
+                    </div>
+                    <div class="flex items-start">
+                        <input type="checkbox" id="consent3" class="mt-1 mr-3" required>
+                        <label for="consent3" class="text-gray-700 dark:text-gray-300">
+                            Saya memahami bahwa informasi yang diberikan bersifat umum dan tidak spesifik untuk kondisi saya
+                        </label>
                     </div>
                 </div>
+                
+                <button onclick="proceedToHealthInfo()" id="proceedBtn" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Saya Setuju & Lanjutkan ke Informasi Kesehatan
+                </button>
             </div>
         </div>
 
-        <!-- Progress Steps -->
-        <div id="progressSection" class="hidden mb-8">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between">
-                    <div class="progress-step flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        <span class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
-                        Pilih Gejala
-                    </div>
-                    <div class="flex-1 h-1 bg-gray-200 dark:bg-gray-700 mx-4"></div>
-                    <div class="progress-step flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        <span class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
-                        Analisis
-                    </div>
-                    <div class="flex-1 h-1 bg-gray-200 dark:bg-gray-700 mx-4"></div>
-                    <div class="progress-step flex items-center px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                        <span class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
-                        Hasil
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Symptom Selection -->
-        <div id="symptomSection" class="hidden animate-slide-up">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
-                <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">
-                    <svg class="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0-8h2a2 2 0 012 2v6a2 2 0 01-2 2H9m0-8v8"></path>
+        <!-- Informasi Kesehatan Section -->
+        <div id="healthInfoSection" class="hidden">
+            
+            <!-- Peringatan Darurat -->
+            <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-8 rounded-lg">
+                <div class="flex items-start">
+                    <svg class="w-6 h-6 text-red-500 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                     </svg>
-                    Pilih Gejala yang Anda Alami
+                    <div>
+                        <h3 class="text-lg font-bold text-red-800 mb-2">🚨 KONDISI DARURAT - SEGERA KE RUMAH SAKIT</h3>
+                        <ul class="text-red-700 space-y-1">
+                            <li>• Kesulitan bernapas atau sesak napas berat</li>
+                            <li>• Nyeri dada yang hebat</li>
+                            <li>• Kehilangan kesadaran</li>
+                            <li>• Demam tinggi (>40°C) yang tidak turun</li>
+                            <li>• Perdarahan yang tidak terkontrol</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pilihan Gejala untuk Edukasi -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+                    📚 Pilih Gejala untuk Informasi Edukasi
                 </h3>
                 <p class="text-gray-600 dark:text-gray-300 mb-8">
-                    Klik pada gejala-gejala yang sedang Anda rasakan. Anda dapat memilih lebih dari satu gejala.
+                    Pilih gejala yang ingin Anda pelajari. Kami akan memberikan informasi edukasi umum dan saran kapan harus ke dokter.
                 </p>
                 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" id="symptomGrid">
@@ -248,69 +166,56 @@
                 
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                        <span id="selectedCount">0</span> gejala dipilih
+                        <span id="selectedCount">0</span> gejala dipilih untuk edukasi
                     </div>
                     <div class="space-x-4">
-                        <button onclick="resetSymptoms()" class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-300">
+                        <button onclick="resetSymptoms()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
                             Reset
                         </button>
-                        <button onclick="analyzeSymptoms()" id="analyzeBtn" class="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            Analisis Gejala
+                        <button onclick="getHealthInformation()" id="infoBtn" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            Dapatkan Informasi Kesehatan
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Analysis Loading -->
-        <div id="analysisSection" class="hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8 text-center">
-                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-spin">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Menganalisis Gejala...</h3>
-                <p class="text-gray-600 dark:text-gray-300">Sistem sedang memproses gejala yang Anda pilih dan mencocokkan dengan basis pengetahuan medis.</p>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div id="resultsSection" class="hidden animate-bounce-in">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
-                <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">
-                    <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Hasil Diagnosis
-                </h3>
-                
-                <div id="diagnosisResults" class="space-y-6">
-                    <!-- Results will be populated by JavaScript -->
-                </div>
-                
-                <div class="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                        </svg>
-                        Rekomendasi Tindak Lanjut
-                    </h4>
-                    <ul class="text-sm text-blue-700 dark:text-blue-400 space-y-2">
-                        <li>• Konsultasikan hasil ini dengan dokter untuk diagnosis yang lebih akurat</li>
-                        <li>• Catat gejala tambahan yang mungkin muncul</li>
-                        <li>• Jika gejala memburuk, segera cari bantuan medis</li>
-                        <li>• Jaga pola hidup sehat dan istirahat yang cukup</li>
-                    </ul>
-                </div>
-                
-                <div class="mt-8 flex justify-center space-x-4">
-                    <button onclick="startNewDiagnosis()" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-lg">
-                        Diagnosis Baru
-                    </button>
-                    <button onclick="printResults()" class="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-300">
-                        Cetak Hasil
-                    </button>
+            <!-- Hasil Informasi Kesehatan -->
+            <div id="healthInfoResults" class="hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+                        📋 Informasi Kesehatan & Edukasi
+                    </h3>
+                    
+                    <!-- Disclaimer dalam Hasil -->
+                    <div class="warning-box rounded-lg p-4 mb-6">
+                        <p class="text-yellow-800 font-semibold">
+                            ⚠️ Informasi berikut hanya untuk edukasi. Konsultasikan kondisi Anda dengan dokter untuk diagnosis dan pengobatan yang tepat.
+                        </p>
+                    </div>
+                    
+                    <div id="educationalContent" class="space-y-6">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Rekomendasi Konsultasi -->
+                    <div class="mt-8 p-6 bg-green-50 rounded-lg border border-green-200">
+                        <h4 class="font-semibold text-green-800 mb-3">🏥 Langkah Selanjutnya</h4>
+                        <ul class="text-green-700 space-y-2">
+                            <li>• <strong>Konsultasi Dokter:</strong> Jadwalkan konsultasi dengan dokter umum atau spesialis</li>
+                            <li>• <strong>Catat Gejala:</strong> Buat catatan detail tentang gejala yang dialami</li>
+                            <li>• <strong>Bawa Riwayat:</strong> Siapkan riwayat kesehatan dan obat yang sedang dikonsumsi</li>
+                            <li>• <strong>Jangan Tunda:</strong> Jika gejala memburuk, segera cari bantuan medis</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-center space-x-4">
+                        <button onclick="startNewInquiry()" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                            Cari Informasi Lain
+                        </button>
+                        <a href="tel:119" class="px-8 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition duration-300">
+                            📞 Darurat: 119
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -319,114 +224,210 @@
 
 @push('after-scripts')
     <script>
-        // Knowledge Base - Disease and Symptoms Database
-        const knowledgeBase = {
-            diseases: {
-                'flu': {
-                    name: 'Influenza (Flu)',
-                    symptoms: ['demam', 'batuk', 'pilek', 'sakit_kepala', 'nyeri_otot', 'kelelahan', 'sakit_tenggorokan'],
-                    description: 'Infeksi virus yang menyerang sistem pernapasan',
-                    severity: 'Ringan - Sedang',
-                    treatment: 'Istirahat, minum banyak air, obat pereda demam, antiviral jika diperlukan',
-                    duration: '7-10 hari'
-                },
-                'covid19': {
-                    name: 'COVID-19',
-                    symptoms: ['demam', 'batuk', 'sesak_napas', 'kelelahan', 'sakit_kepala', 'hilang_penciuman', 'sakit_tenggorokan', 'diare'],
-                    description: 'Infeksi virus SARS-CoV-2 yang dapat menyebabkan gejala ringan hingga berat',
-                    severity: 'Ringan - Berat',
-                    treatment: 'Isolasi mandiri, istirahat, monitoring saturasi oksigen, konsultasi dokter',
-                    duration: '10-14 hari'
-                },
-                'migrain': {
-                    name: 'Migrain',
-                    symptoms: ['sakit_kepala', 'mual', 'muntah', 'sensitif_cahaya', 'sensitif_suara'],
-                    description: 'Sakit kepala berdenyut yang sering disertai mual dan sensitivitas terhadap cahaya',
-                    severity: 'Sedang - Berat',
-                    treatment: 'Obat pereda nyeri, istirahat di ruangan gelap, hindari pemicu',
-                    duration: '4-72 jam'
-                },
-                'gastritis': {
-                    name: 'Gastritis',
-                    symptoms: ['nyeri_perut', 'mual', 'muntah', 'kembung', 'hilang_nafsu_makan'],
-                    description: 'Peradangan pada dinding lambung',
-                    severity: 'Ringan - Sedang',
-                    treatment: 'Antasida, hindari makanan pedas dan asam, makan teratur',
-                    duration: 'Beberapa hari hingga minggu'
-                },
-                'hipertensi': {
-                    name: 'Hipertensi',
-                    symptoms: ['sakit_kepala', 'pusing', 'sesak_napas', 'nyeri_dada', 'kelelahan'],
-                    description: 'Tekanan darah tinggi yang dapat meningkatkan risiko penyakit jantung',
-                    severity: 'Sedang - Berat',
-                    treatment: 'Obat antihipertensi, diet rendah garam, olahraga teratur',
-                    duration: 'Kondisi kronis yang memerlukan pengelolaan jangka panjang'
-                },
-                'anemia': {
-                    name: 'Anemia',
-                    symptoms: ['kelelahan', 'pusing', 'pucat', 'sesak_napas', 'jantung_berdebar'],
-                    description: 'Kondisi kekurangan sel darah merah atau hemoglobin',
-                    severity: 'Ringan - Berat',
-                    treatment: 'Suplemen zat besi, diet kaya zat besi, pengobatan penyebab dasar',
-                    duration: 'Bervariasi tergantung penyebab'
-                }
-            },
+        // Basis pengetahuan untuk edukasi kesehatan (bukan diagnosis)
+        const healthEducationBase = {
             symptoms: {
-                'demam': 'Suhu tubuh di atas 37.5°C',
-                'batuk': 'Batuk kering atau berdahak',
-                'pilek': 'Hidung tersumbat atau berair',
-                'sakit_kepala': 'Nyeri di area kepala',
-                'nyeri_otot': 'Nyeri atau pegal pada otot',
-                'kelelahan': 'Merasa sangat lelah atau lemah',
-                'sakit_tenggorokan': 'Nyeri atau gatal di tenggorokan',
-                'sesak_napas': 'Kesulitan bernapas atau napas pendek',
-                'hilang_penciuman': 'Tidak dapat mencium bau',
-                'diare': 'Buang air besar cair lebih dari 3x sehari',
-                'mual': 'Rasa ingin muntah',
-                'muntah': 'Mengeluarkan isi lambung',
-                'sensitif_cahaya': 'Mata tidak tahan terhadap cahaya terang',
-                'sensitif_suara': 'Telinga tidak tahan terhadap suara keras',
-                'nyeri_perut': 'Nyeri di area perut atau lambung',
-                'kembung': 'Perut terasa penuh dan mengembang',
-                'hilang_nafsu_makan': 'Tidak ada keinginan untuk makan',
-                'pusing': 'Kepala terasa berputar atau tidak stabil',
-                'nyeri_dada': 'Nyeri atau tekanan di area dada',
-                'pucat': 'Kulit atau bibir tampak pucat',
-                'jantung_berdebar': 'Detak jantung terasa cepat atau tidak teratur'
+                'demam': {
+                    name: 'Demam',
+                    description: 'Peningkatan suhu tubuh di atas normal (>37.5°C)',
+                    education: {
+                        what_is: 'Demam adalah respons alami tubuh terhadap infeksi atau peradangan. Suhu tubuh normal berkisar 36-37°C.',
+                        care_tips: [
+                            'Istirahat yang cukup di tempat yang sejuk',
+                            'Minum banyak cairan (air putih, jus, sup)',
+                            'Kompres dengan air hangat (bukan dingin)',
+                            'Pakai pakaian yang tipis dan menyerap keringat',
+                            'Konsumsi makanan yang mudah dicerna'
+                        ],
+                        when_to_doctor: [
+                            'Demam >39°C atau berlangsung >3 hari',
+                            'Disertai sesak napas atau nyeri dada',
+                            'Kejang demam (terutama pada anak)',
+                            'Dehidrasi berat (mulut kering, jarang buang air kecil)',
+                            'Ruam kulit yang menyebar'
+                        ],
+                        avoid: [
+                            'Jangan gunakan alkohol untuk kompres',
+                            'Jangan paksa makan jika tidak nafsu makan',
+                            'Jangan mandi air dingin saat demam tinggi'
+                        ]
+                    }
+                },
+                'batuk': {
+                    name: 'Batuk',
+                    description: 'Refleks tubuh untuk membersihkan saluran pernapasan',
+                    education: {
+                        what_is: 'Batuk adalah refleks alami tubuh untuk membersihkan saluran pernapasan dari iritan, lendir, atau benda asing.',
+                        care_tips: [
+                            'Minum air hangat dengan madu (untuk usia >1 tahun)',
+                            'Berkumur dengan air garam hangat',
+                            'Hindari asap rokok dan polusi udara',
+                            'Jaga kelembaban udara di ruangan',
+                            'Istirahat dengan posisi kepala sedikit lebih tinggi'
+                        ],
+                        when_to_doctor: [
+                            'Batuk berdarah atau dahak berwarna',
+                            'Batuk berlangsung >2 minggu',
+                            'Disertai demam tinggi >3 hari',
+                            'Sesak napas atau nyeri dada',
+                            'Penurunan berat badan tanpa sebab'
+                        ],
+                        avoid: [
+                            'Jangan berikan madu pada bayi <1 tahun',
+                            'Hindari obat batuk tanpa konsultasi dokter',
+                            'Jangan merokok atau terpapar asap'
+                        ]
+                    }
+                },
+                'sakit_kepala': {
+                    name: 'Sakit Kepala',
+                    description: 'Nyeri atau ketidaknyamanan di area kepala',
+                    education: {
+                        what_is: 'Sakit kepala dapat disebabkan berbagai faktor seperti stres, kurang tidur, dehidrasi, atau ketegangan otot.',
+                        care_tips: [
+                            'Istirahat di ruangan yang tenang dan gelap',
+                            'Kompres dingin di dahi atau belakang leher',
+                            'Pijat lembut area pelipis dan leher',
+                            'Minum air putih yang cukup',
+                            'Atur pola tidur yang teratur'
+                        ],
+                        when_to_doctor: [
+                            'Sakit kepala mendadak dan sangat hebat',
+                            'Disertai demam tinggi dan kaku kuduk',
+                            'Gangguan penglihatan atau bicara',
+                            'Sakit kepala berulang dan semakin parah',
+                            'Disertai mual muntah terus menerus'
+                        ],
+                        avoid: [
+                            'Jangan konsumsi obat pereda nyeri berlebihan',
+                            'Hindari cahaya terang saat sakit kepala',
+                            'Jangan abaikan sakit kepala yang tidak biasa'
+                        ]
+                    }
+                },
+                'mual': {
+                    name: 'Mual',
+                    description: 'Sensasi tidak nyaman di perut dengan keinginan muntah',
+                    education: {
+                        what_is: 'Mual adalah sensasi tidak nyaman di perut dengan keinginan untuk muntah, dapat disebabkan gangguan pencernaan atau kondisi lainnya.',
+                        care_tips: [
+                            'Makan dalam porsi kecil tapi sering',
+                            'Hindari makanan berlemak, pedas, atau berbau menyengat',
+                            'Minum jahe hangat atau teh chamomile',
+                            'Istirahat dengan posisi kepala lebih tinggi',
+                            'Hirup udara segar'
+                        ],
+                        when_to_doctor: [
+                            'Muntah terus menerus >24 jam',
+                            'Tanda-tanda dehidrasi (mulut kering, pusing)',
+                            'Disertai nyeri perut hebat',
+                            'Muntah darah atau cairan kehijauan',
+                            'Demam tinggi disertai mual'
+                        ],
+                        avoid: [
+                            'Jangan makan makanan berat saat mual',
+                            'Hindari bau-bauan yang menyengat',
+                            'Jangan berbaring langsung setelah makan'
+                        ]
+                    }
+                },
+                'pusing': {
+                    name: 'Pusing',
+                    description: 'Sensasi kepala ringan atau kehilangan keseimbangan',
+                    education: {
+                        what_is: 'Pusing dapat berupa kepala ringan, kehilangan keseimbangan, atau sensasi berputar (vertigo).',
+                        care_tips: [
+                            'Duduk atau berbaring perlahan saat merasa pusing',
+                            'Minum air putih yang cukup',
+                            'Hindari gerakan kepala yang mendadak',
+                            'Istirahat yang cukup dan teratur',
+                            'Hindari berdiri terlalu lama'
+                        ],
+                        when_to_doctor: [
+                            'Pusing berulang tanpa sebab jelas',
+                            'Disertai nyeri dada atau sesak napas',
+                            'Kehilangan kesadaran atau hampir pingsan',
+                            'Gangguan pendengaran atau telinga berdenging',
+                            'Pusing disertai sakit kepala hebat'
+                        ],
+                        avoid: [
+                            'Jangan mengemudi saat merasa pusing',
+                            'Hindari aktivitas berbahaya di ketinggian',
+                            'Jangan abaikan pusing yang berulang'
+                        ]
+                    }
+                },
+                'sesak_napas': {
+                    name: 'Sesak Napas',
+                    description: 'Kesulitan bernapas atau napas pendek',
+                    education: {
+                        what_is: 'Sesak napas adalah kesulitan bernapas yang bisa disebabkan aktivitas berat, kondisi paru-paru, atau jantung.',
+                        care_tips: [
+                            'Duduk tegak dengan bersandar ke depan',
+                            'Bernapas perlahan dan dalam melalui hidung',
+                            'Gunakan kipas angin untuk sirkulasi udara',
+                            'Hindari aktivitas berat',
+                            'Tetap tenang dan jangan panik'
+                        ],
+                        when_to_doctor: [
+                            'Sesak napas mendadak dan berat',
+                            'Tidak membaik dengan istirahat',
+                            'Disertai nyeri dada atau pusing',
+                            'Bibir atau kuku kebiruan',
+                            'Riwayat penyakit jantung atau paru'
+                        ],
+                        avoid: [
+                            'Jangan berbaring telentang saat sesak',
+                            'Hindari tempat berdebu atau berasap',
+                            'Jangan tunda mencari bantuan medis'
+                        ]
+                    }
+                }
             }
         };
 
-        // Application State
         let selectedSymptoms = [];
-        let currentStep = 0;
 
-        // Initialize the application
-        function initializeApp() {
+        // Initialize consent checking
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('#consentSection input[type="checkbox"]');
+            const proceedBtn = document.getElementById('proceedBtn');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    proceedBtn.disabled = !allChecked;
+                });
+            });
+            
             renderSymptomGrid();
-            updateSelectedCount();
+        });
+
+        function proceedToHealthInfo() {
+            document.getElementById('consentSection').classList.add('hidden');
+            document.getElementById('healthInfoSection').classList.remove('hidden');
         }
 
-        // Render symptom selection grid
         function renderSymptomGrid() {
             const grid = document.getElementById('symptomGrid');
-            const symptoms = Object.keys(knowledgeBase.symptoms);
+            const symptoms = Object.keys(healthEducationBase.symptoms);
             
             grid.innerHTML = symptoms.map(symptom => `
-                <div class="symptom-card p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600" 
+                <div class="symptom-card p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200" 
                      onclick="toggleSymptom('${symptom}')" 
                      data-symptom="${symptom}">
                     <div class="flex items-center">
-                        <div class="w-4 h-4 border-2 border-gray-300 dark:border-gray-500 rounded mr-3 flex items-center justify-center">
+                        <div class="w-4 h-4 border-2 border-gray-300 rounded mr-3 flex items-center justify-center">
                             <svg class="w-3 h-3 text-white hidden" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
                         <div>
-                            <h4 class="font-medium text-gray-800 dark:text-gray-200 capitalize">
-                                ${symptom.replace('_', ' ')}
+                            <h4 class="font-medium text-gray-800 dark:text-gray-200">
+                                ${healthEducationBase.symptoms[symptom].name}
                             </h4>
                             <p class="text-sm text-gray-600 dark:text-gray-400">
-                                ${knowledgeBase.symptoms[symptom]}
+                                ${healthEducationBase.symptoms[symptom].description}
                             </p>
                         </div>
                     </div>
@@ -434,7 +435,6 @@
             `).join('');
         }
 
-        // Toggle symptom selection
         function toggleSymptom(symptom) {
             const card = document.querySelector(`[data-symptom="${symptom}"]`);
             const checkbox = card.querySelector('svg');
@@ -450,21 +450,18 @@
             }
             
             updateSelectedCount();
-            updateAnalyzeButton();
+            updateInfoButton();
         }
 
-        // Update selected symptoms count
         function updateSelectedCount() {
             document.getElementById('selectedCount').textContent = selectedSymptoms.length;
         }
 
-        // Update analyze button state
-        function updateAnalyzeButton() {
-            const btn = document.getElementById('analyzeBtn');
+        function updateInfoButton() {
+            const btn = document.getElementById('infoBtn');
             btn.disabled = selectedSymptoms.length === 0;
         }
 
-        // Reset all selected symptoms
         function resetSymptoms() {
             selectedSymptoms = [];
             document.querySelectorAll('.symptom-card').forEach(card => {
@@ -472,173 +469,67 @@
                 card.querySelector('svg').classList.add('hidden');
             });
             updateSelectedCount();
-            updateAnalyzeButton();
+            updateInfoButton();
         }
 
-        // Start diagnosis process
-        function startDiagnosis() {
-            document.getElementById('welcomeSection').classList.add('hidden');
-            document.getElementById('progressSection').classList.remove('hidden');
-            document.getElementById('symptomSection').classList.remove('hidden');
-            
-            updateProgressStep(1);
-        }
-
-        // Update progress step indicator
-        function updateProgressStep(step) {
-            const steps = document.querySelectorAll('.progress-step');
-            steps.forEach((stepEl, index) => {
-                const stepNumber = index + 1;
-                if (stepNumber < step) {
-                    stepEl.classList.add('completed');
-                    stepEl.classList.remove('active');
-                } else if (stepNumber === step) {
-                    stepEl.classList.add('active');
-                    stepEl.classList.remove('completed');
-                } else {
-                    stepEl.classList.remove('active', 'completed');
-                }
-            });
-        }
-
-        // Analyze selected symptoms
-        function analyzeSymptoms() {
+        function getHealthInformation() {
             if (selectedSymptoms.length === 0) return;
             
-            document.getElementById('symptomSection').classList.add('hidden');
-            document.getElementById('analysisSection').classList.remove('hidden');
-            updateProgressStep(2);
+            const content = document.getElementById('educationalContent');
+            const resultsSection = document.getElementById('healthInfoResults');
             
-            // Simulate analysis delay
-            setTimeout(() => {
-                const results = performDiagnosis();
-                displayResults(results);
-            }, 3000);
-        }
-
-        // Perform diagnosis using expert system logic
-        function performDiagnosis() {
-            const results = [];
+            let html = '';
             
-            Object.keys(knowledgeBase.diseases).forEach(diseaseKey => {
-                const disease = knowledgeBase.diseases[diseaseKey];
-                const matchingSymptoms = disease.symptoms.filter(symptom => 
-                    selectedSymptoms.includes(symptom)
-                );
-                
-                if (matchingSymptoms.length > 0) {
-                    const confidence = (matchingSymptoms.length / disease.symptoms.length) * 100;
-                    const coverage = (matchingSymptoms.length / selectedSymptoms.length) * 100;
-                    const overallScore = (confidence + coverage) / 2;
-                    
-                    results.push({
-                        disease: disease,
-                        matchingSymptoms: matchingSymptoms,
-                        confidence: Math.round(confidence),
-                        coverage: Math.round(coverage),
-                        score: Math.round(overallScore)
-                    });
-                }
+            selectedSymptoms.forEach(symptom => {
+                const info = healthEducationBase.symptoms[symptom];
+                html += `
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 mb-6">
+                        <h4 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">
+                            📖 Informasi tentang ${info.name}
+                        </h4>
+                        <p class="text-blue-700 dark:text-blue-400 mb-4">${info.education.what_is}</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">💡 Tips Perawatan Umum:</h5>
+                                <ul class="text-blue-700 dark:text-blue-400 space-y-1">
+                                    ${info.education.care_tips.map(tip => `<li>• ${tip}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-red-800 dark:text-red-300 mb-2">🏥 Kapan Harus ke Dokter:</h5>
+                                <ul class="text-red-700 dark:text-red-400 space-y-1">
+                                    ${info.education.when_to_doctor.map(condition => `<li>• ${condition}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        ${info.education.avoid ? `
+                            <div class="mt-4">
+                                <h5 class="font-semibold text-orange-800 dark:text-orange-300 mb-2">⚠️ Yang Harus Dihindari:</h5>
+                                <ul class="text-orange-700 dark:text-orange-400 space-y-1">
+                                    ${info.education.avoid.map(item => `<li>• ${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
             });
             
-            // Sort by overall score
-            return results.sort((a, b) => b.score - a.score);
+            content.innerHTML = html;
+            resultsSection.classList.remove('hidden');
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Display diagnosis results
-        function displayResults(results) {
-            document.getElementById('analysisSection').classList.add('hidden');
-            document.getElementById('resultsSection').classList.remove('hidden');
-            updateProgressStep(3);
-            
-            const resultsContainer = document.getElementById('diagnosisResults');
-            
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="text-center py-8">
-                        <div class="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2">Tidak Ada Diagnosis yang Cocok</h4>
-                        <p class="text-gray-500 dark:text-gray-500">Gejala yang Anda pilih tidak cocok dengan penyakit dalam basis pengetahuan kami. Silakan konsultasi dengan dokter.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            resultsContainer.innerHTML = results.map((result, index) => {
-                const confidenceColor = result.score >= 70 ? 'text-red-600' : 
-                                      result.score >= 50 ? 'text-yellow-600' : 'text-green-600';
-                const confidenceBg = result.score >= 70 ? 'bg-red-100 dark:bg-red-900/20' : 
-                                   result.score >= 50 ? 'bg-yellow-100 dark:bg-yellow-900/20' : 'bg-green-100 dark:bg-green-900/20';
-                
-                return `
-                    <div class="disease-result p-6 rounded-lg ${index === 0 ? 'ring-2 ring-blue-500' : ''}">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex-1">
-                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">
-                                    ${index + 1}. ${result.disease.name}
-                                    ${index === 0 ? '<span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full ml-2">Kemungkinan Tertinggi</span>' : ''}
-                                </h4>
-                                <p class="text-gray-600 dark:text-gray-300 mb-3">${result.disease.description}</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold ${confidenceColor} mb-1">${result.score}%</div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">Kesesuaian</div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-4 mb-4">
-                            <div class="${confidenceBg} p-3 rounded-lg">
-                                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tingkat Keparahan</div>
-                                <div class="font-semibold ${confidenceColor}">${result.disease.severity}</div>
-                            </div>
-                            <div class="${confidenceBg} p-3 rounded-lg">
-                                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Durasi</div>
-                                <div class="font-semibold ${confidenceColor}">${result.disease.duration}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <h5 class="font-semibold text-gray-800 dark:text-white mb-2">Gejala yang Cocok:</h5>
-                            <div class="flex flex-wrap gap-2">
-                                ${result.matchingSymptoms.map(symptom => `
-                                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-full text-sm">
-                                        ${symptom.replace('_', ' ')}
-                                    </span>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                            <h5 class="font-semibold text-gray-800 dark:text-white mb-2">Rekomendasi Pengobatan:</h5>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm">${result.disease.treatment}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Start new diagnosis
-        function startNewDiagnosis() {
+        function startNewInquiry() {
             selectedSymptoms = [];
-            currentStep = 0;
-            
-            document.getElementById('resultsSection').classList.add('hidden');
-            document.getElementById('welcomeSection').classList.remove('hidden');
-            document.getElementById('progressSection').classList.add('hidden');
-            
+            document.getElementById('healthInfoResults').classList.add('hidden');
             resetSymptoms();
+            
+            // Scroll back to symptom selection
+            document.getElementById('healthInfoSection').scrollIntoView({ behavior: 'smooth' });
         }
-
-        // Print results
-        function printResults() {
-            window.print();
-        }
-
-        // Initialize app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 @endpush

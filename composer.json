@@ -28,6 +28,7 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.4",
+        "midtrans/midtrans-php": "^2.6",
         "nasirkhan/module-manager": "^2.7",
         "nwidart/laravel-modules": "^11.0",
         "spatie/laravel-activitylog": "^4.8",
