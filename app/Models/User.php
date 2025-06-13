@@ -29,6 +29,20 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'updated_at',
     ];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'username',
+        'google_id',
+        'avatar',
+        'last_login',
+        'last_ip',
+        'login_count',
+        'expert_system_access',        // Tambahan untuk sistem pakar
+        'expert_system_expires_at',    // Tambahan untuk sistem pakar
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -53,6 +67,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             'last_login' => 'datetime',
             'deleted_at' => 'datetime',
             'social_profiles' => 'array',
+            'expert_system_access' => 'boolean',           // Cast untuk sistem pakar
+            'expert_system_expires_at' => 'datetime',      // Cast untuk sistem pakar
         ];
     }
 
@@ -107,15 +123,101 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return array_map('intval', $this->roles->pluck('id')->toArray());
     }
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'username',
-        'google_id',
-        'avatar',
-        'last_login',
-        'last_ip',
-        'login_count',
-    ];
+    /**
+     * Check if user has active expert system access
+     *
+     * @return bool
+     */
+    public function hasExpertSystemAccess()
+    {
+        return $this->expert_system_access && 
+               ($this->expert_system_expires_at === null || $this->expert_system_expires_at > now());
+    }
+
+    /**
+     * Relationship with payments
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\Payment::class);
+    }
+
+    /**
+     * Get the latest successful payment for expert system
+     *
+     * @return \App\Models\Payment|null
+     */
+    public function getLatestExpertSystemPayment()
+    {
+        return $this->payments()
+            ->where('transaction_status', 'settlement')
+            ->whereNotNull('paid_at')
+            ->latest('paid_at')
+            ->first();
+    }
+
+    /**
+     * Grant expert system access
+     *
+     * @param int $days
+     * @return bool
+     */
+    public function grantExpertSystemAccess($days = 30)
+    {
+        return $this->update([
+            'expert_system_access' => true,
+            'expert_system_expires_at' => now()->addDays($days)
+        ]);
+    }
+
+    /**
+     * Revoke expert system access
+     *
+     * @return bool
+     */
+    public function revokeExpertSystemAccess()
+    {
+        return $this->update([
+            'expert_system_access' => false,
+            'expert_system_expires_at' => null
+        ]);
+    }
+
+    /**
+     * Check if expert system access is expired
+     *
+     * @return bool
+     */
+    public function isExpertSystemAccessExpired()
+    {
+        if (!$this->expert_system_access) {
+            return true;
+        }
+
+        if ($this->expert_system_expires_at === null) {
+            return false; // Never expires
+        }
+
+        return $this->expert_system_expires_at <= now();
+    }
+
+    /**
+     * Get days remaining for expert system access
+     *
+     * @return int|null
+     */
+    public function getExpertSystemDaysRemaining()
+    {
+        if (!$this->hasExpertSystemAccess()) {
+            return 0;
+        }
+
+        if ($this->expert_system_expires_at === null) {
+            return null; // Never expires
+        }
+
+        return max(0, now()->diffInDays($this->expert_system_expires_at, false));
+    }
 }

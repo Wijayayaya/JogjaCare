@@ -167,12 +167,11 @@ Route::get('/deepseek-chat', [DeepSeekChatController::class, 'index'])->name('fr
 
 Route::get('/medical-education', [MedicalEducationController::class, 'index'])->name('frontend.medicaleducation.index');
 
-// Route untuk sistem pakar
-// TAMBAHKAN ROUTE SISTEM PAKAR
-Route::get('/expert-system', function () {
-    return view('frontend.medicaleducation.expert-system');
-})->name('expert-system');
-
 // Add these routes for Google authentication
 Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+// Expert system route - Now accessible without subscription
+Route::get('/expert-system', function () {
+    return view('frontend.medicaleducation.expert-system');
+})->middleware(['auth'])->name('expert-system');
