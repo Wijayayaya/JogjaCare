@@ -104,6 +104,15 @@ $notifications_latest = optional($notifications)->take(5);
         @endphp
         <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
 
+        @php
+            $module_name = "customer-service";
+            $text = __('Customer Service');
+            $icon = "fa-solid fa-comments";
+            $permission = "view_backend";
+            $url = route('backend.'.$module_name.'.index');
+        @endphp
+        <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
+
         @can('view_logs')
             <li class="nav-group" aria-expanded="true">
                 <a class="nav-link nav-group-toggle" href="#">
@@ -123,6 +132,8 @@ $notifications_latest = optional($notifications)->take(5);
                 </ul>
             </li>
         @endcan
+
+        
 
     </ul>
     <div class="sidebar-footer border-top d-none d-md-flex">

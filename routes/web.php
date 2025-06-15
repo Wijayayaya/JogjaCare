@@ -11,6 +11,10 @@ use App\Http\Controllers\Frontend\MedicalEducationController;
 use App\Http\Controllers\Frontend\DeepSeekChatController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Middleware\CheckExpertSystemAccess;
+use App\Http\Controllers\Frontend\CustomerServiceChatController;
+use App\Http\Controllers\Backend\CustomerServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -171,7 +175,95 @@ Route::get('/medical-education', [MedicalEducationController::class, 'index'])->
 Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
-// Expert system route - Now accessible without subscription
+// Payment routes (authenticated users only)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/expert-system/payment', [PaymentController::class, 'showPaymentPage'])->name('expert-system.payment');
+    Route::post('/payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+    Route::get('/payment/status/{orderId}', [PaymentController::class, 'checkPaymentStatus'])->name('payment.status');
+    Route::post('/payment/manual-check', [PaymentController::class, 'manualCheckStatus'])->name('payment.manual-check');
+});
+
+// Midtrans notification (no auth required)
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
+
+// Protected expert system route - HANYA SATU INI SAJA
 Route::get('/expert-system', function () {
     return view('frontend.medicaleducation.expert-system');
-})->middleware(['auth'])->name('expert-system');
+})->middleware(['auth', CheckExpertSystemAccess::class])->name('expert-system');
+
+// Debug routes untuk testing
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payment/debug/{orderId}', function($orderId) {
+        $payment = \App\Models\Payment::where('order_id', $orderId)->first();
+        
+        if (!$payment) {
+            return response()->json(['error' => 'Payment not found']);
+        }
+        
+        $user = \App\Models\User::find($payment->user_id);
+        
+        return response()->json([
+            'payment' => $payment,
+            'user_access' => [
+                'expert_system_access' => $user->expert_system_access,
+                'expert_system_expires_at' => $user->expert_system_expires_at,
+                'has_access' => $user->hasExpertSystemAccess()
+            ]
+        ]);
+    });
+    
+    // Route untuk grant access manual (untuk testing)
+    Route::get('/test-access-grant/{userId}', function($userId) {
+        $user = \App\Models\User::find($userId);
+        
+        if (!$user) {
+            return 'User not found';
+        }
+        
+        // Grant access manually untuk testing
+        $user->update([
+            'expert_system_access' => true,
+            'expert_system_expires_at' => now()->addDays(30)
+        ]);
+        
+        return response()->json([
+            'message' => 'Access granted manually',
+            'user' => $user->only(['id', 'email', 'expert_system_access', 'expert_system_expires_at']),
+            'has_access' => $user->hasExpertSystemAccess(),
+            'redirect_url' => route('expert-system')
+        ]);
+    });
+});
+
+
+
+
+// Customer Service Chat Routes (Frontend)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/customer-service/initialize', [CustomerServiceChatController::class, 'initializeChat'])
+        ->name('customer-service.initialize');
+    
+    Route::post('/customer-service/send', [CustomerServiceChatController::class, 'sendMessage'])
+        ->name('customer-service.send');
+    
+    Route::get('/customer-service/messages', [CustomerServiceChatController::class, 'getMessages'])
+        ->name('customer-service.messages');
+});
+
+// Admin Customer Service Routes
+Route::prefix('admin')->name('backend.')->middleware(['auth'])->group(function () {
+    Route::get('/customer-service', [CustomerServiceController::class, 'index'])
+        ->name('customer-service.index');
+    
+    Route::get('/customer-service/chat/{userId}', [CustomerServiceController::class, 'showChat'])
+        ->name('customer-service.chat');
+    
+    Route::post('/customer-service/chat/{userId}/send', [CustomerServiceController::class, 'sendMessage'])
+        ->name('customer-service.send');
+    
+    Route::get('/customer-service/chat/{userId}/messages', [CustomerServiceController::class, 'getNewMessages'])
+        ->name('customer-service.messages');
+    
+    Route::get('/customer-service/sessions', [CustomerServiceController::class, 'getActiveSessions'])
+        ->name('customer-service.sessions');
+});
