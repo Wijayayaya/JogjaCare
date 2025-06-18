@@ -31,6 +31,7 @@
         "midtrans/midtrans-php": "^2.6",
         "nasirkhan/module-manager": "^2.7",
         "nwidart/laravel-modules": "^11.0",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-backup": "^8.6",
         "spatie/laravel-html": "^3.6",
