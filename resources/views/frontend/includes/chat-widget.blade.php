@@ -556,6 +556,11 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    
+    .dark .welcome-title,
+    .dark .welcome-subtitle {
+        color: #fff
+    }
 
     /* Hide Tawk.to elements */
     iframe[title*="chat"] {

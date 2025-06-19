@@ -86,18 +86,8 @@ return [
 
     'available_locales' => [
         'en' => 'English (EN)',
-        'fr' => 'French (FR)',
-        'cn' => 'Chinese (CN)',
-        'es' => 'Spanish (ES)',
-        'ar' => 'Arabic (AR)',
-        'ru' => 'Russian (RU)',
-        'hi' => 'Hindi (HI)',
-        'it' => 'Italian (IT)',
-        'pt' => 'Portuguese (PT)',
-        'in' => 'Indonesian (IN)',
-        'bn' => 'Bengali (BN)',
-        'ja' => 'Japanese (JA)',
-        'vi' => 'Vietnamese (VI)',
+        'id' => 'Indonesian (ID)',
+
     ],
 
     /*

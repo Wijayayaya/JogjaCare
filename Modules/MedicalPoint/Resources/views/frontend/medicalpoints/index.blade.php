@@ -30,32 +30,37 @@
             <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
                 {{ __($module_title) }}
             </h1>
-            
-            <button id="descriptionBtn" class="group bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-105 mb-8 flex items-center mx-auto">
+
+            <button id="descriptionBtn"
+                data-show-text="{{ __('Show Description') }}"
+
+                data-hide-text="{{ __('Hide Description') }}"
+
+                class="group bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-105 mb-8 flex items-center mx-auto">
                 <span class="flex items-center">
                     <svg class="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
-                    <span id="btnText">Show Description</span>
+                    <span id="btnText">{{ __('Show Description') }}</span>
                 </span>
             </button>
-            
+
             <div class="hidden" id="description">
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 text-left animate-fade-in">
                     <p class="mb-4 leading-relaxed">
-                        Medical Point is an important innovation in the modern healthcare system that aims to integrate various aspects of medical care into one integrated platform. This concept was born from the need for a more efficient, accessible and patient-centered health system. In an era where technology and information are developing rapidly, Medical Point is here as a solution to bridge the gap between health service providers and patients.
+                        {{ __('Medical Point is an important innovation in the modern healthcare system that aims to integrate various aspects of medical care into one integrated platform. This concept was born from the need for a more efficient, accessible and patient-centered health system. In an era where technology and information are developing rapidly, Medical Point is here as a solution to bridge the gap between health service providers and patients.') }}
                     </p>
                     <p class="mb-4 leading-relaxed">
-                        With an integrated system, doctors and other medical personnel can easily access a patient's medical history, see the latest test results, and collaborate with other specialists. This not only improves efficiency but also the quality of care provided.
+                        {{ __('With an integrated system, doctors and other medical personnel can easily access a patient\'s medical history, see the latest test results, and collaborate with other specialists. This not only improves efficiency but also the quality of care provided.') }}
                     </p>
                     <p class="leading-relaxed">
-                        In the digital era, Medical Point often takes the form of an online platform or mobile application. This allows patients to access healthcare services anytime and anywhere. The often included telemedicine feature allows for remote consultations, which is especially beneficial during a pandemic or for those living in remote areas.
+                        {{ __('In the digital era, Medical Point often takes the form of an online platform or mobile application. This allows patients to access healthcare services anytime and anywhere. The often included telemedicine feature allows for remote consultations, which is especially beneficial during a pandemic or for those living in remote areas.') }}
                     </p>
                 </div>
             </div>
-            
+
             <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-                Explore our comprehensive collection of {{ __($module_name) }}.
+                {{ __('Explore our comprehensive collection of :name.', ['name' => __($module_name)]) }}
             </p>
 
             @include('frontend.includes.messages')
@@ -73,13 +78,13 @@
     <div class="container mx-auto px-4">
         <form action="{{ route('frontend.medicalpoints.index') }}" method="GET" class="mb-8">
             <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Find Medical Points</h2>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">{{ __('Find Medical Points') }}</h2>
                 
                 <!-- First Row -->
                 <div class="flex flex-wrap -mx-2 mb-4">
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="search">
-                            Search
+                            {{ __('Search') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -88,20 +93,20 @@
                                 </svg>
                             </div>
                             <input class="w-full bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 pl-10 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-                                id="search" type="text" placeholder="Search by name" name="search" value="{{ request('search') }}">
+                                id="search" type="text" placeholder="{{ __('Search by name') }}" name="search" value="{{ request('search') }}">
                         </div>
                     </div>
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="type">
-                            Type
+                            {{ __('Type') }}
                         </label>
                         <div class="relative">
                             <select class="w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                 id="type" name="type">
-                                <option value="">Filter by type</option>
-                                <option value="Clinic" {{ request('type') == 'Clinic' ? 'selected' : '' }}>Clinic</option>
-                                <option value="Public health center" {{ request('type') == 'Public health center' ? 'selected' : '' }}>Public health center</option>
-                                <option value="Pharmacy" {{ request('type') == 'Pharmacy' ? 'selected' : '' }}>Pharmacy</option>
+                                <option value="">{{ __('Filter by type') }}</option>
+                                <option value="Clinic" {{ request('type') == 'Clinic' ? 'selected' : '' }}>{{ __('Clinic') }}</option>
+                                <option value="Public health center" {{ request('type') == 'Public health center' ? 'selected' : '' }}>{{ __('Public health center') }}</option>
+                                <option value="Pharmacy" {{ request('type') == 'Pharmacy' ? 'selected' : '' }}>{{ __('Pharmacy') }}</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -112,14 +117,14 @@
                     </div>
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="sort">
-                            Sort By
+                            {{ __('Sort By') }}
                         </label>
                         <div class="relative">
                             <select class="w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                 id="sort" name="sort">
-                                <option value="">Sort By</option>
-                                <option value="recent" {{ request('sort') == 'recent' ? 'selected' : '' }}>Most Recent</option>
-                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                                <option value="">{{ __('Sort By') }}</option>
+                                <option value="recent" {{ request('sort') == 'recent' ? 'selected' : '' }}>{{ __('Most Recent') }}</option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>{{ __('Oldest') }}</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -134,7 +139,7 @@
                 <div class="flex flex-wrap -mx-2">
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="district">
-                            District
+                            {{ __('District') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -145,7 +150,7 @@
                             </div>
                             <select class="w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pl-10 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                 name="district" id="district">
-                                <option value="">Select District</option>
+                                <option value="">{{ __('Select District') }}</option>
                                 @foreach($districts as $district)
                                     <option value="{{ $district }}" {{ request('district') == $district ? 'selected' : '' }}>{{ $district }}</option>
                                 @endforeach
@@ -159,7 +164,7 @@
                     </div>
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="sub_district">
-                            Sub District
+                            {{ __('Sub District') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -169,7 +174,7 @@
                             </div>
                             <select class="w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pl-10 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                 name="sub_district" id="sub_district">
-                                <option value="">Select Sub District</option>
+                                <option value="">{{ __('Select Sub District') }}</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -187,7 +192,7 @@
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                                 </svg>
-                                Filter
+                                {{ __('Filter') }}
                             </span>
                         </button>
                     </div>
@@ -200,7 +205,7 @@
 <!-- Results Section -->
 <section class="bg-white dark:bg-gray-800 py-16">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-10 text-center">Available Medical Points</h2>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-10 text-center">{{ __('Available Medical Points') }}</h2>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($$module_name as $$module_name_singular)
@@ -243,7 +248,7 @@
                     </p>
                     <div class="mt-auto">
                         <a href="{{ $details_url }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:outline-none focus:ring-blue-300 transition-all duration-300 group">
-                            View Details
+                            {{ __('View Details') }}
                             <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                             </svg>
@@ -267,19 +272,20 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const descriptionBtn = document.getElementById('descriptionBtn');
-        const description = document.getElementById('description');
-        const btnText = document.getElementById('btnText');
-        
-        descriptionBtn.addEventListener('click', function() {
-            description.classList.toggle('hidden');
-            
-            if (!description.classList.contains('hidden')) {
-                description.style.animation = 'fadeIn 0.5s ease-out forwards';
-                btnText.textContent = 'Hide Description';
-            } else {
-                btnText.textContent = 'Show Description';
-            }
-        });
+const description = document.getElementById('description');
+const btnText = document.getElementById('btnText');
+
+descriptionBtn.addEventListener('click', function() {
+    description.classList.toggle('hidden');
+    const showText = descriptionBtn.getAttribute('data-show-text');
+    const hideText = descriptionBtn.getAttribute('data-hide-text');
+    if (!description.classList.contains('hidden')) {
+        description.style.animation = 'fadeIn 0.5s ease-out forwards';
+        btnText.textContent = hideText;
+    } else {
+        btnText.textContent = showText;
+    }
+});
 
         // District and Sub-district functionality
         const districtSelect = document.getElementById('district');
