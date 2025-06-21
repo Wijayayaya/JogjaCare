@@ -559,7 +559,7 @@
     
     .dark .welcome-title,
     .dark .welcome-subtitle {
-        color: #fff
+        color: #fff;
     }
 
     /* Hide Tawk.to elements */
