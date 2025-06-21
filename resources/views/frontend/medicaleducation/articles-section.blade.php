@@ -341,8 +341,10 @@
                 <div class="article-header p-8" onclick="toggleArticle('article1')">
                     <div class="flex items-start gap-6">
                         <div
-                            class="article-icon w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center shadow-lg">
-                            <!-- icon -->
+                        class="article-icon w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 6v6m0 4h.01" />
+                            </svg>
                         </div>
                         <div class="flex-1 min-w-0">
                             <h2 class="text-2xl font-bold mb-3 text-gray-800 dark:text-white leading-tight">
