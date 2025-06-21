@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationsController extends Controller
 {
@@ -48,7 +49,9 @@ class NotificationsController extends Controller
         $module_action = 'List';
 
         $notifications = Auth::user()->notifications()->paginate();
-        $unread_notifications_count = Auth::user()->unreadNotifications()->count();
+        // $notifications = DatabaseNotification::paginate();
+        // $unread_notifications_count = Auth::user()->unreadNotifications()->count();
+        $unread_notifications_count = DatabaseNotification::whereNull('read_at')->count();
 
         return view(
             "backend.$module_path.index",

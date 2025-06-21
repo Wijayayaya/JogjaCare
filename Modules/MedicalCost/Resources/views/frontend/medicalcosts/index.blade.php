@@ -30,29 +30,34 @@
             <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
                 {{ __($module_title) }}
             </h1>
-            
-            <button id="descriptionBtn" class="group bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-105 mb-8 flex items-center mx-auto">
+
+            <button id="descriptionBtn"
+                data-show-text="{{ __('Show Description') }}"
+
+                data-hide-text="{{ __('Hide Description') }}"
+
+                class="group bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-105 mb-8 flex items-center mx-auto">
                 <span class="flex items-center">
                     <svg class="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
-                    <span id="btnText">Show Description</span>
+                    <span id="btnText">{{ __('Show Description') }}</span>
                 </span>
             </button>
-            
+
             <div class="hidden" id="description">
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 text-left animate-fade-in">
                     <p class="mb-4 leading-relaxed">
-                        Treatment costs are a major and frequently debated aspect of healthcare systems around the world. These expenses include all financial expenses related to health maintenance, disease prevention, and treatment of medical conditions. As healthcare advances and the population ages, understanding and managing medical costs becomes increasingly important for individuals, healthcare providers, and policy makers.
+                        {{ __('Treatment costs are a major and frequently debated aspect of healthcare systems around the world. These expenses include all financial expenses related to health maintenance, disease prevention, and treatment of medical conditions. As healthcare advances and the population ages, understanding and managing medical costs becomes increasingly important for individuals, healthcare providers, and policy makers.') }}
                     </p>
                     <p class="leading-relaxed">
-                        Medical expense coverage is complex and varies widely in different contexts. Factors such as geographic location, type of healthcare provider, complexity of the medical condition, and insurance coverage all play a role in determining the final cost of medical care. This variability can make it difficult for individuals to estimate and plan their health care costs, often leading to financial stress or, in some cases, avoidance of necessary medical care.
+                        {{ __('Medical expense coverage is complex and varies widely in different contexts. Factors such as geographic location, type of healthcare provider, complexity of the medical condition, and insurance coverage all play a role in determining the final cost of medical care. This variability can make it difficult for individuals to estimate and plan their health care costs, often leading to financial stress or, in some cases, avoidance of necessary medical care.') }}
                     </p>
                 </div>
             </div>
-            
+
             <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-                Explore our comprehensive collection of {{ __($module_name) }}.
+                {{ __('Explore our comprehensive collection of :name.', ['name' => __($module_name)]) }}
             </p>
 
             @include('frontend.includes.messages')
@@ -70,12 +75,12 @@
     <div class="container mx-auto px-4">
         <form action="{{ route('frontend.medicalcosts.index') }}" method="GET" class="mb-8">
             <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Search Medical Treatment Costs</h2>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">{{ __('Search Medical Treatment Costs') }}</h2>
                 
                 <div class="flex flex-wrap -mx-2">
                     <div class="w-full md:w-2/6 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="search">
-                            Search Service
+                            {{ __('Search Service') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -84,12 +89,12 @@
                                 </svg>
                             </div>
                             <input class="w-full bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 pl-10 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-                                id="search" type="text" placeholder="Search by service name" name="search" value="{{ request('search') }}">
+                                id="search" type="text" placeholder="{{ __('Search by service name') }}" name="search" value="{{ request('search') }}">
                         </div>
                     </div>
                     <div class="w-full md:w-1/6 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="min_price">
-                            Min Price
+                            {{ __('Min Price') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -101,7 +106,7 @@
                     </div>
                     <div class="w-full md:w-1/6 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="max_price">
-                            Max Price
+                            {{ __('Max Price') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -113,14 +118,14 @@
                     </div>
                     <div class="w-full md:w-1/6 px-2 mb-4">
                         <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="sort">
-                            Sort By
+                            {{ __('Sort By') }}
                         </label>
                         <div class="relative">
                             <select class="w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all appearance-none dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                 id="sort" name="sort">
-                                <option value="">Sort By</option>
-                                <option value="lowest_price" {{ request('sort') == 'lowest_price' ? 'selected' : '' }}>Lowest Price</option>
-                                <option value="highest_price" {{ request('sort') == 'highest_price' ? 'selected' : '' }}>Highest Price</option>
+                                <option value="">{{ __('Sort By') }}</option>
+                                <option value="lowest_price" {{ request('sort') == 'lowest_price' ? 'selected' : '' }}>{{ __('Lowest Price') }}</option>
+                                <option value="highest_price" {{ request('sort') == 'highest_price' ? 'selected' : '' }}>{{ __('Highest Price') }}</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -138,7 +143,7 @@
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                                 </svg>
-                                Filter
+                                {{ __('Filter') }}
                             </span>
                         </button>
                     </div>
@@ -151,7 +156,7 @@
 <!-- Results Section -->
 <section class="bg-white dark:bg-gray-800 py-16">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-10 text-center">Medical Treatment Costs</h2>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-10 text-center">{{ __('Medical Treatment Costs') }}</h2>
         
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
@@ -163,7 +168,7 @@
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    No.
+                                    {{ __('No.') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-4 font-bold" style="width: 45%;">
@@ -171,7 +176,7 @@
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
-                                    Service Name
+                                    {{ __('Service Name') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-4 font-bold" style="width: 25%;">
@@ -180,7 +185,7 @@
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
                                     </svg>
-                                    Lowest Price
+                                    {{ __('Lowest Price') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-4 font-bold" style="width: 25%;">
@@ -189,7 +194,7 @@
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
                                     </svg>
-                                    Highest Price
+                                    {{ __('Highest Price') }}
                                 </div>
                             </th>
                         </tr>
@@ -237,15 +242,16 @@
         const descriptionBtn = document.getElementById('descriptionBtn');
         const description = document.getElementById('description');
         const btnText = document.getElementById('btnText');
-        
+
         descriptionBtn.addEventListener('click', function() {
             description.classList.toggle('hidden');
-            
+            const showText = descriptionBtn.getAttribute('data-show-text');
+            const hideText = descriptionBtn.getAttribute('data-hide-text');
             if (!description.classList.contains('hidden')) {
                 description.style.animation = 'fadeIn 0.5s ease-out forwards';
-                btnText.textContent = 'Hide Description';
+                btnText.textContent = hideText;
             } else {
-                btnText.textContent = 'Show Description';
+                btnText.textContent = showText;
             }
         });
     });
