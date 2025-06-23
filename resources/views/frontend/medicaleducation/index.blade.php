@@ -33,7 +33,7 @@
                     {{ __('Medical') }} <span class="text-blue-200">{{ __('Education') }}</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Platform edukasi kesehatan dengan kuis interaktif, artikel terkini, dan informasi gejala untuk meningkatkan literasi kesehatan
+                    {{ __('A health education platform with interactive quizzes, up-to-date articles, and symptom information to improve health literacy') }}
                 </p>
                 
                 <!-- Disclaimer Penting -->
@@ -43,8 +43,8 @@
                             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                         </svg>
                         <div class="text-red-100">
-                            <p class="font-semibold mb-1">⚠️ Platform Edukasi Kesehatan</p>
-                            <p class="text-sm">Informasi di platform ini hanya untuk edukasi. Selalu konsultasi dengan dokter untuk kondisi kesehatan Anda.</p>
+                            <p class="font-semibold mb-1">⚠️ {{ __('Health Education Platform') }}</p>
+                            <p class="text-sm">{{ __('Information on this platform is for education only. Always consult a doctor for your health conditions.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                             </svg>
-                            Informasi Kesehatan
+                            {{ __('Health Information') }}
                         </span>
                     </a>
                     <button onclick="scrollToArticles()"
@@ -130,123 +130,50 @@
                     </svg>
                 </div>
                 
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Informasi Kesehatan & Edukasi Gejala</h2>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">{{ __('Health Information & Symptom Education') }}</h2>
                 <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Pelajari tentang gejala kesehatan umum dan kapan harus mencari bantuan medis profesional
+                    {{ __('Learn about common health symptoms and when to seek professional medical help') }}
                 </p>
-                
-                <!-- Disclaimer Box -->
-                <div class="bg-red-50/20 border border-red-300 rounded-xl p-4 mb-8 max-w-2xl mx-auto">
-                    <p class="text-red-100 font-semibold text-sm">
-                        ⚠️ Hanya untuk edukasi kesehatan - Bukan pengganti konsultasi medis
-                    </p>
-                </div>
-                
-                <div class="grid md:grid-cols-3 gap-8 mb-12">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-2">Edukasi Gejala</h3>
-                        <p class="text-emerald-100 text-sm">Pelajari tentang gejala umum dan cara perawatan dasar</p>
-                    </div>
-                    
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-2">Kapan ke Dokter</h3>
-                        <p class="text-emerald-100 text-sm">Panduan kapan harus mencari bantuan medis profesional</p>
-                    </div>
-                    
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-                        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-2">Tips Perawatan</h3>
-                        <p class="text-emerald-100 text-sm">Saran perawatan umum dan pencegahan</p>
-                    </div>
-                </div>
-                
-                <a href="{{ route('expert-system') }}" class="inline-flex items-center bg-white text-emerald-600 px-12 py-5 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    Akses Informasi Kesehatan
-                </a>
-            </div>
-        </div>
-    </section>
 
-    <!-- Health Information Preview Section -->
-    <section class="py-20 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white relative overflow-hidden">
-        <!-- Background Animation -->
-        <div class="absolute inset-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-emerald-600/80 to-cyan-600/80"></div>
-            <div class="absolute top-0 left-0 w-full h-full">
-                <div class="animate-pulse absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full"></div>
-                <div class="animate-pulse absolute bottom-20 right-20 w-24 h-24 bg-white/5 rounded-full"
-                    style="animation-delay: 1s;"></div>
-                <div class="animate-pulse absolute top-1/2 left-1/3 w-16 h-16 bg-white/5 rounded-full"
-                    style="animation-delay: 2s;"></div>
-            </div>
-        </div>
-        
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-8">
-                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                </div>
-                
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Informasi Kesehatan & Edukasi Gejala</h2>
-                <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Pelajari tentang gejala kesehatan umum dan kapan harus mencari bantuan medis profesional
-                </p>
-                
                 <!-- Disclaimer Box -->
                 <div class="bg-red-50/20 border border-red-300 rounded-xl p-4 mb-8 max-w-2xl mx-auto">
                     <p class="text-red-100 font-semibold text-sm">
-                        ⚠️ Hanya untuk edukasi kesehatan - Bukan pengganti konsultasi medis
+                        ⚠️ {{ __('For health education only - Not a substitute for medical consultation') }}
                     </p>
                 </div>
-                
+
                 <div class="grid md:grid-cols-3 gap-8 mb-12">
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold mb-2">Edukasi Gejala</h3>
-                        <p class="text-emerald-100 text-sm">Pelajari tentang gejala umum dan cara perawatan dasar</p>
+                        <h3 class="text-lg font-semibold mb-2">{{ __('Symptom Education') }}</h3>
+                        <p class="text-emerald-100 text-sm">{{ __('Learn about common symptoms and basic care') }}</p>
                     </div>
-                    
+
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold mb-2">Kapan ke Dokter</h3>
-                        <p class="text-emerald-100 text-sm">Panduan kapan harus mencari bantuan medis profesional</p>
+                        <h3 class="text-lg font-semibold mb-2">{{ __('When to See a Doctor') }}</h3>
+                        <p class="text-emerald-100 text-sm">{{ __('Guide on when to seek professional medical help') }}</p>
                     </div>
-                    
+
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold mb-2">Tips Perawatan</h3>
-                        <p class="text-emerald-100 text-sm">Saran perawatan umum dan pencegahan</p>
+                        <h3 class="text-lg font-semibold mb-2">{{ __('Care Tips') }}</h3>
+                        <p class="text-emerald-100 text-sm">{{ __('General care and prevention tips') }}</p>
                     </div>
                 </div>
                 
@@ -254,7 +181,7 @@
                     <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
-                    Akses Informasi Kesehatan
+                    {{ __('Access Health Information') }}
                 </a>
             </div>
         </div>
@@ -321,9 +248,12 @@
                 </div>
                 <div class="text-center group">
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-                        <div class="text-5xl font-bold mb-2 text-emerald-200 group-hover:text-white transition-colors">50+</div>
-                        <div class="text-lg text-blue-100 group-hover:text-white transition-colors">Topik Kesehatan</div>
-                        <div class="mt-4 w-12 h-1 bg-emerald-300 rounded-full mx-auto group-hover:w-16 transition-all duration-300"></div>
+                        <div class="text-5xl font-bold mb-2 text-emerald-200 group-hover:text-white transition-colors">
+                            50+
+                        </div>
+                        <div class="text-lg text-blue-100 group-hover:text-white transition-colors">
+                            {{ __('Health Topics') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -367,7 +297,7 @@
                             <svg class="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                             </svg>
-                            Akses Informasi Kesehatan
+                            {{ __('Access Health Information') }}
                         </span>
                     </a>
                     <button onclick="scrollToArticles()"
@@ -388,7 +318,8 @@
 @endsection
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @vite('resources/css/app.css')
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -462,10 +393,10 @@
     <script>
         // Smooth scrolling functions
         function scrollToQuiz() {
-            document.getElementById('quiz-section').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            const quizSection = document.getElementById('quiz-section');
+            if (quizSection) {
+                quizSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function scrollToArticles() {
