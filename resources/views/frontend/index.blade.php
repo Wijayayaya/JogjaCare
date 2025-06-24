@@ -85,7 +85,7 @@
             <div class="animate-description lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
                 <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Education')}}
                 </h1>
-                <p class="mb-4 leading-relaxed dark:text-gray-400">Tingkatkan pengetahuan medis Anda dengan platform pembelajaran interaktif yang komprehensif.</p>
+                <p class="mb-4 leading-relaxed dark:text-gray-400">ingkatkan pengetahuan medis Anda dengan platform pembelajaran interaktif yang komprehensif.</p>
                 <div class="mb-6 space-y-2">
                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
