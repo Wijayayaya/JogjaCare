@@ -10,20 +10,3 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with: 
-          node-version: "18.x"
-      - name: Install Dependencies
-        run: npm install
-      - name: Install Composer
-        run: composer install --no-dev --optimize-autoloader
-      - name: php artisan
-        run: | 
-          php artisan key:generate
-          php artisan livewire:publish --assets
-          php artisan storage:link
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-        
