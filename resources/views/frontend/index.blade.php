@@ -85,25 +85,25 @@
             <div class="animate-description lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
                 <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 dark:text-white">{{__('Medical Education')}}
                 </h1>
-                <p class="mb-4 leading-relaxed dark:text-gray-400">ingkatkan pengetahuan medis Anda dengan platform pembelajaran interaktif yang komprehensif.</p>
+                <p class="mb-4 leading-relaxed dark:text-gray-400">{{__('Enhance your medical knowledge with a comprehensive interactive learning platform.')}}</p>
                 <div class="mb-6 space-y-2">
                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        Kuis interaktif dengan 150+ topik medis
+                        {{__('Interactive quiz with 150+ medical topics')}}
                     </div>
                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        Sistem Informasi Kesehatan Sesuai Artikel & Jurnal
+                        {{__('Health Information System According to Articles & Journals')}}
                     </div>
                     <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        Artikel medis terkini dari para ahli
+                        {{__('Latest medical articles from experts')}}
                     </div>
                 </div>
                 <div class="flex justify-center">
@@ -111,8 +111,8 @@
                 </div>
             </div>
             <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-    <img class="object-cover object-center rounded animate-smooth-bounce" alt="Medical Education" src="{{ asset('img/asset/education.png') }}">
-</div>
+                <img class="object-cover object-center rounded animate-smooth-bounce" alt="Medical Education" src="{{ asset('img/asset/education.png') }}">
+            </div>
         </div>
     </section>
 
