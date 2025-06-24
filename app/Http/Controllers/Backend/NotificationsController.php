@@ -48,8 +48,8 @@ class NotificationsController extends Controller
         $module_model = $this->module_model;
         $module_action = 'List';
 
-        $notifications = Auth::user()->notifications()->paginate();
-        // $notifications = DatabaseNotification::paginate();
+        // $notifications = Auth::user()->notifications()->paginate();
+        $notifications = DatabaseNotification::paginate();
         // $unread_notifications_count = Auth::user()->unreadNotifications()->count();
         $unread_notifications_count = DatabaseNotification::whereNull('read_at')->count();
 

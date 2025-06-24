@@ -1,45 +1,27 @@
-name: Deploy Laravel App
+name: Deploy
 
 on:
   push:
     branches:
       - main
 
-env:
-  DEPLOY_DIR: /var/www/jogjacare
-
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Determine Changed Files
-      run: |
-        git fetch origin
-        git diff --name-only HEAD~3 > changed_files.txt
-
-    - name: Copy Changed Files to Deployment Directory
-      run: |
-        mkdir -p /tmp/tmp_sync
-        cat changed_files.txt | while read file; do
-          mkdir -p /tmp/tmp_sync/$(dirname "$file")
-          cp --parents "$file" /tmp/tmp_sync/
-        done
-        sudo rsync -av /tmp/tmp_sync/ ${{ env.DEPLOY_DIR }}/tmp/
-        rm -rf /tmp/tmp_sync
-
-    - name: Backup Changed Files
-      run: |
-        BACKUP_FOLDER="${{ env.DEPLOY_DIR }}/backup/$(date +%Y%m%d%H%M%S)"
-        sudo mkdir -p "$BACKUP_FOLDER"
-        sudo rsync -av --backup --backup-dir="$BACKUP_FOLDER" ${{ env.DEPLOY_DIR }}/tmp/ ${{ env.DEPLOY_DIR }}
-        sudo rm -rf ${{ env.DEPLOY_DIR }}/tmp/
-
-    - name: Deploy Changed Files
-      run: |
-        rsync -av --files-from=changed_files.txt . ${{ env.DEPLOY_DIR }}
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/jogjacare.my.id/public_html
+            git fetch --all
+            git pull origin main
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan cache:clear
