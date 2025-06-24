@@ -9,6 +9,7 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Go to directory
-        run: cd /home/jogjacare.my.id/public_html/
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: /home/jogjacare.my.id/public_html/
