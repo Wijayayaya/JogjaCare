@@ -34,12 +34,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Run Laravel Artisan commands
-        run: |
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-
       # Deploy ke public_html
       - name: Deploy to public_html with rsync
         run: |
