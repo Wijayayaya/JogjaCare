@@ -36,8 +36,6 @@ jobs:
 
       - name: Run Laravel Artisan commands
         run: |
-          php artisan livewire:publish --assets
-          php artisan storage:link
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
