@@ -8,8 +8,5 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: /home/jogjacare.my.id/public_html/
     steps:
         - uses: actions/checkout@v2
