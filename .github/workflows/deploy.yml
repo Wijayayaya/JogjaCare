@@ -45,7 +45,3 @@ jobs:
             --no-perms --no-group --omit-dir-times \
             "${{ github.workspace }}/" \
             /home/jogjacare.my.id/public_html/
-
-      - name: Set Laravel permissions
-        run: chmod -R 775 /home/jogjacare.my.id /home/jogjacare.my.id/public_html/storage /home/jogjacare.my.id/public_html/bootstrap/cache
-     
