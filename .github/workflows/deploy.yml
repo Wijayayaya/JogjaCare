@@ -21,7 +21,6 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
 
-      # Jika ada proses build frontend (misal Vite, Mix), aktifkan baris di bawah ini:
       - name: Build frontend
         run: npm run build
 
@@ -32,9 +31,19 @@ jobs:
           extensions: mbstring, xml, zip, curl, gd, mysql
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
+        run: |
+          composer install --no-dev --optimize-autoloader
+          php artisan livewire:publish --assets
+          php artisan storage:link
 
-      # Deploy ke public_html
       - name: Deploy to public_html with rsync
         run: |
-          rsync -av --delete ${{ github.workspace }}/ /home/jogjacare.my.id/public_html/
+          rsync -av --delete \
+            --exclude='.env' \
+            --exclude='.git/' \
+            --exclude='storage/' \
+            --no-perms --no-group --omit-dir-times \
+            "${{ github.workspace }}/" \
+            /home/jogjacare.my.id/public_html/
+      - name: Set Laravel permissions
+        run: chmod -R 775 /home/jogjacare.my.id/public_html/storage /home/jogjacare.my.id/public_html/bootstrap/cache
