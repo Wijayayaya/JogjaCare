@@ -34,7 +34,6 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader
           php artisan livewire:publish --assets
-          php artisan storage:link
 
       - name: Deploy to public_html with rsync
         run: |
@@ -44,3 +43,9 @@ jobs:
             --no-perms --no-group --omit-dir-times \
             "${{ github.workspace }}/" \
             /home/jogjacare.my.id/public_html/
+
+      - name: Recreate storage symlink
+        run: |
+          rm -f /home/jogjacare.my.id/public_html/public/storage
+          cd /home/jogjacare.my.id/public_html
+          php artisan storage:link
