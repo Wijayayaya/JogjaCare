@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\HealthInformation;
 
 class MedicalEducationController extends Controller
 {
@@ -12,13 +13,37 @@ class MedicalEducationController extends Controller
         return view('frontend.medicaleducation.index');
     }
 
-    public function quiz()
-    {
-        return view('frontend.medicaleducation.quiz'); // Sesuaikan dengan lokasi file view quiz
-    }
-
     public function articles()
     {
-        return view('frontend.medicaleducation.articles'); // Sesuaikan dengan lokasi file view artikel
+        return view('frontend.medicaleducation.articles');
+    }
+
+    public function expertSystem()
+    {
+        return view('frontend.medicaleducation.expert-system');
+    }
+
+    public function getHealthInformation()
+    {
+        $healthInfo = HealthInformation::active()
+            ->ordered()
+            ->get()
+            ->mapWithKeys(function ($info) {
+                return [$info->slug => [
+                    'name' => $info->name,
+                    'description' => $info->description,
+                    'education' => [
+                        'what_is' => $info->what_is,
+                        'care_tips' => $info->care_tips,
+                        'when_to_doctor' => $info->when_to_doctor,
+                        'avoid' => $info->avoid
+                    ],
+                    'icon' => $info->icon,
+                    'color' => $info->color,
+                    'is_emergency' => $info->is_emergency
+                ]];
+            });
+
+        return response()->json($healthInfo);
     }
 }

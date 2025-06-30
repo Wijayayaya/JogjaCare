@@ -148,42 +148,138 @@
         </div>
     </section>
 
-    <section class="bg-blue-100 dark:bg-gray-700 text-gray-600 body-font">
-        <div class="container px-5 py-24 mx-auto">
-            <div class="flex flex-col text-center w-full mb-20">
-            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900 dark:text-white">{{__('Recommended Destinations')}}</h1>
-            <p class="lg:w-2/3 mx-auto leading-relaxed text-base dark:text-gray-400">{{__('Recommended Destinations Descriptions')}}</p>
+    <!-- Enhanced Destinations Section -->
+    <section class="bg-blue-100 dark:bg-gray-700 text-gray-600 body-font py-24">
+        <div class="container px-5 mx-auto">
+            <!-- Section Header -->
+            <div class="text-center w-full mb-16 animate-fade-in">
+                <div class="mb-4">
+                    <span class="inline-block w-16 h-1 bg-blue-500 rounded-full"></span>
+                    <span class="inline-block w-8 h-1 bg-blue-300 rounded-full ml-1"></span>
+                </div>
+                <h1 class="sm:text-4xl text-3xl font-bold title-font mb-4 text-gray-900 dark:text-white">
+                    <i class="fas fa-map-marked-alt text-blue-500 mr-3"></i>
+                    {{__('Recommended Destinations')}}
+                </h1>
+                <p class="lg:w-2/3 mx-auto leading-relaxed text-lg dark:text-gray-300 text-gray-600">
+                    {{__('Discover amazing places and create unforgettable memories with our carefully curated destination recommendations')}}
+                </p>
             </div>
-            <div class="flex flex-wrap -m-4">
-            @foreach([
-                ['title' => 'Gamplong Studio Alam', 'description' => 'Studio Alam Gamplong, located in Sleman, is a former sugarcane plantation that was converted into an educational and cinema attraction.', 'map' => 'https://maps.app.goo.gl/osSN6zjAZVFvnGAk8', 'image' => 'img/destinasi/1.jpg'],
-                ['title' => 'HeHa Sky View', 'description' => 'HeHa Sky View is a combination restaurant, cafe and amusement park that offers a beautiful view of Yogyakarta from the top of the hills.', 'map' => 'https://maps.app.goo.gl/j9xn28E99PYWELK79', 'image' => 'img/destinasi/2.jpg'],
-                ['title' => 'Gembira Loka Zoo', 'description' => 'Gembira Loka Zoo is located in the city of Yogyakarta. The zoo is easily accessible by private vehicle or public transportation.', 'map' => 'https://maps.app.goo.gl/haE5qUt46qkV22jUA', 'image' => 'img/destinasi/3.jpeg'],
-                ['title' => 'Merapi Park', 'description' => 'Merapi Park is located in Sleman. It is right at the foot of Mount Merapi, so it offers beautiful mountain views.', 'map' => 'https://maps.app.goo.gl/KfLwXFFHtZuhi2ndA', 'image' => 'img/destinasi/4.jpg'],
-                ['title' => 'Candi Prambanan', 'description' => 'Prambanan Temple is located in Sleman. The largest Hindu temple in Indonesia is located on the border between Yogyakarta and Solo.', 'map' => 'https://maps.app.goo.gl/e5rbJu2rHQeWkeAx8', 'image' => 'img/destinasi/5.jpg'],
-                ['title' => 'Bukit Pengilon', 'description' => 'Pengilon Hill, located in Gunung Kidul, offers a panoramic view of green hills, blue southern sea, and exotic corals.', 'map' => 'https://maps.app.goo.gl/ydyiFVYKffxBniz16', 'image' => 'img/destinasi/6.jpeg'],
-            ] as $destination)
-            <div class="lg:w-1/3 sm:w-1/2 p-4">
-                <div class="destination-card">
-                    <img alt="{{ $destination['title'] }}" class="destination-image" src="{{ asset($destination['image']) }}">
-                    <div class="destination-info">
-                        <h2 class="text-lg font-medium text-gray-900 mb-1">{{ $destination['title'] }}</h2>
-                        <p class="text-sm mb-2">{{ $destination['description'] }}</p>
-                        <a class="text-sm font-medium text-blue-500" href="{{ $destination['map'] }}" target="_blank">Google Maps</a>
-                    </div>
+
+            @php
+                $destinations = \App\Models\Destination::active()->ordered()->get();
+                $destinationChunks = $destinations->chunk(6); // Bagi menjadi grup 6
+            @endphp
+
+            @if($destinations->count() > 0)
+            <!-- Tab Navigation -->
+            @if($destinationChunks->count() > 1)
+            <div class="flex justify-center mb-12">
+                <div class="destination-tabs">
+                    @foreach($destinationChunks as $index => $chunk)
+                    <button class="destination-tab {{ $index === 0 ? 'active' : '' }}" 
+                            data-tab="{{ $index }}"
+                            onclick="showDestinationTab({{ $index }})">
+                        <i class="fas fa-map-pin mr-2"></i>
+                        {{ __('Page') }} {{ $index + 1 }}
+                        <span class="tab-count">({{ $chunk->count() }})</span>
+                    </button>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
+            @endif
+
+            <!-- Destinations Content -->
+            <div class="destinations-container">
+                @foreach($destinationChunks as $chunkIndex => $chunk)
+                <div class="destination-tab-content {{ $chunkIndex === 0 ? 'active' : '' }}" 
+                     id="tab-content-{{ $chunkIndex }}">
+                    <div class="flex flex-wrap -m-4">
+                        @foreach($chunk as $index => $destination)
+                        <div class="lg:w-1/3 sm:w-1/2 p-4 destination-item" 
+                             style="animation-delay: {{ $index * 0.1 }}s">
+                            <div class="destination-card">
+                                <!-- Image Container -->
+                                <div class="destination-image-container">
+                                    <img alt="{{ $destination->title }}" 
+                                         class="destination-image" 
+                                         src="{{ $destination->image_url }}"
+                                         loading="lazy">
+                                    
+                                    <!-- Overlay -->
+                                    <div class="destination-overlay">
+                                        <div class="destination-overlay-content">
+                                            @if($destination->map_url)
+                                            <a href="{{ $destination->map_url }}" 
+                                               target="_blank" 
+                                               class="destination-map-btn">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span>View Location</span>
+                                            </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="destination-content">
+                                    <div class="destination-badge">
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <span>Recommended</span>
+                                    </div>
+                                    <h2 class="destination-title">{{ $destination->title }}</h2>
+                                    <p class="destination-description">{{ Str::limit($destination->description, 100) }}</p>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="destination-actions">
+                                        @if($destination->map_url)
+                                        <a href="{{ $destination->map_url }}" 
+                                           target="_blank" 
+                                           class="destination-btn-primary">
+                                            <i class="fas fa-directions mr-2"></i>
+                                            Get Directions
+                                        </a>
+                                        @endif
+                                        <button class="destination-btn-secondary" 
+                                                onclick="shareDestination('{{ $destination->title }}', '{{ $destination->map_url }}')">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endforeach
             </div>
+
+            @else
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <div class="mb-6">
+                        <i class="fas fa-map-marked-alt text-6xl text-gray-300 dark:text-gray-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        {{__('No Destinations Available')}}
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400">
+                        {{__('Check back later for amazing destination recommendations!')}}
+                    </p>
+                </div>
+            </div>
+            @endif
         </div>
     </section>
 
     @push('after-styles')
 <style>
+    /* Enhanced Animations */
     .animate-description {
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .animate-description.show {
@@ -191,41 +287,245 @@
         transform: translateY(0);
     }
 
+    .animate-fade-in {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Tab Navigation Styles */
+    .destination-tabs {
+        display: flex;
+        background: white;
+        border-radius: 15px;
+        padding: 6px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        gap: 4px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .destination-tab {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        border: none;
+        background: transparent;
+        color: #6b7280;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .destination-tab:hover {
+        background: #f3f4f6;
+        color: #374151;
+        transform: translateY(-1px);
+    }
+
+    .destination-tab.active {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .tab-count {
+        margin-left: 6px;
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+    /* Tab Content */
+    .destination-tab-content {
+        display: none;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .destination-tab-content.active {
+        display: block;
+    }
+
+    /* Destination Cards */
     .destination-card {
-        position: relative;
+        background: white;
+        border-radius: 16px;
         overflow: hidden;
-        border-radius: 0.5rem;
-        height: 300px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 380px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .destination-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .destination-image-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
     }
 
     .destination-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .destination-info {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 1rem;
-        transform: translateY(100%);
-        transition: transform 0.5s ease;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .destination-card:hover .destination-image {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 
-    .destination-card:hover .destination-info {
+    .destination-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .destination-card:hover .destination-overlay {
+        opacity: 1;
+    }
+
+    .destination-overlay-content {
+        text-align: center;
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+    }
+
+    .destination-card:hover .destination-overlay-content {
         transform: translateY(0);
     }
 
+    .destination-map-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: white;
+        color: #1f2937;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .destination-map-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #1f2937;
+        text-decoration: none;
+    }
+
+    .destination-content {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .destination-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: white;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+        width: fit-content;
+        margin-bottom: 10px;
+    }
+
+    .destination-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .destination-description {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        flex: 1;
+    }
+
+    .destination-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: auto;
+    }
+
+    .destination-btn-primary {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .destination-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .destination-btn-secondary {
+        padding: 8px 12px;
+        background: #f3f4f6;
+        color: #6b7280;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .destination-btn-secondary:hover {
+        background: #e5e7eb;
+        color: #374151;
+        transform: translateY(-1px);
+    }
+
+    /* Smooth Bounce Animation */
     .animate-smooth-bounce {
-        animation: smoothBounce 3s ease-in-out infinite;
+        animation: smoothBounce 4s ease-in-out infinite;
     }
 
     @keyframes smoothBounce {
@@ -233,13 +533,145 @@
             transform: translateY(0px);
         }
         50% {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
+        }
+    }
+
+    /* Loading Animation for Items */
+    .destination-item {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: slideInUp 0.6s ease forwards;
+    }
+
+    @keyframes slideInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Dark Mode Adjustments */
+    .dark .destination-card {
+        background: #374151;
+    }
+
+    .dark .destination-title {
+        color: #f9fafb;
+    }
+
+    .dark .destination-description {
+        color: #d1d5db;
+    }
+
+    .dark .destination-btn-secondary {
+        background: #4b5563;
+        color: #d1d5db;
+    }
+
+    .dark .destination-btn-secondary:hover {
+        background: #6b7280;
+        color: #f9fafb;
+    }
+
+    .dark .destination-tabs {
+        background: #374151;
+    }
+
+    .dark .destination-tab {
+        color: #d1d5db;
+    }
+
+    .dark .destination-tab:hover {
+        background: #4b5563;
+        color: #f9fafb;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .destination-card {
+            height: 350px;
+        }
+        
+        .destination-image-container {
+            height: 180px;
+        }
+        
+        .destination-content {
+            padding: 16px;
+        }
+        
+        .destination-title {
+            font-size: 16px;
+        }
+        
+        .destination-description {
+            font-size: 13px;
+        }
+        
+        .destination-tabs {
+            padding: 4px;
+            gap: 2px;
+        }
+        
+        .destination-tab {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .destination-tabs {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .destination-tab {
+            justify-content: center;
+            width: 100%;
         }
     }
 </style>
 
 @push('after-scripts')
 <script>
+    // Tab functionality
+    function showDestinationTab(tabIndex) {
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.destination-tab-content');
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.destination-tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        const selectedContent = document.getElementById(`tab-content-${tabIndex}`);
+        if (selectedContent) {
+            selectedContent.classList.add('active');
+        }
+        
+        // Add active class to selected tab
+        const selectedTab = document.querySelector(`[data-tab="${tabIndex}"]`);
+        if (selectedTab) {
+            selectedTab.classList.add('active');
+        }
+        
+        // Restart animations for destination items
+        const destinationItems = selectedContent.querySelectorAll('.destination-item');
+        destinationItems.forEach((item, index) => {
+            item.style.animation = 'none';
+            item.offsetHeight; // Trigger reflow
+            item.style.animation = `slideInUp 0.6s ease forwards`;
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // Enhanced scroll animation
     function isElementInViewport(el) {
         var rect = el.getBoundingClientRect();
         return (
@@ -255,14 +687,71 @@
         for (var i = 0; i < elements.length; i++) {
             if (isElementInViewport(elements[i])) {
                 elements[i].classList.add('show');
-            } else {
-                elements[i].classList.remove('show'); // Remove class when not in viewport
             }
         }
     }
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('load', handleScroll);
+    // Share destination function
+    function shareDestination(title, mapUrl) {
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: `Check out this amazing destination: ${title}`,
+                url: mapUrl || window.location.href
+            }).catch(console.error);
+        } else {
+            const text = `Check out this amazing destination: ${title} ${mapUrl || ''}`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Link copied to clipboard!');
+                });
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Link copied to clipboard!');
+            }
+        }
+    }
+
+    // Show notification
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize scroll animations
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Run once on load
+        
+        // Auto-switch tabs every 10 seconds (optional)
+        const tabs = document.querySelectorAll('.destination-tab');
+        if (tabs.length > 1) {
+            let currentTab = 0;
+            setInterval(() => {
+                currentTab = (currentTab + 1) % tabs.length;
+                showDestinationTab(currentTab);
+            }, 10000); // 10 seconds
+        }
+    });
 </script>
 
 @endpush

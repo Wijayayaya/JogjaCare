@@ -141,8 +141,8 @@
             </h1>
         </div>
         
-        <p class="text-gray-600 dark:text-gray-300 mb-12 text-lg animate-fade-in">
-            Uji pengetahuan Anda tentang mitos dan fakta kesehatan dengan 9 pertanyaan menarik berdasarkan penelitian medis terpercaya.
+        <p class="text-gray-600 dark:text-gray-300 mb-12 text-lg animate-fade-in welcome-description">
+            Uji pengetahuan Anda tentang mitos dan fakta kesehatan dengan pertanyaan menarik berdasarkan penelitian medis terpercaya.
         </p>
 
         <!-- Main Welcome Screen -->
@@ -161,7 +161,7 @@
                         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-3 mb-4">
                             <span>Tim Medis</span>
                             <span>•</span>
-                            <span>9 Pertanyaan</span>
+                            <span class="question-count">Memuat...</span>
                             <span>•</span>
                             <span>Tanpa Batas Waktu</span>
                         </div>
@@ -177,7 +177,7 @@
                         <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                             <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">📊 Format Quiz</h4>
                             <ul class="text-sm text-blue-700 dark:text-blue-400 space-y-1">
-                                <li>• 9 pertanyaan pilihan ganda</li>
+                                <li>• <span class="question-count-detail">Memuat...</span> pertanyaan pilihan ganda</li>
                                 <li>• Mitos atau Fakta</li>
                                 <li>• Penjelasan untuk setiap jawaban</li>
                             </ul>
@@ -217,13 +217,13 @@
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="text-lg">❓</span>
-                            <span class="font-medium text-sm">Soal: <span id="currentQ">1</span>/<span id="totalQ">9</span></span>
+                            <span class="font-medium text-sm">Soal: <span id="currentQ">1</span>/<span id="totalQ">0</span></span>
                         </div>
                     </div>
                     
                     <!-- Progress Bar -->
                     <div class="mt-3 bg-white/20 rounded-full h-2">
-                        <div id="progressBar" class="bg-white rounded-full h-2 transition-all duration-500" style="width: 11.11%"></div>
+                        <div id="progressBar" class="bg-white rounded-full h-2 transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
 
@@ -277,7 +277,7 @@
                         
                         <div class="bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 mb-4">
                             <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                                <span id="finalScore">0</span>/9
+                                <span id="finalScore">0</span>/<span id="finalTotal">0</span>
                             </p>
                             <div class="text-base text-gray-700 dark:text-gray-300" id="scorePercentage"></div>
                         </div>
@@ -314,54 +314,82 @@
     </div>
 
     <script>
-        // Quiz data
-        const quizData = [
+        // Quiz data - akan diambil dari database
+        let quizData = [];
+        let isDataLoaded = false;
+
+        // Fungsi untuk mengambil data quiz dari database
+        async function loadQuizData() {
+    try {
+        console.log('Loading quiz data...');
+        const response = await fetch('/api/quiz-data');
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Quiz data received:', data);
+        
+        if (data && Array.isArray(data) && data.length > 0) {
+            quizData = data;
+            isDataLoaded = true;
+            console.log('Quiz data loaded successfully:', quizData.length, 'questions');
+            updateWelcomeScreen();
+        } else {
+            console.warn('No quiz data found in database');
+            // Fallback jika tidak ada data di database
+            quizData = [
+                {
+                    question: "Belum ada quiz tersedia di database",
+                    answer: "Fakta",
+                    explanation: "Silakan hubungi administrator untuk menambahkan quiz melalui dashboard admin."
+                }
+            ];
+            isDataLoaded = true;
+            updateWelcomeScreen();
+        }
+    } catch (error) {
+        console.error('Error loading quiz data:', error);
+        // Fallback data jika terjadi error
+        quizData = [
             {
-                question: "Gula merah lebih sehat daripada gula putih",
-                answer: "Mitos",
-                explanation: "Kandungan kalori dan indeks glikemiknya tidak jauh berbeda; konsumsi tetap harus dibatasi."
-            },
-            {
-                question: "Konsumsi nanas dapat menyebabkan ibu hamil keguguran",
-                answer: "Mitos",
-                explanation: "Jumlah bromelain dalam nanas segar sangat kecil dan tidak cukup kuat untuk menyebabkan kontraksi atau keguguran, sehingga ibu hamil sangat aman mengkonsumsi nanas dalam jumlah normal."
-            },
-            {
-                question: "Menggigit es bisa merusak gigi",
-                answer: "Fakta",
-                explanation: "Benar, menggigit es dapat menyebabkan keretakan kecil pada gigi dan kerusakan email."
-            },
-            {
-                question: "Mandi malam menyebabkan rematik",
-                answer: "Mitos",
-                explanation: "Rematik tidak disebabkan oleh mandi malam; ini adalah gangguan autoimun atau inflamasi sendi."
-            },
-            {
-                question: "Makan makanan pedas bisa memicu sakit maag",
-                answer: "Fakta",
-                explanation: "Makan pedas akan memicu peningkatan asam lambung didalam lambung, makanya setiap orang ada toleransi pedasnya, jika melebihi batas toleransi asam lambungnya akan terus meningkat dan menjadi faktor GERD."
-            },
-            {
-                question: "Minum air dingin saat haid bisa menyebabkan kista ovarium",
-                answer: "Mitos",
-                explanation: "Kista ovarium adalah kantung berisi cairan yang terbentuk di ovarium dan umumnya disebabkan oleh fluktuasi hormon dan gaya hidup tidak sehat bukan karena suhu minuman yang kamu minum."
-            },
-            {
-                question: "Obat Antibiotik yang telah diresepkan oleh Dokter harus dihabiskan",
-                answer: "Fakta",
-                explanation: "Jika tidak dihabiskan, bakteri yang lebih kuat bisa bertahan hidup dan berkembang lagi, menyebabkan infeksi kambuh dan bakteri kebal terhadap obat tersebut."
-            },
-            {
-                question: "Sering Sakit Kepala disebabkan karena kurang tidur",
-                answer: "Fakta",
-                explanation: "Terutama orang yang jam tidurnya kacau, akan rentan mengalami TTH (Tension Type Headache) dan migrain. Karena terjadinya penyempitan pembuluh darah (terutama kapiler) pada bagian kulit kepala dan kepala."
-            },
-            {
-                question: "Tertawa bisa meningkatkan rasio panjang umur",
-                answer: "Fakta",
-                explanation: "Ketika tertawa meredakan stres, endorfin keluar, gula turun, adrenalin turun, tekanan darah turun karena lagi happy."
+                question: "Terjadi kesalahan saat memuat quiz: " + error.message,
+                answer: "Fakta", 
+                explanation: "Silakan refresh halaman atau hubungi administrator. Error: " + error.message
             }
         ];
+        isDataLoaded = true;
+        updateWelcomeScreen();
+    }
+}
+
+        // Update welcome screen dengan data dinamis
+        function updateWelcomeScreen() {
+            const questionCount = quizData.length;
+            
+            // Update deskripsi utama
+            const welcomeDescription = document.querySelector('.welcome-description');
+            if (welcomeDescription) {
+                welcomeDescription.textContent = `Uji pengetahuan Anda tentang mitos dan fakta kesehatan dengan ${questionCount} pertanyaan menarik berdasarkan penelitian medis terpercaya.`;
+            }
+            
+            // Update jumlah pertanyaan di berbagai tempat
+            const questionCountElements = document.querySelectorAll('.question-count');
+            questionCountElements.forEach(el => {
+                el.textContent = `${questionCount} Pertanyaan`;
+            });
+            
+            const questionCountDetailElements = document.querySelectorAll('.question-count-detail');
+            questionCountDetailElements.forEach(el => {
+                el.textContent = questionCount;
+            });
+            
+            // Update total questions display
+            totalQElement.textContent = questionCount;
+        }
 
         // Quiz state
         let currentQuestion = 0;
@@ -387,8 +415,13 @@
         const totalQElement = document.getElementById('totalQ');
         const progressBar = document.getElementById('progressBar');
 
-        // Initialize
-        function initQuiz() {
+        // Initialize quiz
+        async function initQuiz() {
+            // Pastikan data quiz sudah dimuat
+            if (!isDataLoaded) {
+                await loadQuizData();
+            }
+            
             currentQuestion = 0;
             score = 0;
             isAnswered = false;
@@ -474,11 +507,13 @@
             finalDisplay.classList.add('bounce-in');
             
             const finalScore = document.getElementById('finalScore');
+            const finalTotal = document.getElementById('finalTotal');
             const scoreMessage = document.getElementById('scoreMessage');
             const finalIcon = document.getElementById('finalIcon');
             const scorePercentage = document.getElementById('scorePercentage');
             
             finalScore.textContent = score;
+            finalTotal.textContent = quizData.length;
             const percentage = Math.round((score / quizData.length) * 100);
             scorePercentage.textContent = `${percentage}% Benar`;
             
@@ -555,8 +590,8 @@
         }
 
         // Event listeners
-        startQuizBtn.addEventListener('click', () => {
-            initQuiz();
+        startQuizBtn.addEventListener('click', async () => {
+            await initQuiz();
             showModal();
         });
 
@@ -564,8 +599,8 @@
         faktaBtn.addEventListener('click', () => selectAnswer('Fakta'));
         nextBtn.addEventListener('click', nextQuestion);
         
-        restartBtn.addEventListener('click', () => {
-            initQuiz();
+        restartBtn.addEventListener('click', async () => {
+            await initQuiz();
         });
         
         closeModalBtn.addEventListener('click', hideModal);
@@ -577,9 +612,6 @@
             }
         });
 
-        // Initialize total questions display
-        totalQElement.textContent = quizData.length;
-
         // Dark mode toggle functionality
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
@@ -590,6 +622,11 @@
         if (localStorage.getItem('darkMode') === 'true') {
             document.documentElement.classList.add('dark');
         }
+
+        // Load quiz data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuizData();
+        });
     </script>
 </body>
 </html>

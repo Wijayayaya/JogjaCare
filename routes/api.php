@@ -34,3 +34,17 @@ Route::get('translations/{locale}', function ($locale) {
 
 // Route untuk FAQ Data
 Route::get('/faq-data', [BotManController::class, 'getFaqData']);
+
+Route::get('/quiz-data', function () {
+    try {
+        $quizzes = \App\Models\Quiz::active()->ordered()->get();
+        
+        \Log::info('Quiz API called, found: ' . $quizzes->count() . ' quizzes');
+        
+        return response()->json($quizzes);
+    } catch (\Exception $e) {
+        \Log::error('Quiz API Error: ' . $e->getMessage());
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+

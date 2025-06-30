@@ -15,6 +15,22 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\CheckExpertSystemAccess;
 use App\Http\Controllers\Frontend\CustomerServiceChatController;
 use App\Http\Controllers\Backend\CustomerServiceController;
+use App\Http\Controllers\Backend\DestinationController;
+use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\MedicalCareController;
+use App\Http\Controllers\MedicalAlterController;
+use App\Http\Controllers\MedicalPointController;
+use App\Http\Controllers\MedicalCostController;
+use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\Admin\AdminDestinationController;
+use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Api\QuizController as ApiQuizController;
+use App\Http\Controllers\Api\ArticleController as ApiArticleController;
+use App\Http\Controllers\Admin\HealthInformationController;
+use App\Http\Controllers\Frontend\ExpertSystemController;
+use App\Http\Controllers\Admin\AmbulanceController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -169,7 +185,9 @@ Route::post('/chatai/clear', [ChatAIController::class, 'clearHistory'])->name('f
 
 Route::get('/deepseek-chat', [DeepSeekChatController::class, 'index'])->name('frontend.deepseek-chat');
 
+// Medical Education Routes
 Route::get('/medical-education', [MedicalEducationController::class, 'index'])->name('frontend.medicaleducation.index');
+Route::get('/medical-education/articles', [MedicalEducationController::class, 'articles'])->name('frontend.medicaleducation.articles');
 
 // Add these routes for Google authentication
 Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
@@ -267,3 +285,158 @@ Route::prefix('admin')->name('backend.')->middleware(['auth'])->group(function (
     Route::get('/customer-service/sessions', [CustomerServiceController::class, 'getActiveSessions'])
         ->name('customer-service.sessions');
 });
+
+Route::resource('destinations', DestinationController::class);
+
+Route::resource('destinations', DestinationController::class)->names([
+    'index' => 'backend.destinations.index',
+    'create' => 'backend.destinations.create',
+    'store' => 'backend.destinations.store',
+    'show' => 'backend.destinations.show',
+    'edit' => 'backend.destinations.edit',
+    'update' => 'backend.destinations.update',
+    'destroy' => 'backend.destinations.destroy',
+]);
+
+// Dashboard Admin Routes - hanya menggunakan auth middleware
+// Dashboard Admin Routes - tanpa middleware, cek auth di controller
+Route::get('/dashboardadmin', [DashboardAdminController::class, 'index'])->name('dashboardadmin.index');
+Route::post('/dashboardadmin/send-message', [DashboardAdminController::class, 'sendMessage'])->name('dashboardadmin.send-message'); 
+
+// Dashboard Admin Routes
+// Dashboard Admin Routes
+Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
+    Route::get('/', [DashboardAdminController::class, 'index'])->name('index');
+    
+    // Services Routes
+    Route::prefix('services')->name('services.')->group(function () {
+        // Medical Care CRUD Routes
+        Route::resource('medical-care', App\Http\Controllers\MedicalCareController::class)->names([
+            'index' => 'medicalcare.index',
+            'create' => 'medicalcare.create', 
+            'store' => 'medicalcare.store',
+            'show' => 'medicalcare.show',
+            'edit' => 'medicalcare.edit',
+            'update' => 'medicalcare.update',
+            'destroy' => 'medicalcare.destroy',
+        ]);
+        
+        // Medical Alter CRUD Routes
+        Route::resource('medical-alter', App\Http\Controllers\MedicalAlterController::class)->names([
+            'index' => 'medicalalter.index',
+            'create' => 'medicalalter.create', 
+            'store' => 'medicalalter.store',
+            'show' => 'medicalalter.show',
+            'edit' => 'medicalalter.edit',
+            'update' => 'medicalalter.update',
+            'destroy' => 'medicalalter.destroy',
+        ]);
+        
+        // Medical Point CRUD Routes
+        Route::resource('medical-point', App\Http\Controllers\MedicalPointController::class)->names([
+            'index' => 'medicalpoint.index',
+            'create' => 'medicalpoint.create', 
+            'store' => 'medicalpoint.store',
+            'show' => 'medicalpoint.show',
+            'edit' => 'medicalpoint.edit',
+            'update' => 'medicalpoint.update',
+            'destroy' => 'medicalpoint.destroy',
+        ]);
+        
+        // Medical Center CRUD Routes
+        Route::resource('medical-center', App\Http\Controllers\MedicalCenterController::class)->names([
+            'index' => 'medicalcenter.index',
+            'create' => 'medicalcenter.create', 
+            'store' => 'medicalcenter.store',
+            'show' => 'medicalcenter.show',
+            'edit' => 'medicalcenter.edit',
+            'update' => 'medicalcenter.update',
+            'destroy' => 'medicalcenter.destroy',
+        ]);
+        
+        // Medical Cost CRUD Routes
+        Route::resource('medical-cost', MedicalCostController::class)->names([
+            'index' => 'medicalcost.index',
+            'create' => 'medicalcost.create', 
+            'store' => 'medicalcost.store',
+            'show' => 'medicalcost.show',
+            'edit' => 'medicalcost.edit',
+            'update' => 'medicalcost.update',
+            'destroy' => 'medicalcost.destroy',
+        ]);
+
+        
+        // Other service routes
+        Route::get('/medical-education', [DashboardAdminController::class, 'medicalEducation'])->name('medicaleducation');
+    });
+
+    // Chat Routes
+    Route::prefix('chat')->name('chat.')->group(function () {
+        Route::get('/', [ChatController::class, 'index'])->name('index');
+        Route::get('/messages/{userId}', [ChatController::class, 'getMessages'])->name('messages');
+        Route::post('/send', [ChatController::class, 'sendMessage'])->name('send');
+        Route::post('/mark-read/{userId}', [ChatController::class, 'markAsRead'])->name('mark-read');
+        Route::delete('/session/{sessionId}', [ChatController::class, 'deleteSession'])->name('delete-session');
+    });
+
+    // Management routes
+    Route::prefix('management')->name('management.')->group(function () {
+        // Destination CRUD Routes
+        Route::resource('destination', AdminDestinationController::class);
+        Route::post('destination/{destination}/toggle-status', [AdminDestinationController::class, 'toggleStatus'])->name('destination.toggle-status');
+    });
+
+    // Admin Quiz Routes
+    Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
+        Route::resource('quiz', QuizController::class);
+        Route::patch('quiz/{quiz}/toggle-status', [QuizController::class, 'toggleStatus'])
+            ->name('quiz.toggle-status');
+    });
+
+    // Ambulance Management - NEW ROUTES
+    Route::prefix('ambulance')->name('ambulance.')->group(function () {
+    Route::get('/', [AmbulanceController::class, 'index'])->name('index');
+    Route::get('/create', [AmbulanceController::class, 'create'])->name('create');
+    Route::post('/', [AmbulanceController::class, 'store'])->name('store');
+    Route::get('/{ambulance}', [AmbulanceController::class, 'show'])->name('show');
+    Route::get('/{ambulance}/edit', [AmbulanceController::class, 'edit'])->name('edit');
+    Route::put('/{ambulance}', [AmbulanceController::class, 'update'])->name('update');
+    Route::delete('/{ambulance}', [AmbulanceController::class, 'destroy'])->name('destroy');
+    
+    // Sub-menu routes
+    Route::get('/emergency-contacts', [AmbulanceController::class, 'emergencyContacts'])->name('emergency-contacts');
+    Route::get('/hospitals', [AmbulanceController::class, 'hospitals'])->name('hospitals');
+    Route::get('/private-services', [AmbulanceController::class, 'privateServices'])->name('private-services');
+
+    
+});
+
+});
+
+// Route untuk admin quiz management,articles
+Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
+    Route::resource('quiz', QuizController::class);
+    Route::patch('quiz/{quiz}/toggle-status', [QuizController::class, 'toggleStatus'])->name('quiz.toggle-status');
+
+    // Route untuk admin article management
+    Route::resource('articles', ArticleController::class);
+    Route::patch('articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggle-status');
+
+    // Health Information Management
+    Route::resource('health-information', HealthInformationController::class);
+    Route::patch('health-information/{healthInformation}/toggle-status', [HealthInformationController::class, 'toggleStatus'])
+        ->name('health-information.toggle-status');
+});
+
+
+
+// API route untuk frontend quiz data,articles
+Route::get('/api/quiz-data', [ApiQuizController::class, 'index']);
+Route::get('/api/articles-data', [ApiArticleController::class, 'index']);
+
+// Frontend Expert System Routes - Fix the route name and structure
+Route::get('/medical-education/expert-system', [MedicalEducationController::class, 'expertSystem'])->name('frontend.medicaleducation.expert-system');
+
+// Add the API route for health information
+Route::get('/api/health-information', [MedicalEducationController::class, 'getHealthInformation']);
+
