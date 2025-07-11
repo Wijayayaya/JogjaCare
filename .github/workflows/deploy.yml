@@ -49,3 +49,5 @@ jobs:
           rm -f /home/jogjacare.my.id/public_html/public/storage
           cd /home/jogjacare.my.id/public_html
           php artisan storage:link
+
+          
