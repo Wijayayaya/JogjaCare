@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\ArticleController as ApiArticleController;
 use App\Http\Controllers\Admin\HealthInformationController;
 use App\Http\Controllers\Frontend\ExpertSystemController;
 use App\Http\Controllers\Admin\AmbulanceController;
+use Laravel\Socialite\Facades\Socialite;
 
 
 /*
