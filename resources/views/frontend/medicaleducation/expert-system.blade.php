@@ -5,7 +5,8 @@
 @endsection
 
 @push('after-styles')
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @vite('resources/css/app.css')
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -76,12 +77,12 @@
                 </div>
                 
                 <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                    Informasi <span class="text-blue-200">Kesehatan</span>
+                    {{ __('Health') }} <span class="text-blue-200">{{ __('Information') }}</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
-                    Platform edukasi kesehatan untuk memahami gejala dan kapan harus mencari bantuan medis profesional
+                    {{ __('A health education platform to understand symptoms and when to seek professional medical help') }}
                 </p>
-                
+
                 <!-- Disclaimer Utama -->
                 <div class="disclaimer-box rounded-xl p-6 mb-8 text-left max-w-4xl mx-auto">
                     <div class="flex items-start">
@@ -89,12 +90,12 @@
                             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                         </svg>
                         <div>
-                            <h3 class="font-bold text-red-800 text-xl mb-3">⚠️ PENTING - BUKAN PENGGANTI KONSULTASI MEDIS</h3>
+                            <h3 class="font-bold text-red-800 text-xl mb-3">⚠️ {{ __('IMPORTANT - NOT A SUBSTITUTE FOR MEDICAL CONSULTATION') }}</h3>
                             <div class="text-red-800 space-y-2">
-                                <p class="font-semibold">• Platform ini HANYA untuk edukasi kesehatan dan informasi umum</p>
-                                <p class="font-semibold">• TIDAK memberikan diagnosis medis atau saran pengobatan</p>
-                                <p class="font-semibold">• SELALU konsultasi dengan dokter untuk kondisi kesehatan Anda</p>
-                                <p class="font-semibold">• Jika mengalami gejala serius, segera cari bantuan medis darurat</p>
+                                <p class="font-semibold">• {{ __('This platform is for health education and general information ONLY') }}</p>
+                                <p class="font-semibold">• {{ __('Does NOT provide medical diagnosis or treatment advice') }}</p>
+                                <p class="font-semibold">• {{ __('ALWAYS consult your doctor for your health conditions') }}</p>
+                                <p class="font-semibold">• {{ __('If you experience serious symptoms, seek emergency medical help immediately') }}</p>
                             </div>
                         </div>
                     </div>
@@ -131,32 +132,30 @@
         <div id="consentSection" class="mb-8">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-                    Persetujuan Penggunaan Platform Edukasi Kesehatan
+                    {{ __('Consent to Use Health Education Platform') }}
                 </h2>
-                
                 <div class="space-y-4 mb-6">
                     <div class="flex items-start">
                         <input type="checkbox" id="consent1" class="mt-1 mr-3" required>
                         <label for="consent1" class="text-gray-700 dark:text-gray-300">
-                            Saya memahami bahwa platform ini hanya untuk edukasi kesehatan dan BUKAN pengganti konsultasi medis profesional
+                            {{ __('I understand that this platform is for health education ONLY and NOT a substitute for professional medical consultation') }}
                         </label>
                     </div>
                     <div class="flex items-start">
                         <input type="checkbox" id="consent2" class="mt-1 mr-3" required>
                         <label for="consent2" class="text-gray-700 dark:text-gray-300">
-                            Saya akan tetap berkonsultasi dengan dokter untuk diagnosis dan pengobatan yang akurat
+                            {{ __('I will still consult a doctor for accurate diagnosis and treatment') }}
                         </label>
                     </div>
                     <div class="flex items-start">
                         <input type="checkbox" id="consent3" class="mt-1 mr-3" required>
                         <label for="consent3" class="text-gray-700 dark:text-gray-300">
-                            Saya memahami bahwa informasi yang diberikan bersifat umum dan tidak spesifik untuk kondisi saya
+                            {{ __('I understand that the information provided is general and not specific to my condition') }}
                         </label>
                     </div>
                 </div>
-                
                 <button onclick="proceedToHealthInfo()" id="proceedBtn" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    Saya Setuju & Lanjutkan ke Informasi Kesehatan
+                    {{ __('I Agree & Continue to Health Information') }}
                 </button>
             </div>
         </div>
@@ -168,16 +167,16 @@
             <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-8 rounded-lg">
                 <div class="flex items-start">
                     <svg class="w-6 h-6 text-red-500 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-4 4a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                     </svg>
                     <div>
-                        <h3 class="text-lg font-bold text-red-800 mb-2">🚨 KONDISI DARURAT - SEGERA KE RUMAH SAKIT</h3>
+                        <h3 class="text-lg font-bold text-red-800 mb-2">🚨 {{ __('EMERGENCY CONDITION - GO TO THE HOSPITAL IMMEDIATELY') }}</h3>
                         <ul class="text-red-700 space-y-1">
-                            <li>• Kesulitan bernapas atau sesak napas berat</li>
-                            <li>• Nyeri dada yang hebat</li>
-                            <li>• Kehilangan kesadaran</li>
-                            <li>• Demam tinggi (>40°C) yang tidak turun</li>
-                            <li>• Perdarahan yang tidak terkontrol</li>
+                            <li>• {{ __('Severe difficulty breathing or shortness of breath') }}</li>
+                            <li>• {{ __('Severe chest pain') }}</li>
+                            <li>• {{ __('Loss of consciousness') }}</li>
+                            <li>• {{ __('High fever (>40°C) that does not subside') }}</li>
+                            <li>• {{ __('Uncontrolled bleeding') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -192,10 +191,10 @@
             <!-- Pilihan Gejala untuk Edukasi -->
             <div id="symptomSelectionCard" class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8 hidden">
                 <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-                    📚 Pilih Gejala untuk Informasi Edukasi
+                    📚 {{ __('Select Symptoms for Educational Information') }}
                 </h3>
                 <p class="text-gray-600 dark:text-gray-300 mb-8">
-                    Pilih gejala yang ingin Anda pelajari. Kami akan memberikan informasi edukasi umum dan saran kapan harus ke dokter.
+                    {{ __('Select the symptoms you want to learn about. We will provide general educational information and advice on when to see a doctor.') }}
                 </p>
                 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" id="symptomGrid">
@@ -204,14 +203,14 @@
                 
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                        <span id="selectedCount">0</span> gejala dipilih untuk edukasi
+                        <span id="selectedCount">0</span> {{ __('symptoms selected for education') }}
                     </div>
                     <div class="space-x-4">
                         <button onclick="resetSymptoms()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
-                            Reset
+                            {{ __('Reset') }}
                         </button>
                         <button onclick="getHealthInformation()" id="infoBtn" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            Dapatkan Informasi Kesehatan
+                            {{ __('Get Health Information') }}
                         </button>
                     </div>
                 </div>
@@ -246,13 +245,13 @@
             <div id="healthInfoResults" class="hidden">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
                     <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-                        📋 Informasi Kesehatan & Edukasi
+                        📋 {{ __('Health Information & Education') }}
                     </h3>
                     
                     <!-- Disclaimer dalam Hasil -->
                     <div class="warning-box rounded-lg p-4 mb-6">
                         <p class="text-yellow-800 font-semibold">
-                            ⚠️ Informasi berikut hanya untuk edukasi. Konsultasikan kondisi Anda dengan dokter untuk diagnosis dan pengobatan yang tepat.
+                            ⚠️ {{ __('The following information is for education only. Consult your doctor for proper diagnosis and treatment.') }}
                         </p>
                     </div>
                     
@@ -262,21 +261,21 @@
                     
                     <!-- Rekomendasi Konsultasi -->
                     <div class="mt-8 p-6 bg-green-50 rounded-lg border border-green-200">
-                        <h4 class="font-semibold text-green-800 mb-3">🏥 Langkah Selanjutnya</h4>
+                        <h4 class="font-semibold text-green-800 mb-3">🏥 {{ __('Next Steps') }}</h4>
                         <ul class="text-green-700 space-y-2">
-                            <li>• <strong>Konsultasi Dokter:</strong> Jadwalkan konsultasi dengan dokter umum atau spesialis</li>
-                            <li>• <strong>Catat Gejala:</strong> Buat catatan detail tentang gejala yang dialami</li>
-                            <li>• <strong>Bawa Riwayat:</strong> Siapkan riwayat kesehatan dan obat yang sedang dikonsumsi</li>
-                            <li>• <strong>Jangan Tunda:</strong> Jika gejala memburuk, segera cari bantuan medis</li>
+                            <li>• <strong>{{ __('Doctor Consultation') }}:</strong> {{ __('Schedule a consultation with a general practitioner or specialist') }}</li>
+                            <li>• <strong>{{ __('Record Symptoms') }}:</strong> {{ __('Make a detailed note of the symptoms you are experiencing') }}</li>
+                            <li>• <strong>{{ __('Bring Medical History') }}:</strong> {{ __('Prepare your medical history and current medications') }}</li>
+                            <li>• <strong>{{ __('Don\'t Delay') }}:</strong> {{ __('If symptoms worsen, seek medical help immediately') }}</li>
                         </ul>
                     </div>
                     
                     <div class="mt-8 flex justify-center space-x-4">
                         <button onclick="startNewInquiry()" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
-                            Cari Informasi Lain
+                            {{ __('Find Other Information') }}
                         </button>
                         <a href="tel:119" class="px-8 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition duration-300">
-                            📞 Darurat: 119
+                            📞 {{ __('Emergency') }}: 119
                         </a>
                     </div>
                 </div>
@@ -472,16 +471,15 @@
                             </div>
                         </div>
                         <p class="text-blue-700 dark:text-blue-400 mb-4">${info.education.what_is}</p>
-                        
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <h5 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">💡 Tips Perawatan Umum:</h5>
+                                <h5 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">💡 {{ __('General Care Tips:') }}</h5>
                                 <ul class="text-blue-700 dark:text-blue-400 space-y-1">
                                     ${info.education.care_tips.map(tip => `<li>• ${tip}</li>`).join('')}
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-semibold text-red-800 dark:text-red-300 mb-2">🏥 Kapan Harus ke Dokter:</h5>
+                                <h5 class="font-semibold text-red-800 dark:text-red-300 mb-2">🏥 {{ __('When to See a Doctor:') }}</h5>
                                 <ul class="text-red-700 dark:text-red-400 space-y-1">
                                     ${info.education.when_to_doctor.map(condition => `<li>• ${condition}</li>`).join('')}
                                 </ul>
@@ -490,7 +488,7 @@
                         
                         ${info.education.avoid && info.education.avoid.length > 0 ? `
                             <div class="mt-4">
-                                <h5 class="font-semibold text-orange-800 dark:text-orange-300 mb-2">⚠️ Yang Harus Dihindari:</h5>
+                                <h5 class="font-semibold text-orange-800 dark:text-orange-300 mb-2">⚠️ {{ __('Things to Avoid:') }}</h5>
                                 <ul class="text-orange-700 dark:text-orange-400 space-y-1">
                                     ${info.education.avoid.map(item => `<li>• ${item}</li>`).join('')}
                                 </ul>
