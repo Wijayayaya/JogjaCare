@@ -19,7 +19,7 @@
         "arcanedev/log-viewer": "^11.0",
         "botman/botman": "^2.8",
         "botman/driver-web": "^1.5",
-        "intervention/image": "^3.7",
+        "intervention/image": "^3.8",
         "intervention/image-laravel": "^1.2",
         "joeri-abbo/laravel-easy-translations": "^1.0",
         "laracasts/flash": "^3.2",

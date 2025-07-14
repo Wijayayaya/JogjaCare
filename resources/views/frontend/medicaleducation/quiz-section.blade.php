@@ -210,6 +210,7 @@
 
         <p class="text-gray-600 dark:text-gray-300 mb-12 text-lg animate-fade-in">
             {{ __('Test your knowledge about health myths and facts with 9 interesting questions based on trusted medical research.') }}
+
         </p>
 
         <!-- Main Welcome Screen -->
@@ -231,6 +232,7 @@
                         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-3 mb-4">
                             <span>{{ __('Medical Team') }}</span>
                             <span>•</span>
+
                             <span>{{ __(':count Questions', ['count' => 9]) }}</span>
                             <span>•</span>
                             <span>{{ __('No Time Limit') }}</span>
@@ -248,6 +250,7 @@
                             <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">📊 {{ __('Quiz Format') }}
                             </h4>
                             <ul class="text-sm text-blue-700 dark:text-blue-400 space-y-1">
+
                                 <li>• {{ __('9 multiple choice questions') }}</li>
                                 <li>• {{ __('Myth or Fact') }}</li>
                                 <li>• {{ __('Explanation for each answer') }}</li>
@@ -291,15 +294,18 @@
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="text-lg">❓</span>
+
                             <span class="font-medium text-sm">{{ __('Question') }}: <span id="currentQ">1</span>/<span
                                     id="totalQ">9</span></span>
+
                         </div>
                     </div>
 
                     <!-- Progress Bar -->
                     <div class="mt-3 bg-white/20 rounded-full h-2">
-                        <div id="progressBar" class="bg-white rounded-full h-2 transition-all duration-500"
-                            style="width: 11.11%"></div>
+
+                        <div id="progressBar" class="bg-white rounded-full h-2 transition-all duration-500" style="width: 0%"></div>
+
                     </div>
                 </div>
 
@@ -362,7 +368,7 @@
                         <div
                             class="bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 mb-4">
                             <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                                <span id="finalScore">0</span>/9
+                                <span id="finalScore">0</span>/<span id="finalTotal">0</span>
                             </p>
                             <div class="text-base text-gray-700 dark:text-gray-300" id="scorePercentage"></div>
                         </div>
@@ -404,6 +410,7 @@
     </div>
 
     <script>
+
         // Quiz data
         const quizData = {!! json_encode([
             [
@@ -479,6 +486,7 @@
             needLearn: "{{ __('📚 You still need to learn more about health. Keep it up!') }}"
         };
 
+
         // Quiz state
         let currentQuestion = 0;
         let score = 0;
@@ -503,8 +511,13 @@
         const totalQElement = document.getElementById('totalQ');
         const progressBar = document.getElementById('progressBar');
 
-        // Initialize
-        function initQuiz() {
+        // Initialize quiz
+        async function initQuiz() {
+            // Pastikan data quiz sudah dimuat
+            if (!isDataLoaded) {
+                await loadQuizData();
+            }
+            
             currentQuestion = 0;
             score = 0;
             isAnswered = false;
@@ -592,11 +605,13 @@
             finalDisplay.classList.add('bounce-in');
 
             const finalScore = document.getElementById('finalScore');
+            const finalTotal = document.getElementById('finalTotal');
             const scoreMessage = document.getElementById('scoreMessage');
             const finalIcon = document.getElementById('finalIcon');
             const scorePercentage = document.getElementById('scorePercentage');
 
             finalScore.textContent = score;
+            finalTotal.textContent = quizData.length;
             const percentage = Math.round((score / quizData.length) * 100);
             // Use multilang string for percent
             scorePercentage.textContent = quizLang.percentRight.replace(':percent', percentage);
@@ -674,8 +689,8 @@
         }
 
         // Event listeners
-        startQuizBtn.addEventListener('click', () => {
-            initQuiz();
+        startQuizBtn.addEventListener('click', async () => {
+            await initQuiz();
             showModal();
         });
 
@@ -684,9 +699,10 @@
         mitosBtn.addEventListener('click', () => selectAnswer(labelMyth));
         faktaBtn.addEventListener('click', () => selectAnswer(labelFact));
         nextBtn.addEventListener('click', nextQuestion);
+        
+        restartBtn.addEventListener('click', async () => {
+            await initQuiz();
 
-        restartBtn.addEventListener('click', () => {
-            initQuiz();
         });
 
         closeModalBtn.addEventListener('click', hideModal);
@@ -698,9 +714,6 @@
             }
         });
 
-        // Initialize total questions display
-        totalQElement.textContent = quizData.length;
-
         // Dark mode toggle functionality
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
@@ -711,7 +724,11 @@
         if (localStorage.getItem('darkMode') === 'true') {
             document.documentElement.classList.add('dark');
         }
+
+        // Load quiz data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuizData();
+        });
     </script>
 </body>
-
 </html>

@@ -34,12 +34,19 @@ class AuthenticatedSessionController extends Controller
         $password = $request->password;
         $remember = $request->remember_me;
 
-        if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1], $remember)) {
+        if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
             $request->session()->regenerate();
 
             $user = auth()->user();
 
             event(new UserLoginSuccess($request, $user));
+
+            // Cek apakah user adalah dashboard admin berdasarkan email
+            if ($user->email === 'dashboardadmin@medical.com' || 
+                str_contains($user->email, 'dashboardadmin') || 
+                $user->name === 'Dashboard Admin') {
+                return redirect()->route('dashboardadmin.index');
+            }
 
             return redirect()->intended(route('home', absolute: false));
         }
@@ -47,12 +54,6 @@ class AuthenticatedSessionController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
-
-        // $request->authenticate();
-
-        // $request->session()->regenerate();
-
-        // return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

@@ -69,6 +69,15 @@ $notifications_latest = optional($notifications)->take(5);
         @endcan
 
         @php
+            $module_name = "destinations";
+            $text = __('Destinations');
+            $icon = "fa-solid fa-map-location-dot";
+            $permission = "view_backend"; // Adjust permission as needed
+            $url = route('backend.'.$module_name.'.index');
+        @endphp
+        <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
+
+        @php
             $module_name = "settings";
             $text = __('Settings');
             $icon = "fa-solid fa-gears";

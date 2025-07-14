@@ -51,6 +51,16 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
         }
+
+        /* Color classes for dynamic icons */
+        .bg-blue { background-color: #3b82f6 !important; }
+        .bg-green { background-color: #10b981 !important; }
+        .bg-red { background-color: #ef4444 !important; }
+        .bg-yellow { background-color: #f59e0b !important; }
+        .bg-purple { background-color: #8b5cf6 !important; }
+        .bg-orange { background-color: #f97316 !important; }
+        .bg-pink { background-color: #ec4899 !important; }
+        .bg-indigo { background-color: #6366f1 !important; }
     </style>
 @endpush
 
@@ -90,6 +100,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Breadcrumb -->
+                <nav class="flex justify-center" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li class="inline-flex items-center">
+                            <a href="{{ route('frontend.medicaleducation.index') }}" class="inline-flex items-center text-blue-200 hover:text-white transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
+                                Medical Education
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="ml-1 text-white font-medium">Informasi Kesehatan</span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </section>
@@ -150,8 +182,14 @@
                 </div>
             </div>
 
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-gray-600">Memuat informasi kesehatan...</p>
+            </div>
+
             <!-- Pilihan Gejala untuk Edukasi -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8">
+            <div id="symptomSelectionCard" class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 mb-8 hidden">
                 <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
                     📚 {{ __('Select Symptoms for Educational Information') }}
                 </h3>
@@ -176,6 +214,31 @@
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="bg-red-50 border border-red-200 rounded-xl p-8 text-center hidden">
+                <div class="text-red-400 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-red-800 mb-2">Gagal Memuat Informasi Kesehatan</h3>
+                <p class="text-red-600 mb-4">Terjadi kesalahan saat memuat data. Silakan refresh halaman atau coba lagi nanti.</p>
+                <button onclick="loadHealthInformation()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-300">
+                    Coba Lagi
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center hidden">
+                <div class="text-gray-400 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Belum Ada Informasi Kesehatan</h3>
+                <p class="text-gray-600">Informasi kesehatan belum tersedia. Silakan hubungi administrator.</p>
             </div>
 
             <!-- Hasil Informasi Kesehatan -->
@@ -223,167 +286,9 @@
 
 @push('after-scripts')
     <script>
-        // Basis pengetahuan untuk edukasi kesehatan (bukan diagnosis)
-        const healthEducationBase = {
-            symptoms: {
-                'demam': {
-                    name: "@lang('Fever')",
-                    description: "@lang('Increased body temperature above normal (>37.5°C)')",
-                    education: {
-                        what_is: "@lang('Fever is the body\'s natural response to infection or inflammation. Normal body temperature ranges from 36-37°C.')",
-                        care_tips: [
-                            "@lang('Get enough rest in a cool place')",
-                            "@lang('Drink plenty of fluids (water, juice, soup)')",
-                            "@lang('Compress with warm water (not cold)')",
-                            "@lang('Wear thin and sweat-absorbing clothes')",
-                            "@lang('Eat easily digestible foods')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Fever >39°C or lasts >3 days')",
-                            "@lang('Accompanied by shortness of breath or chest pain')",
-                            "@lang('Febrile seizures (especially in children)')",
-                            "@lang('Severe dehydration (dry mouth, infrequent urination)')",
-                            "@lang('Widespread skin rash')"
-                        ],
-                        avoid: [
-                            "@lang('Do not use alcohol for compress')",
-                            "@lang('Do not force to eat if not hungry')",
-                            "@lang('Do not bathe in cold water during high fever')"
-                        ]
-                    }
-                },
-                'batuk': {
-                    name: "@lang('Cough')",
-                    description: "@lang('Reflex of the body to clear the respiratory tract')",
-                    education: {
-                        what_is: "@lang('Coughing is the body\'s natural reflex to clear the airways of irritants, mucus, or foreign objects.')",
-                        care_tips: [
-                            "@lang('Drink warm water with honey (for ages >1 year)')",
-                            "@lang('Gargle with warm salt water')",
-                            "@lang('Avoid cigarette smoke and air pollution')",
-                            "@lang('Maintain humidity in the room')",
-                            "@lang('Rest with your head slightly elevated')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Coughing up blood or colored mucus')",
-                            "@lang('Cough lasts >2 weeks')",
-                            "@lang('Accompanied by high fever >3 days')",
-                            "@lang('Shortness of breath or chest pain')",
-                            "@lang('Unexplained weight loss')"
-                        ],
-                        avoid: [
-                            "@lang('Do not give honey to babies <1 year')",
-                            "@lang('Avoid cough medicine without doctor\'s consultation')",
-                            "@lang('Do not smoke or be exposed to smoke')"
-                        ]
-                    }
-                },
-                'sakit_kepala': {
-                    name: "@lang('Headache')",
-                    description: "@lang('Pain or discomfort in the head area')",
-                    education: {
-                        what_is: "@lang('Headaches can be caused by various factors such as stress, lack of sleep, dehydration, or muscle tension.')",
-                        care_tips: [
-                            "@lang('Rest in a quiet and dark room')",
-                            "@lang('Cold compress on the forehead or back of the neck')",
-                            "@lang('Gently massage the temples and neck')",
-                            "@lang('Drink enough water')",
-                            "@lang('Maintain a regular sleep pattern')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Sudden and severe headache')",
-                            "@lang('Accompanied by high fever and stiff neck')",
-                            "@lang('Vision or speech disturbances')",
-                            "@lang('Recurring and worsening headaches')",
-                            "@lang('Accompanied by continuous nausea and vomiting')"
-                        ],
-                        avoid: [
-                            "@lang('Do not consume pain relievers excessively')",
-                            "@lang('Avoid bright lights during a headache')",
-                            "@lang('Do not ignore unusual headaches')"
-                        ]
-                    }
-                },
-                'mual': {
-                    name: "@lang('Nausea')",
-                    description: "@lang('Uncomfortable sensation in the stomach with the urge to vomit')",
-                    education: {
-                        what_is: "@lang('Nausea is an uncomfortable sensation in the stomach with the urge to vomit, which can be caused by digestive disorders or other conditions.')",
-                        care_tips: [
-                            "@lang('Eat in small but frequent portions')",
-                            "@lang('Avoid fatty, spicy, or strongly scented foods')",
-                            "@lang('Drink warm ginger tea or chamomile tea')",
-                            "@lang('Rest with your head elevated')",
-                            "@lang('Breathe in fresh air')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Vomiting continuously for >24 hours')",
-                            "@lang('Signs of dehydration (dry mouth, dizziness)')",
-                            "@lang('Accompanied by severe abdominal pain')",
-                            "@lang('Vomiting blood or greenish fluid')",
-                            "@lang('High fever accompanied by nausea')"
-                        ],
-                        avoid: [
-                            "@lang('Do not eat heavy foods when nauseous')",
-                            "@lang('Avoid strong odors')",
-                            "@lang('Do not lie down immediately after eating')"
-                        ]
-                    }
-                },
-                'pusing': {
-                    name: "@lang('Dizziness')",
-                    description: "@lang('Lightheadedness or loss of balance')",
-                    education: {
-                        what_is: "@lang('Dizziness can be a feeling of lightheadedness, loss of balance, or a spinning sensation (vertigo).')",
-                        care_tips: [
-                            "@lang('Sit or lie down slowly when feeling dizzy')",
-                            "@lang('Drink enough water')",
-                            "@lang('Avoid sudden head movements')",
-                            "@lang('Get enough and regular rest')",
-                            "@lang('Avoid standing for too long')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Recurring dizziness for no apparent reason')",
-                            "@lang('Accompanied by chest pain or shortness of breath')",
-                            "@lang('Loss of consciousness or near-fainting')",
-                            "@lang('Hearing disturbances or ringing in the ears')",
-                            "@lang('Dizziness accompanied by severe headache')"
-                        ],
-                        avoid: [
-                            "@lang('Do not drive when feeling dizzy')",
-                            "@lang('Avoid dangerous activities at heights')",
-                            "@lang('Do not ignore recurring dizziness')"
-                        ]
-                    }
-                },
-                'sesak_napas': {
-                    name: "@lang('Shortness of Breath')",
-                    description: "@lang('Difficulty breathing or short breaths')",
-                    education: {
-                        what_is: "@lang('Shortness of breath is difficulty in breathing that can be caused by heavy activity, lung conditions, or heart problems.')",
-                        care_tips: [
-                            "@lang('Sit upright leaning forward')",
-                            "@lang('Breathe slowly and deeply through the nose')",
-                            "@lang('Use a fan for air circulation')",
-                            "@lang('Avoid heavy activities')",
-                            "@lang('Stay calm and do not panic')"
-                        ],
-                        when_to_doctor: [
-                            "@lang('Sudden and severe shortness of breath')",
-                            "@lang('Not improving with rest')",
-                            "@lang('Accompanied by chest pain or dizziness')",
-                            "@lang('Bluish lips or nails')",
-                            "@lang('History of heart or lung disease')"
-                        ],
-                        avoid: [
-                            "@lang('Do not lie flat on your back when short of breath')",
-                            "@lang('Avoid dusty or smoky places')",
-                            "@lang('Do not delay seeking medical help')"
-                        ]
-                    }
-                }
-            }
-        };
+    
+        // Health information data from API
+        let healthEducationBase = { symptoms: {} };
 
         let selectedSymptoms = [];
 
@@ -398,54 +303,123 @@
                     proceedBtn.disabled = !allChecked;
                 });
             });
-            
-            renderSymptomGrid();
         });
 
         function proceedToHealthInfo() {
             document.getElementById('consentSection').classList.add('hidden');
             document.getElementById('healthInfoSection').classList.remove('hidden');
+            loadHealthInformation();
+        }
+
+        // Load health information from API
+        async function loadHealthInformation() {
+            try {
+                showLoadingState();
+                
+                const response = await fetch('/api/health-information');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Loaded health data:', data); // Debug log
+                
+                healthEducationBase.symptoms = data;
+                
+                if (Object.keys(data).length === 0) {
+                    showEmptyState();
+                } else {
+                    renderSymptomGrid();
+                    showSymptomSelection();
+                }
+                
+            } catch (error) {
+                console.error('Error loading health information:', error);
+                showErrorState();
+            }
+        }
+
+        function showLoadingState() {
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('symptomSelectionCard').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+        }
+
+        function showSymptomSelection() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('symptomSelectionCard').classList.remove('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+        }
+
+        function showErrorState() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('symptomSelectionCard').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+        }
+
+        function showEmptyState() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('symptomSelectionCard').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('emptyState').classList.remove('hidden');
         }
 
         function renderSymptomGrid() {
             const grid = document.getElementById('symptomGrid');
             const symptoms = Object.keys(healthEducationBase.symptoms);
             
-            grid.innerHTML = symptoms.map(symptom => `
-                <div class="symptom-card p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200" 
-                     onclick="toggleSymptom('${symptom}')" 
-                     data-symptom="${symptom}">
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 border-2 border-gray-300 rounded mr-3 flex items-center justify-center">
-                            <svg class="w-3 h-3 text-white hidden" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-gray-800 dark:text-gray-200">
-                                ${healthEducationBase.symptoms[symptom].name}
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                ${healthEducationBase.symptoms[symptom].description}
-                            </p>
+            console.log('Rendering symptoms:', symptoms); // Debug log
+            
+            grid.innerHTML = symptoms.map(symptom => {
+                const info = healthEducationBase.symptoms[symptom];
+                return `
+                    <div class="symptom-card p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 hover:border-${info.color}-300" 
+                         onclick="toggleSymptom('${symptom}')" 
+                         data-symptom="${symptom}">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 border-2 border-gray-300 rounded mr-3 flex items-center justify-center symptom-checkbox">
+                                <svg class="w-3 h-3 text-white hidden" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="w-12 h-12 bg-${info.color} rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="${info.icon} text-white text-lg"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-1">
+                                    ${info.name}
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                                    ${info.description}
+                                </p>
+                                ${info.is_emergency ? '<span class="inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full mt-2">🚨 Darurat</span>' : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function toggleSymptom(symptom) {
             const card = document.querySelector(`[data-symptom="${symptom}"]`);
             const checkbox = card.querySelector('svg');
+            const checkboxContainer = card.querySelector('.symptom-checkbox');
             
             if (selectedSymptoms.includes(symptom)) {
                 selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
                 card.classList.remove('selected');
                 checkbox.classList.add('hidden');
+                checkboxContainer.classList.remove('bg-blue-500', 'border-blue-500');
+                checkboxContainer.classList.add('border-gray-300');
             } else {
                 selectedSymptoms.push(symptom);
                 card.classList.add('selected');
                 checkbox.classList.remove('hidden');
+                checkboxContainer.classList.remove('border-gray-300');
+                checkboxContainer.classList.add('bg-blue-500', 'border-blue-500');
             }
             
             updateSelectedCount();
@@ -465,7 +439,11 @@
             selectedSymptoms = [];
             document.querySelectorAll('.symptom-card').forEach(card => {
                 card.classList.remove('selected');
-                card.querySelector('svg').classList.add('hidden');
+                const checkbox = card.querySelector('svg');
+                const checkboxContainer = card.querySelector('.symptom-checkbox');
+                checkbox.classList.add('hidden');
+                checkboxContainer.classList.remove('bg-blue-500', 'border-blue-500');
+                checkboxContainer.classList.add('border-gray-300');
             });
             updateSelectedCount();
             updateInfoButton();
@@ -483,9 +461,18 @@
                 const info = healthEducationBase.symptoms[symptom];
                 html += `
                     <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 mb-6">
-                        <h4 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">
-                            📖 {{ __('Information about') }} ${info.name}
-                        </h4>
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-${info.color} rounded-lg flex items-center justify-center mr-4">
+                                <i class="${info.icon} text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-blue-800 dark:text-blue-300">
+                                    📖 Informasi tentang ${info.name}
+                                </h4>
+                                ${info.is_emergency ? '<span class="inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full mt-1">🚨 Kondisi Darurat</span>' : ''}
+                            </div>
+                        </div>
+
                         <p class="text-blue-700 dark:text-blue-400 mb-4">${info.education.what_is}</p>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
@@ -501,7 +488,8 @@
                                 </ul>
                             </div>
                         </div>
-                        ${info.education.avoid ? `
+                        
+                        ${info.education.avoid && info.education.avoid.length > 0 ? `
                             <div class="mt-4">
                                 <h5 class="font-semibold text-orange-800 dark:text-orange-300 mb-2">⚠️ {{ __('Things to Avoid:') }}</h5>
                                 <ul class="text-orange-700 dark:text-orange-400 space-y-1">
@@ -526,7 +514,7 @@
             resetSymptoms();
             
             // Scroll back to symptom selection
-            document.getElementById('healthInfoSection').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('symptomSelectionCard').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 @endpush

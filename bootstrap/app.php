@@ -62,5 +62,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'locale' => \App\Http\Middleware\SetLocale::class, // Alias untuk middleware SetLocale
+            'admin' => AdminMiddleware::class, // Gunakan class yang sudah di-import
         ]);
     });
