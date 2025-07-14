@@ -207,9 +207,10 @@
                 {{ __('Health Quiz') }}
             </h1>
         </div>
-        
-        <p class="text-gray-600 dark:text-gray-300 mb-12 text-lg animate-fade-in welcome-description">
-            Uji pengetahuan Anda tentang mitos dan fakta kesehatan dengan pertanyaan menarik berdasarkan penelitian medis terpercaya.
+
+        <p class="text-gray-600 dark:text-gray-300 mb-12 text-lg animate-fade-in">
+            {{ __('Test your knowledge about health myths and facts with 9 interesting questions based on trusted medical research.') }}
+
         </p>
 
         <!-- Main Welcome Screen -->
@@ -231,7 +232,8 @@
                         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-3 mb-4">
                             <span>{{ __('Medical Team') }}</span>
                             <span>•</span>
-                            <span class="question-count">Memuat...</span>
+
+                            <span>{{ __(':count Questions', ['count' => 9]) }}</span>
                             <span>•</span>
                             <span>{{ __('No Time Limit') }}</span>
                         </div>
@@ -248,9 +250,10 @@
                             <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-2">📊 {{ __('Quiz Format') }}
                             </h4>
                             <ul class="text-sm text-blue-700 dark:text-blue-400 space-y-1">
-                                <li>• <span class="question-count-detail">Memuat...</span> pertanyaan pilihan ganda</li>
-                                <li>• Mitos atau Fakta</li>
-                                <li>• Penjelasan untuk setiap jawaban</li>
+
+                                <li>• {{ __('9 multiple choice questions') }}</li>
+                                <li>• {{ __('Myth or Fact') }}</li>
+                                <li>• {{ __('Explanation for each answer') }}</li>
                             </ul>
                         </div>
                         <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
@@ -291,13 +294,18 @@
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="text-lg">❓</span>
-                            <span class="font-medium text-sm">Soal: <span id="currentQ">1</span>/<span id="totalQ">0</span></span>
+
+                            <span class="font-medium text-sm">{{ __('Question') }}: <span id="currentQ">1</span>/<span
+                                    id="totalQ">9</span></span>
+
                         </div>
                     </div>
 
                     <!-- Progress Bar -->
                     <div class="mt-3 bg-white/20 rounded-full h-2">
+
                         <div id="progressBar" class="bg-white rounded-full h-2 transition-all duration-500" style="width: 0%"></div>
+
                     </div>
                 </div>
 
@@ -402,82 +410,82 @@
     </div>
 
     <script>
-        // Quiz data - akan diambil dari database
-        let quizData = [];
-        let isDataLoaded = false;
 
-        // Fungsi untuk mengambil data quiz dari database
-        async function loadQuizData() {
-    try {
-        console.log('Loading quiz data...');
-        const response = await fetch('/api/quiz-data');
-        
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('Quiz data received:', data);
-        
-        if (data && Array.isArray(data) && data.length > 0) {
-            quizData = data;
-            isDataLoaded = true;
-            console.log('Quiz data loaded successfully:', quizData.length, 'questions');
-            updateWelcomeScreen();
-        } else {
-            console.warn('No quiz data found in database');
-            // Fallback jika tidak ada data di database
-            quizData = [
-                {
-                    question: "Belum ada quiz tersedia di database",
-                    answer: "Fakta",
-                    explanation: "Silakan hubungi administrator untuk menambahkan quiz melalui dashboard admin."
-                }
-            ];
-            isDataLoaded = true;
-            updateWelcomeScreen();
-        }
-    } catch (error) {
-        console.error('Error loading quiz data:', error);
-        // Fallback data jika terjadi error
-        quizData = [
-            {
-                question: "Terjadi kesalahan saat memuat quiz: " + error.message,
-                answer: "Fakta", 
-                explanation: "Silakan refresh halaman atau hubungi administrator. Error: " + error.message
-            }
-        ];
-        isDataLoaded = true;
-        updateWelcomeScreen();
-    }
-}
+        // Quiz data
+        const quizData = {!! json_encode([
+            [
+                'question' => __('Is brown sugar healthier than white sugar?'),
+                'answer' => __('Myth'),
+                'explanation' => __(
+                    'The calorie content and glycemic index are not much different; consumption should still be limited.',
+                ),
+            ],
+            [
+                'question' => __('Does eating pineapple cause miscarriage in pregnant women?'),
+                'answer' => __('Myth'),
+                'explanation' => __(
+                    'The amount of bromelain in fresh pineapple is very small and not enough to cause contractions or miscarriage, so it is safe for pregnant women to consume pineapple in normal amounts.',
+                ),
+            ],
+            [
+                'question' => __('Chewing ice can damage teeth'),
+                'answer' => __('Fact'),
+                'explanation' => __('Chewing ice can cause small cracks in teeth and damage enamel.'),
+            ],
+            [
+                'question' => __('Bathing at night causes rheumatism'),
+                'answer' => __('Myth'),
+                'explanation' => __(
+                    'Rheumatism is not caused by bathing at night; it is an autoimmune or joint inflammatory disorder.',
+                ),
+            ],
+            [
+                'question' => __('Eating spicy food can trigger stomach ulcers'),
+                'answer' => __('Fact'),
+                'explanation' => __(
+                    'Spicy food can increase stomach acid, and if it exceeds your tolerance, it can trigger GERD.',
+                ),
+            ],
+            [
+                'question' => __('Drinking cold water during menstruation causes ovarian cysts'),
+                'answer' => __('Myth'),
+                'explanation' => __(
+                    'Ovarian cysts are fluid-filled sacs in the ovary, usually caused by hormonal fluctuations and unhealthy lifestyle, not by the temperature of your drink.',
+                ),
+            ],
+            [
+                'question' => __('Antibiotics prescribed by a doctor must be finished'),
+                'answer' => __('Fact'),
+                'explanation' => __(
+                    'If not finished, stronger bacteria can survive and cause recurring infections and antibiotic resistance.',
+                ),
+            ],
+            [
+                'question' => __('Frequent headaches are caused by lack of sleep'),
+                'answer' => __('Fact'),
+                'explanation' => __(
+                    'People with irregular sleep are prone to TTH (Tension Type Headache) and migraines due to narrowing of blood vessels in the scalp.',
+                ),
+            ],
+            [
+                'question' => __('Laughing can increase life expectancy'),
+                'answer' => __('Fact'),
+                'explanation' => __(
+                    'Laughing relieves stress, releases endorphins, lowers sugar and adrenaline, and reduces blood pressure.',
+                ),
+            ],
+        ]) !!};
 
-        // Update welcome screen dengan data dinamis
-        function updateWelcomeScreen() {
-            const questionCount = quizData.length;
-            
-            // Update deskripsi utama
-            const welcomeDescription = document.querySelector('.welcome-description');
-            if (welcomeDescription) {
-                welcomeDescription.textContent = `Uji pengetahuan Anda tentang mitos dan fakta kesehatan dengan ${questionCount} pertanyaan menarik berdasarkan penelitian medis terpercaya.`;
-            }
-            
-            // Update jumlah pertanyaan di berbagai tempat
-            const questionCountElements = document.querySelectorAll('.question-count');
-            questionCountElements.forEach(el => {
-                el.textContent = `${questionCount} Pertanyaan`;
-            });
-            
-            const questionCountDetailElements = document.querySelectorAll('.question-count-detail');
-            questionCountDetailElements.forEach(el => {
-                el.textContent = questionCount;
-            });
-            
-            // Update total questions display
-            totalQElement.textContent = questionCount;
-        }
+        // Multilang strings for JS
+        const quizLang = {
+            correct: "{{ __('Correct! 🎉') }}",
+            wrong: "{{ __('Wrong! 😔') }}",
+            percentRight: "{{ __(':percent% Correct', ['percent' => ':percent']) }}",
+            excellent: "{{ __('🌟 Excellent! You really understand health facts!') }}",
+            good: "{{ __('👍 Good! Your health knowledge is quite good.') }}",
+            needLearn: "{{ __('📚 You still need to learn more about health. Keep it up!') }}"
+        };
+
 
         // Quiz state
         let currentQuestion = 0;
@@ -694,6 +702,7 @@
         
         restartBtn.addEventListener('click', async () => {
             await initQuiz();
+
         });
 
         closeModalBtn.addEventListener('click', hideModal);
@@ -723,4 +732,3 @@
     </script>
 </body>
 </html>
-

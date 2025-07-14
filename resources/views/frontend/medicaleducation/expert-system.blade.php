@@ -286,8 +286,10 @@
 
 @push('after-scripts')
     <script>
+    
         // Health information data from API
         let healthEducationBase = { symptoms: {} };
+
         let selectedSymptoms = [];
 
         // Initialize consent checking
@@ -470,6 +472,7 @@
                                 ${info.is_emergency ? '<span class="inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full mt-1">🚨 Kondisi Darurat</span>' : ''}
                             </div>
                         </div>
+
                         <p class="text-blue-700 dark:text-blue-400 mb-4">${info.education.what_is}</p>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
