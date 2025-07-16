@@ -23,7 +23,8 @@
             <div class="mb-4 flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 lg:mb-16">
                 <a class="inline-flex items-center justify-center rounded-lg border-0 bg-blue-500 px-5 py-3 text-center text-base font-medium text-white hover:bg-blue-600"
                     href="{{ route('frontend.aboutus') }}">
-                    {{__('Read more')}}
+<!--                     {{__('Read more')}} -->
+                    {{__('Baca Selengkapnya')}}
                 </a>
             </div>
 
