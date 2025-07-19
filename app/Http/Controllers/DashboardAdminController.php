@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Modules\MedicalCare\Models\MedicalCare;
 use Modules\MedicalAlter\Models\MedicalAlter;
 use Modules\MedicalPoint\Models\MedicalPoint;
-use Modules\MedicalCost\Models\medicalCost;
-use Modules\MedicalCenter\Models\medicalCenter;
+use Modules\MedicalCost\Models\MedicalCost;
+use Modules\MedicalCenter\Models\MedicalCenter;
 
 class DashboardAdminController extends Controller
 {
