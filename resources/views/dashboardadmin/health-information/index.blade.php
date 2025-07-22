@@ -440,6 +440,28 @@
         --alert-color: #ef4444;
     }
     
+    .search-box {
+        background: white;
+        border-radius: 15px;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    .bulk-actions {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 2px dashed #cbd5e1;
+    }
+    
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -601,6 +623,64 @@
         </div>
     </div>
 
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="GET" class="d-flex">
+                <input type="text" name="search" class="form-control search-box me-2" 
+                       placeholder="Cari nama gejala atau deskripsi..." 
+                       value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary-modern btn-modern">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('dashboardadmin.health-information.index') }}" 
+                       class="btn btn-secondary-modern btn-modern ms-2">
+                        <i class="fas fa-times"></i>
+                    </a>
+                @endif
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <div class="dropdown">
+                <button class="btn btn-info-modern btn-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-filter me-2"></i>Filter Data
+                </button>
+                <ul class="dropdown-menu filter-dropdown">
+                    <li><a class="dropdown-item" href="?filter=all"><i class="fas fa-list me-2"></i>Semua Data</a></li>
+                    <li><a class="dropdown-item" href="?filter=active"><i class="fas fa-check-circle me-2"></i>Hanya Aktif</a></li>
+                    <li><a class="dropdown-item" href="?filter=inactive"><i class="fas fa-times-circle me-2"></i>Hanya Nonaktif</a></li>
+                    <li><a class="dropdown-item" href="?filter=emergency"><i class="fas fa-exclamation-triangle me-2"></i>Kondisi Darurat</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions" id="bulkActions" style="display: none;">
+        <form method="POST" action="{{ route('dashboardadmin.health-information.bulk-action') }}" id="bulkForm">
+            @csrf
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <span class="fw-bold">
+                        <span id="selectedCount">0</span> item dipilih
+                    </span>
+                </div>
+                <div class="col-md-6 text-end">
+                    <select name="action" class="form-select d-inline-block w-auto me-2" required>
+                        <option value="">Pilih Aksi</option>
+                        <option value="activate">Aktifkan</option>
+                        <option value="deactivate">Nonaktifkan</option>
+                        <option value="delete">Hapus</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary-modern btn-modern">
+                        <i class="fas fa-check me-1"></i>Jalankan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- Main Content Card -->
     <div class="main-card animate-fade-in-up" style="animation-delay: 0.5s;">
         <div class="card-header-custom">
@@ -612,16 +692,11 @@
                     <p class="mb-0 text-white-50 small">Kelola dan pantau semua informasi kesehatan dalam satu tempat</p>
                 </div>
                 <div class="col-auto">
-                    <div class="dropdown">
-                        <button class="btn btn-light btn-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-filter me-2"></i>Filter Data
-                        </button>
-                        <ul class="dropdown-menu filter-dropdown">
-                            <li><a class="dropdown-item" href="?filter=all"><i class="fas fa-list me-2"></i>Semua Data</a></li>
-                            <li><a class="dropdown-item" href="?filter=active"><i class="fas fa-check-circle me-2"></i>Hanya Aktif</a></li>
-                            <li><a class="dropdown-item" href="?filter=inactive"><i class="fas fa-times-circle me-2"></i>Hanya Nonaktif</a></li>
-                            <li><a class="dropdown-item" href="?filter=emergency"><i class="fas fa-exclamation-triangle me-2"></i>Kondisi Darurat</a></li>
-                        </ul>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="selectAll">
+                        <label class="form-check-label text-white" for="selectAll">
+                            Pilih Semua
+                        </label>
                     </div>
                 </div>
             </div>
@@ -632,6 +707,9 @@
                 <table class="table table-modern" id="healthInfoTable">
                     <thead>
                         <tr>
+                            <th class="text-center" style="width: 50px;">
+                                <input type="checkbox" class="form-check-input" id="selectAllHeader">
+                            </th>
                             <th class="text-center" style="width: 100px;">Icon</th>
                             <th>Informasi Gejala</th>
                             <th style="width: 350px;">Deskripsi & Detail</th>
@@ -644,6 +722,10 @@
                     <tbody>
                         @forelse($healthInfo as $info)
                             <tr class="health-info-row" data-id="{{ $info->id }}">
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-check-input row-checkbox" 
+                                           name="selected_items[]" value="{{ $info->id }}">
+                                </td>
                                 <td class="text-center">
                                     <div class="icon-circle-modern bg-{{ $info->color }}-modern mx-auto">
                                         <i class="{{ $info->icon }}"></i>
@@ -723,20 +805,20 @@
                                            data-bs-toggle="tooltip">
                                             <i class="fas fa-edit text-white"></i>
                                         </a>
-                                        <button type="button" 
-                                                class="action-btn bg-danger-modern delete-btn" 
-                                                title="Hapus"
-                                                data-bs-toggle="tooltip"
-                                                data-id="{{ $info->id }}"
-                                                data-name="{{ $info->name }}">
-                                            <i class="fas fa-trash text-white"></i>
-                                        </button>
+                                        <form action="{{ route('dashboardadmin.health-information.destroy', $info) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus {{ $info->name }}?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="action-btn bg-danger-modern" title="Hapus" data-bs-toggle="tooltip">
+                                                <i class="fas fa-trash text-white"></i>
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <div class="empty-state">
                                         <div class="empty-state-icon">
                                             <i class="fas fa-heartbeat"></i>
@@ -805,7 +887,7 @@
                 <form id="deleteForm" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger-modern btn-modern">
+                    <button type="submit" class="btn btn-danger-modern btn-modern" id="confirmDeleteBtn">
                         <i class="fas fa-trash me-1"></i>Ya, Hapus Sekarang
                     </button>
                 </form>
@@ -829,13 +911,20 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
             const name = this.dataset.name;
+            const url = this.dataset.url;
             
             document.getElementById('deleteName').textContent = name;
-            document.getElementById('deleteForm').action = 
-                `/dashboardadmin/health-information/${id}`;
+            document.getElementById('deleteForm').action = url;
             
             new bootstrap.Modal(document.getElementById('deleteModal')).show();
         });
+    });
+
+    // Handle delete form submission
+    document.getElementById('deleteForm').addEventListener('submit', function(e) {
+        const btn = document.getElementById('confirmDeleteBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Menghapus...';
+        btn.disabled = true;
     });
 
     // Status toggle with confirmation
@@ -855,6 +944,96 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.submit();
             }
         });
+    });
+
+    // Bulk selection functionality
+    const selectAll = document.getElementById('selectAll');
+    const selectAllHeader = document.getElementById('selectAllHeader');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const bulkActions = document.getElementById('bulkActions');
+    const selectedCount = document.getElementById('selectedCount');
+    const bulkForm = document.getElementById('bulkForm');
+
+    function updateBulkActions() {
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+        const count = checkedBoxes.length;
+        
+        selectedCount.textContent = count;
+        
+        if (count > 0) {
+            bulkActions.style.display = 'block';
+            // Add selected IDs to bulk form
+            const existingInputs = bulkForm.querySelectorAll('input[name="selected_items[]"]');
+            existingInputs.forEach(input => input.remove());
+            
+            checkedBoxes.forEach(checkbox => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'selected_items[]';
+                input.value = checkbox.value;
+                bulkForm.appendChild(input);
+            });
+        } else {
+            bulkActions.style.display = 'none';
+        }
+    }
+
+    // Select all functionality
+    [selectAll, selectAllHeader].forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            rowCheckboxes.forEach(cb => {
+                cb.checked = isChecked;
+            });
+            // Sync both select all checkboxes
+            selectAll.checked = isChecked;
+            selectAllHeader.checked = isChecked;
+            updateBulkActions();
+        });
+    });
+
+    // Individual checkbox functionality
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+            
+            selectAll.checked = allChecked;
+            selectAllHeader.checked = allChecked;
+            selectAll.indeterminate = someChecked && !allChecked;
+            selectAllHeader.indeterminate = someChecked && !allChecked;
+            
+            updateBulkActions();
+        });
+    });
+
+    // Bulk form submission
+    bulkForm.addEventListener('submit', function(e) {
+        const action = this.querySelector('select[name="action"]').value;
+        const count = document.querySelectorAll('.row-checkbox:checked').length;
+        
+        if (!action) {
+            e.preventDefault();
+            alert('Pilih aksi yang ingin dilakukan');
+            return;
+        }
+        
+        let message = '';
+        switch(action) {
+            case 'activate':
+                message = `Aktifkan ${count} informasi kesehatan?`;
+                break;
+            case 'deactivate':
+                message = `Nonaktifkan ${count} informasi kesehatan?`;
+                break;
+            case 'delete':
+                message = `Hapus ${count} informasi kesehatan? Tindakan ini tidak dapat dibatalkan!`;
+                break;
+        }
+        
+        if (!confirm(message)) {
+            e.preventDefault();
+        }
     });
 
     // Auto-hide alerts after 5 seconds

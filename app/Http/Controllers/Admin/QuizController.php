@@ -84,4 +84,22 @@ class QuizController extends Controller
         return redirect()->back()
             ->with('success', "Quiz berhasil {$status}!");
     }
+
+    // API method untuk frontend
+    public function getQuizData()
+    {
+        try {
+            $quizzes = Quiz::where('is_active', true)
+                ->orderBy('order')
+                ->orderBy('created_at')
+                ->get(['question', 'answer', 'explanation']);
+
+            return response()->json($quizzes);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to load quiz data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

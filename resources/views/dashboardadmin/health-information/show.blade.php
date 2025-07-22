@@ -9,6 +9,11 @@
         font-family: 'Inter', sans-serif;
     }
     
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    
     .detail-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 25px;
@@ -17,6 +22,7 @@
         color: white;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
     }
     
     .detail-header::before {
@@ -33,6 +39,21 @@
     @keyframes rotate {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    
+    .emergency-banner {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        border-radius: 15px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 2rem;
+        color: white;
+        animation: pulse 2s infinite;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
     }
     
     .detail-card {
@@ -147,14 +168,60 @@
         border-left: 5px solid #ef4444;
     }
     
+    .timeline-item {
+        position: relative;
+        padding-left: 3rem;
+        margin-bottom: 2rem;
+    }
+    
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .timeline-marker {
+        position: absolute;
+        left: -8px;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: 3px solid white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    
     .tip-item {
         background: white;
         border-radius: 15px;
-        padding: 1rem 1.5rem;
+        padding: 1.5rem;
         margin-bottom: 1rem;
         box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         border-left: 4px solid #10b981;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tip-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .tip-item:hover::before {
+        opacity: 1;
     }
     
     .tip-item:hover {
@@ -165,11 +232,29 @@
     .doctor-item {
         background: white;
         border-radius: 15px;
-        padding: 1rem 1.5rem;
+        padding: 1.5rem;
         margin-bottom: 1rem;
         box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         border-left: 4px solid #f59e0b;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .doctor-item:hover::before {
+        opacity: 1;
     }
     
     .doctor-item:hover {
@@ -180,16 +265,59 @@
     .avoid-item {
         background: white;
         border-radius: 15px;
-        padding: 1rem 1.5rem;
+        padding: 1.5rem;
         margin-bottom: 1rem;
         box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         border-left: 4px solid #ef4444;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .avoid-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .avoid-item:hover::before {
+        opacity: 1;
     }
     
     .avoid-item:hover {
         transform: translateX(10px);
         box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .action-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        border-color: #667eea;
+    }
+    
+    .action-card-emergency {
+        background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+        border-color: #ef4444;
+    }
+    
+    .action-card-emergency:hover {
+        border-color: #dc2626;
     }
     
     .btn-modern {
@@ -200,6 +328,10 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .btn-modern::before {
@@ -315,6 +447,12 @@
         margin-bottom: 1rem;
         box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         border-left: 3px solid #667eea;
+        transition: all 0.3s ease;
+    }
+    
+    .metadata-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
     
     .section-title {
@@ -342,6 +480,83 @@
         margin-left: 0.5rem;
     }
     
+    .floating-actions {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .floating-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: white;
+    }
+    
+    .floating-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .breadcrumb-modern {
+        background: white;
+        border-radius: 15px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .breadcrumb-modern .breadcrumb {
+        margin: 0;
+        background: none;
+        padding: 0;
+    }
+    
+    .breadcrumb-modern .breadcrumb-item a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumb-modern .breadcrumb-item a:hover {
+        color: #764ba2;
+    }
+    
+    .print-section {
+        display: none;
+    }
+    
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        
+        .print-section {
+            display: block !important;
+        }
+        
+        body {
+            background: white !important;
+        }
+        
+        .detail-card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+            page-break-inside: avoid;
+        }
+    }
+    
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -355,15 +570,6 @@
     
     .animate-fade-in-up {
         animation: fadeInUp 0.6s ease-out;
-    }
-    
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
     }
     
     .animate-pulse-custom {
@@ -391,11 +597,66 @@
         padding: 2rem;
         border-radius: 0 0 25px 25px;
     }
+    
+    .share-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .share-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .share-btn:hover {
+        transform: scale(1.1);
+    }
+    
+    .share-btn.facebook { background: #3b5998; }
+    .share-btn.twitter { background: #1da1f2; }
+    .share-btn.whatsapp { background: #25d366; }
+    .share-btn.telegram { background: #0088cc; }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid px-4">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-modern animate-fade-in-up no-print">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboardadmin.health-information.index') }}">
+                        <i class="fas fa-heartbeat me-1"></i>Informasi Kesehatan
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $healthInformation->name }}</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Emergency Banner -->
+    @if($healthInformation->is_emergency)
+        <div class="emergency-banner animate-fade-in-up no-print">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle fs-2 me-3"></i>
+                <div>
+                    <h5 class="mb-1 fw-bold">⚠️ KONDISI DARURAT</h5>
+                    <p class="mb-0">Informasi ini berkaitan dengan kondisi yang memerlukan penanganan medis segera. Jika mengalami gejala ini, segera hubungi layanan darurat atau dokter terdekat.</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Detail Header -->
     <div class="detail-header animate-fade-in-up">
         <div class="row align-items-center">
@@ -406,31 +667,48 @@
                     </div>
                     <div>
                         <h1 class="h2 mb-2 fw-bold">{{ $healthInformation->name }}</h1>
-                        <p class="mb-1 opacity-75">{{ $healthInformation->description }}</p>
-                        <div class="d-flex align-items-center">
+                        <p class="mb-1 opacity-75 fs-5">{{ $healthInformation->description }}</p>
+                        <div class="d-flex align-items-center flex-wrap gap-2">
                             <code class="bg-white bg-opacity-20 px-3 py-1 rounded-pill text-white">{{ $healthInformation->slug }}</code>
                             @if($healthInformation->is_emergency)
-                                <span class="badge badge-danger-modern ms-2 animate-pulse-custom">
+                                <span class="badge badge-danger-modern animate-pulse-custom">
                                     <i class="fas fa-exclamation-triangle me-1"></i>DARURAT
                                 </span>
                             @endif
+                            <span class="badge badge-{{ $healthInformation->is_active ? 'success' : 'secondary' }}-modern">
+                                <i class="fas fa-{{ $healthInformation->is_active ? 'check' : 'times' }}-circle me-1"></i>
+                                {{ $healthInformation->is_active ? 'AKTIF' : 'NONAKTIF' }}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 text-lg-end">
-                <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
-                    <a href="{{ route('dashboardadmin.health-information.index') }}" class="btn btn-light btn-modern">
+                <div class="d-flex gap-2 justify-content-lg-end flex-wrap no-print">
+                    <button class="btn btn-info-modern btn-modern" onclick="window.print()">
+                        <i class="fas fa-print me-2"></i>Cetak
+                    </button>
+                    <button class="btn btn-success-modern btn-modern" onclick="shareContent()">
+                        <i class="fas fa-share-alt me-2"></i>Bagikan
+                    </button>
+                    <a href="{{ route('dashboardadmin.health-information.index') }}" class="btn btn-secondary-modern btn-modern">
                         <i class="fas fa-arrow-left me-2"></i>Kembali
                     </a>
-                    <a href="{{ route('dashboardadmin.health-information.edit', $healthInformation) }}" class="btn btn-warning btn-modern">
+                    <a href="{{ route('dashboardadmin.health-information.edit', $healthInformation) }}" class="btn btn-warning-modern btn-modern">
                         <i class="fas fa-edit me-2"></i>Edit
                     </a>
-                    <button type="button" class="btn btn-danger btn-modern" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        <i class="fas fa-trash me-2"></i>Hapus
-                    </button>
+                    
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Print Header (Only visible when printing) -->
+    <div class="print-section">
+        <div class="text-center mb-4">
+            <h1>{{ $healthInformation->name }}</h1>
+            <p class="text-muted">{{ $healthInformation->description }}</p>
+            <hr>
         </div>
     </div>
 
@@ -462,15 +740,19 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="timeline-container">
                         @foreach($healthInformation->care_tips as $index => $tip)
-                            <div class="col-md-6 mb-3">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
                                 <div class="tip-item">
                                     <div class="d-flex align-items-start">
-                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 0.875rem; font-weight: 600;">
+                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px; font-size: 0.875rem; font-weight: 600; flex-shrink: 0;">
                                             {{ $index + 1 }}
                                         </div>
-                                        <span class="text-dark" style="line-height: 1.6;">{{ $tip }}</span>
+                                        <div>
+                                            <h6 class="mb-2 fw-bold text-success">Tip {{ $index + 1 }}</h6>
+                                            <p class="mb-0 text-dark" style="line-height: 1.6;">{{ $tip }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -493,8 +775,13 @@
                             <div class="col-md-6 mb-3">
                                 <div class="doctor-item">
                                     <div class="d-flex align-items-start">
-                                        <i class="fas fa-exclamation-triangle text-warning me-3 mt-1"></i>
-                                        <span class="text-dark" style="line-height: 1.6;">{{ $condition }}</span>
+                                        <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px; font-size: 0.875rem; font-weight: 600; flex-shrink: 0;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-2 fw-bold text-warning">Kondisi {{ $index + 1 }}</h6>
+                                            <p class="mb-0 text-dark" style="line-height: 1.6;">{{ $condition }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -518,8 +805,13 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="avoid-item">
                                         <div class="d-flex align-items-start">
-                                            <i class="fas fa-times-circle text-danger me-3 mt-1"></i>
-                                            <span class="text-dark" style="line-height: 1.6;">{{ $avoid }}</span>
+                                            <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px; font-size: 0.875rem; font-weight: 600; flex-shrink: 0;">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-2 fw-bold text-danger">Hindari {{ $index + 1 }}</h6>
+                                                <p class="mb-0 text-dark" style="line-height: 1.6;">{{ $avoid }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -529,23 +821,57 @@
                 </div>
             @endif
 
-            <!-- Next Steps Section -->
+            <!-- Emergency Actions Section -->
             <div class="detail-card animate-fade-in-up" style="animation-delay: 0.5s;">
                 <div class="card-header-info">
                     <h5 class="mb-0 fw-bold text-white">
-                        <i class="fas fa-route me-2"></i>Langkah Selanjutnya
+                        <i class="fas fa-ambulance me-2"></i>Kontak Darurat & Langkah Selanjutnya
                     </h5>
                 </div>
                 <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="action-card action-card-emergency">
+                                <div class="mb-3">
+                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold mb-2">Layanan Darurat</h6>
+                                <p class="text-muted small mb-3">Hubungi segera jika kondisi memburuk</p>
+                                <a href="tel:119" class="btn btn-danger-modern btn-modern">
+                                    <i class="fas fa-phone me-2"></i>119
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="action-card">
+                                <div class="mb-3">
+                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                        <i class="fas fa-ambulance"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold mb-2">Ambulans</h6>
+                                <p class="text-muted small mb-3">Layanan ambulans 24 jam</p>
+                                <a href="tel:1500-567" class="btn btn-info-modern btn-modern">
+                                    <i class="fas fa-ambulance me-2"></i>1500-567
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="info-section info-section-success">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-route me-2"></i>Langkah-Langkah yang Disarankan:
+                        </h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                                         <i class="fas fa-user-md"></i>
                                     </div>
                                     <div>
-                                        <h6 class="mb-1 fw-bold">Konsultasi Dokter</h6>
+                                        <h6 class="mb-1 fw-bold">1. Konsultasi Dokter</h6>
                                         <small class="text-muted">Jadwalkan konsultasi dengan dokter umum atau spesialis</small>
                                     </div>
                                 </div>
@@ -556,7 +882,7 @@
                                         <i class="fas fa-clipboard-list"></i>
                                     </div>
                                     <div>
-                                        <h6 class="mb-1 fw-bold">Catat Gejala</h6>
+                                        <h6 class="mb-1 fw-bold">2. Catat Gejala</h6>
                                         <small class="text-muted">Buat catatan detail tentang gejala yang dialami</small>
                                     </div>
                                 </div>
@@ -567,32 +893,21 @@
                                         <i class="fas fa-history"></i>
                                     </div>
                                     <div>
-                                        <h6 class="mb-1 fw-bold">Bawa Riwayat</h6>
+                                        <h6 class="mb-1 fw-bold">3. Bawa Riwayat</h6>
                                         <small class="text-muted">Siapkan riwayat kesehatan dan obat yang sedang dikonsumsi</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                        <i class="fas fa-clock"></i>
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-shield-alt"></i>
                                     </div>
                                     <div>
-                                        <h6 class="mb-1 fw-bold">Jangan Tunda</h6>
-                                        <small class="text-muted">Jika gejala memburuk, segera cari bantuan medis</small>
+                                        <h6 class="mb-1 fw-bold">4. Ikuti Anjuran</h6>
+                                        <small class="text-muted">Patuhi anjuran dokter dan minum obat sesuai resep</small>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center mt-4">
-                            <div class="d-flex gap-3 justify-content-center flex-wrap">
-                                <a href="tel:119" class="btn btn-danger-modern btn-modern">
-                                    <i class="fas fa-phone me-2"></i>Darurat: 119
-                                </a>
-                                <a href="tel:1500-567" class="btn btn-info-modern btn-modern">
-                                    <i class="fas fa-ambulance me-2"></i>Ambulans: 1500-567
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -602,9 +917,40 @@
 
         <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Status & Settings Card -->
+            <!-- Quick Stats Card -->
             <div class="detail-card animate-fade-in-up" style="animation-delay: 0.1s;">
                 <div class="card-header-info">
+                    <h6 class="mb-0 fw-bold text-white">
+                        <i class="fas fa-chart-bar me-2"></i>Statistik Konten
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="stats-mini">
+                                <div class="text-success fw-bold fs-3">{{ count($healthInformation->care_tips) }}</div>
+                                <small class="text-muted fw-semibold">Tips Perawatan</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-mini">
+                                <div class="text-warning fw-bold fs-3">{{ count($healthInformation->when_to_doctor) }}</div>
+                                <small class="text-muted fw-semibold">Kondisi Dokter</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-mini">
+                                <div class="text-danger fw-bold fs-3">{{ $healthInformation->avoid ? count($healthInformation->avoid) : 0 }}</div>
+                                <small class="text-muted fw-semibold">Yang Dihindari</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Settings Card -->
+            <div class="detail-card animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div class="card-header-gradient">
                     <h6 class="mb-0 fw-bold text-white">
                         <i class="fas fa-cog me-2"></i>Status & Pengaturan
                     </h6>
@@ -628,13 +974,13 @@
                         <div class="col-6">
                             <div class="stats-mini">
                                 <div class="text-muted text-uppercase fw-bold mb-2" style="font-size: 0.75rem;">Urutan</div>
-                                <span class="badge badge-secondary-modern fs-6">{{ $healthInformation->sort_order }}</span>
+                                <span class="badge badge-secondary-modern fs-6"># {{ $healthInformation->sort_order }}</span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Quick Actions -->
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-2 no-print">
                         <form action="{{ route('dashboardadmin.health-information.toggle-status', $healthInformation) }}" method="POST">
                             @csrf
                             @method('PATCH')
@@ -648,8 +994,8 @@
             </div>
 
             <!-- Metadata Card -->
-            <div class="detail-card animate-fade-in-up" style="animation-delay: 0.2s;">
-                <div class="card-header-gradient">
+            <div class="detail-card animate-fade-in-up" style="animation-delay: 0.3s;">
+                <div class="card-header-success">
                     <h6 class="mb-0 fw-bold text-white">
                         <i class="fas fa-info me-2"></i>Informasi Metadata
                     </h6>
@@ -679,7 +1025,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <small class="text-muted d-block">ID Sistem</small>
-                                <code class="bg-light px-2 py-1 rounded">{{ $healthInformation->id }}</code>
+                                <code class="bg-light px-2 py-1 rounded">#{{ $healthInformation->id }}</code>
                             </div>
                             <i class="fas fa-hashtag text-info"></i>
                         </div>
@@ -692,37 +1038,6 @@
                                 <code class="bg-light px-2 py-1 rounded">{{ $healthInformation->slug }}</code>
                             </div>
                             <i class="fas fa-link text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Statistics Card -->
-            <div class="detail-card animate-fade-in-up" style="animation-delay: 0.3s;">
-                <div class="card-header-success">
-                    <h6 class="mb-0 fw-bold text-white">
-                        <i class="fas fa-chart-bar me-2"></i>Statistik Konten
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <div class="stats-mini">
-                                <div class="text-success fw-bold fs-4">{{ count($healthInformation->care_tips) }}</div>
-                                <small class="text-muted">Tips Perawatan</small>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stats-mini">
-                                <div class="text-warning fw-bold fs-4">{{ count($healthInformation->when_to_doctor) }}</div>
-                                <small class="text-muted">Kondisi Dokter</small>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stats-mini">
-                                <div class="text-danger fw-bold fs-4">{{ $healthInformation->avoid ? count($healthInformation->avoid) : 0 }}</div>
-                                <small class="text-muted">Yang Dihindari</small>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -743,7 +1058,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 fw-bold text-dark">{{ $healthInformation->name }}</h6>
-                                <small class="text-muted">{{ $healthInformation->description }}</small>
+                                <small class="text-muted">{{ Str::limit($healthInformation->description, 80) }}</small>
                                 @if($healthInformation->is_emergency)
                                     <div class="mt-2">
                                         <span class="badge badge-danger-modern">🚨 Darurat</span>
@@ -758,10 +1073,36 @@
                             </small>
                         </div>
                     </div>
+                    
+                    <!-- Share Buttons -->
+                    <div class="share-buttons no-print">
+                        <button class="share-btn facebook" onclick="shareToFacebook()">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="share-btn twitter" onclick="shareToTwitter()">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <button class="share-btn telegram" onclick="shareToTelegram()">
+                            <i class="fab fa-telegram"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Floating Actions -->
+<div class="floating-actions no-print">
+    <button class="floating-btn bg-primary-modern" onclick="scrollToTop()" title="Scroll to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <button class="floating-btn bg-success-modern" onclick="shareContent()" title="Share Content">
+        <i class="fas fa-share-alt"></i>
+    </button>
 </div>
 
 <!-- Delete Confirmation Modal -->
@@ -798,6 +1139,62 @@
                         <i class="fas fa-trash me-1"></i>Ya, Hapus Sekarang
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal fade modal-modern" id="shareModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white fw-bold">
+                    <i class="fas fa-share-alt me-2"></i>Bagikan Informasi
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <div class="icon-circle-large bg-info-gradient mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h5 class="mb-3">Bagikan "{{ $healthInformation->name }}"</h5>
+                    <p class="text-muted">Pilih platform untuk membagikan informasi kesehatan ini</p>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <button class="btn btn-primary w-100" onclick="shareToFacebook()">
+                            <i class="fab fa-facebook-f me-2"></i>Facebook
+                        </button>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <button class="btn btn-info w-100" onclick="shareToTwitter()">
+                            <i class="fab fa-twitter me-2"></i>Twitter
+                        </button>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <button class="btn btn-success w-100" onclick="shareToWhatsApp()">
+                            <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                        </button>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <button class="btn btn-primary w-100" onclick="shareToTelegram()">
+                            <i class="fab fa-telegram me-2"></i>Telegram
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <label class="form-label">Link untuk dibagikan:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="shareUrl" value="{{ url()->current() }}" readonly>
+                        <button class="btn btn-outline-secondary" onclick="copyToClipboard()">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -852,6 +1249,119 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.opacity = '1';
         }, 100);
     });
+
+    // Auto-hide floating buttons on scroll
+    let lastScrollTop = 0;
+    const floatingActions = document.querySelector('.floating-actions');
+    
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop) {
+            // Scrolling down
+            floatingActions.style.transform = 'translateX(100px)';
+        } else {
+            // Scrolling up
+            floatingActions.style.transform = 'translateX(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+});
+
+// Scroll to top function
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// Share content function
+function shareContent() {
+    new bootstrap.Modal(document.getElementById('shareModal')).show();
+}
+
+// Social media sharing functions
+function shareToFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ $healthInformation->name }} - Informasi Kesehatan');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${title}`, '_blank', 'width=600,height=400');
+}
+
+function shareToTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('{{ $healthInformation->name }} - {{ Str::limit($healthInformation->description, 100) }}');
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+}
+
+function shareToWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('{{ $healthInformation->name }} - {{ Str::limit($healthInformation->description, 100) }} ' + url);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function shareToTelegram() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('{{ $healthInformation->name }} - {{ Str::limit($healthInformation->description, 100) }}');
+    window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+}
+
+// Copy to clipboard function
+function copyToClipboard() {
+    const shareUrl = document.getElementById('shareUrl');
+    shareUrl.select();
+    shareUrl.setSelectionRange(0, 99999);
+    
+    try {
+        document.execCommand('copy');
+        
+        // Show success feedback
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i>';
+        btn.classList.add('btn-success');
+        
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('btn-success');
+        }, 2000);
+        
+    } catch (err) {
+        console.error('Failed to copy: ', err);
+        alert('Gagal menyalin link. Silakan salin manual.');
+    }
+}
+
+// Print optimization
+window.addEventListener('beforeprint', function() {
+    document.title = '{{ $healthInformation->name }} - Informasi Kesehatan';
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + P for print
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.
+    // Ctrl/Cmd + P for print
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        window.print();
+    }
+    
+    // Ctrl/Cmd + S for share
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        shareContent();
+    }
+    
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+            bootstrap.Modal.getInstance(modal)?.hide();
+        });
+    }
 });
 </script>
 @endpush

@@ -153,149 +153,18 @@
         }
     }
     
-    .chat-header {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-bottom: 1px solid #e2e8f0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .chat-input-area {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-top: 1px solid #e2e8f0;
-        box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
-    }
-    
-    .message-input {
-        border: 2px solid #e2e8f0;
-        border-radius: 25px;
-        padding: 12px 20px;
-        transition: all 0.3s ease;
-        background: white;
-    }
-    
-    .message-input:focus {
-        border-color: #4299e1;
-        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-        outline: none;
-    }
-    
-    .send-button {
-        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-    }
-    
-    .send-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
-    }
-    
-    .send-button:active {
-        transform: translateY(0);
-    }
-    
-    .online-status {
-        width: 8px;
-        height: 8px;
-        background: #10b981;
-        border-radius: 50%;
-        animation: pulse-green 2s infinite;
-    }
-    
-    @keyframes pulse-green {
-        0% {
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-        }
-        70% {
-            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-        }
-    }
-    
-    .empty-state {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        border-radius: 16px;
-        padding: 3rem;
-        text-align: center;
-        margin: 2rem;
-        border: 2px dashed #cbd5e0;
-    }
-    
-    .stats-card {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        padding: 1rem;
-        margin: 0.5rem;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-    
-    .typing-indicator {
-        display: flex;
-        align-items: center;
-        padding: 8px 16px;
-        background: rgba(0,0,0,0.05);
-        border-radius: 20px;
-        margin: 8px 0;
-    }
-    
-    .typing-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #94a3b8;
-        margin: 0 2px;
-        animation: typing 1.4s infinite ease-in-out;
-    }
-    
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-    
-    @keyframes typing {
-        0%, 80%, 100% {
-            transform: scale(0.8);
-            opacity: 0.5;
-        }
-        40% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-    
-    .message-time {
-        font-size: 0.7rem;
-        opacity: 0.7;
-        margin-top: 4px;
-    }
-    
-    .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .admin-badge {
+        background: linear-gradient(45deg, #10b981, #059669);
+        color: white;
+        font-size: 0.6rem;
+        padding: 2px 6px;
+        border-radius: 8px;
         font-weight: 600;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
-    .avatar-user {
-        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-        color: white;
-    }
-    
-    .avatar-admin {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
+    .current-admin {
+        border: 2px solid #fbbf24;
+        box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.3);
     }
 </style>
 @endpush
@@ -308,22 +177,19 @@
                 <i class="fas fa-comments text-blue-600 mr-3"></i>
                 Customer Chat
             </h1>
-            <p class="text-gray-600 mt-1">Manage customer conversations and provide support</p>
+            <p class="text-gray-600 mt-1">
+                Manage customer conversations and provide support 
+                <span class="admin-badge ml-2">
+                    <i class="fas fa-user-shield mr-1"></i>
+                    Admin: {{ Auth::user()->name }}
+                </span>
+            </p>
         </div>
         <div class="flex items-center space-x-4">
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
                 <i class="fas fa-users mr-2"></i>
                 {{ $chatSessions->count() }} Active Conversations
             </div>
-            @php
-                $totalUnreadCount = 0;
-                foreach($chatSessions as $session) {
-                    $totalUnreadCount += \App\Models\ChatMessage::where('user_id', $session->user_id)
-                        ->where('sender_type', 'user')
-                        ->where('is_read', false)
-                        ->count();
-                }
-            @endphp
             @if($totalUnreadCount > 0)
             <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-pulse">
                 <i class="fas fa-bell mr-2"></i>
@@ -365,20 +231,14 @@
             
             <div class="chat-list">
                 @forelse($chatSessions as $session)
-                <div class="chat-list-item p-4 cursor-pointer" 
+                <div class="chat-list-item p-4 cursor-pointer {{ $session->admin_id == Auth::id() ? 'current-admin' : '' }}" 
                      onclick="selectChat({{ $session->user_id }}, '{{ $session->user->name ?? 'Unknown User' }}', '{{ $session->user->email ?? '' }}')">
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0 relative">
                             <div class="avatar avatar-user">
                                 {{ strtoupper(substr($session->user->name ?? 'U', 0, 1)) }}
                             </div>
-                            @php
-                                $unreadCount = \App\Models\ChatMessage::where('user_id', $session->user_id)
-                                    ->where('sender_type', 'user')
-                                    ->where('is_read', false)
-                                    ->count();
-                            @endphp
-                            @if($unreadCount > 0)
+                            @if($session->unread_count > 0)
                                 <div class="absolute -top-1 -right-1 unread-indicator"></div>
                             @endif
                         </div>
@@ -387,13 +247,27 @@
                                 <p class="text-sm font-semibold text-white truncate">
                                     {{ $session->user->name ?? 'Unknown User' }}
                                 </p>
-                                @if($unreadCount > 0)
-                                    <span class="unread-count">{{ $unreadCount }}</span>
+                                @if($session->unread_count > 0)
+                                    <span class="unread-count">{{ $session->unread_count }}</span>
                                 @endif
                             </div>
                             <p class="text-xs text-white text-opacity-70 truncate">
                                 {{ $session->user->email ?? 'No email' }}
                             </p>
+                            
+                            <!-- Admin Assignment Info -->
+                            @if($session->admin)
+                                <div class="flex items-center mt-1">
+                                    <i class="fas fa-user-tie text-xs mr-1 text-white text-opacity-60"></i>
+                                    <span class="text-xs text-white text-opacity-60">
+                                        {{ $session->admin->name }}
+                                        @if($session->admin_id == Auth::id())
+                                            <span class="text-yellow-300">(You)</span>
+                                        @endif
+                                    </span>
+                                </div>
+                            @endif
+                            
                             @if($session->latestMessage)
                                 <p class="text-sm text-white text-opacity-80 truncate mt-2">
                                     @if($session->latestMessage->sender_type === 'admin')
@@ -442,14 +316,12 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i class="fas fa-phone"></i>
-                        </button>
-                        <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                            <i class="fas fa-ellipsis-v"></i>
+                        <div class="admin-badge">
+                            <i class="fas fa-user-shield mr-1"></i>
+                            Replying as: {{ Auth::user()->name }}
+                        </div>
+                        <button onclick="markAllAsRead()" class="p-2 text-gray-400 hover:text-gray-600 transition-colors" title="Mark all as read">
+                            <i class="fas fa-check-double"></i>
                         </button>
                     </div>
                 </div>
@@ -528,6 +400,10 @@ function loadMessages(userId) {
     fetch(`/dashboardadmin/chat/messages/${userId}`)
         .then(response => response.json())
         .then(data => {
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to load messages');
+            }
+            
             const messagesContainer = document.getElementById('chatMessages');
             messagesContainer.innerHTML = '';
             
@@ -547,7 +423,8 @@ function loadMessages(userId) {
                 messageDiv.className = `mb-6 flex ${message.sender_type === 'admin' ? 'justify-end' : 'justify-start'}`;
                 
                 const bubbleClass = message.sender_type === 'admin' ? 'message-admin' : 'message-user';
-                const senderName = message.sender_type === 'admin' ? 'Dashboard Admin' : data.user_name;
+                const senderName = message.sender_type === 'admin' ? 
+                    (message.admin ? message.admin.name : 'Admin') : data.user_name;
                 const messageTime = new Date(message.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 const avatarClass = message.sender_type === 'admin' ? 'avatar-admin' : 'avatar-user';
                 const avatarText = message.sender_type === 'admin' ? 'A' : data.user_name.charAt(0).toUpperCase();
@@ -581,7 +458,7 @@ function loadMessages(userId) {
         })
         .catch(error => {
             console.error('Error loading messages:', error);
-            showNotification('Error loading messages', 'error');
+            showNotification('Error loading messages: ' + error.message, 'error');
         });
 }
 
@@ -647,6 +524,28 @@ document.getElementById('messageForm').addEventListener('submit', function(e) {
         sendButton.innerHTML = originalContent;
     });
 });
+
+// Mark all messages as read
+function markAllAsRead() {
+    if (!currentUserId) return;
+    
+    fetch(`/dashboardadmin/chat/mark-read/${currentUserId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Messages marked as read', 'success');
+            updateSidebarUnreadCounts();
+        }
+    })
+    .catch(error => {
+        console.error('Error marking as read:', error);
+    });
+}
 
 // Character count for message input
 document.getElementById('messageInput').addEventListener('input', updateCharCount);
@@ -714,7 +613,9 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.classList.add('translate-x-full');
         setTimeout(() => {
-            document.body.removeChild(notification);
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
         }, 300);
     }, 3000);
 }
@@ -726,23 +627,36 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
-// Auto-refresh page every 5 minutes to update unread counts
+// Auto-refresh sidebar every 30 seconds to update unread counts
 setInterval(function() {
     if (!currentUserId) {
-        location.reload();
+        // Only refresh if no chat is selected to avoid disrupting conversation
+        fetch('/dashboardadmin/chat/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.unread_count > 0) {
+                    // Update page title with unread count
+                    document.title = `(${data.unread_count}) Customer Chat - Medical Services`;
+                } else {
+                    document.title = 'Customer Chat - Medical Services';
+                }
+            })
+            .catch(error => console.error('Error getting unread count:', error));
     }
-}, 300000);
+}, 30000);
 
-// Initialize tooltips and other UI enhancements
+// Initialize page
 document.addEventListener('DOMContentLoaded', function() {
-    // Add smooth scrolling to all internal links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
+    // Focus message input when chat is selected
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.chat-list-item')) {
+            setTimeout(() => {
+                const messageInput = document.getElementById('messageInput');
+                if (messageInput && !messageInput.classList.contains('hidden')) {
+                    messageInput.focus();
+                }
+            }, 500);
+        }
     });
 });
 </script>
