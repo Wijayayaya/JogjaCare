@@ -3,253 +3,210 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ambulance;
-use App\Models\EmergencyContact;
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
-class AmbulanceController extends Controller
+class AdminDestinationController extends Controller
 {
+    /**
+     * Display a listing of destinations
+     */
     public function index(Request $request)
     {
-        $query = Ambulance::query();
+        $query = Destination::query();
 
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%")
-                  ->orWhere('coverage_area', 'like', "%{$search}%");
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
             });
-        }
-
-        // Filter by type
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
         }
 
         // Filter by status
         if ($request->filled('status')) {
-            $query->where('is_active', $request->status === 'active');
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
         }
 
-        $ambulances = $query->latest()->paginate(10)->withQueryString();
+        // Order by sort_order and created_at
+        $destinations = $query->orderBy('sort_order', 'asc')
+                             ->orderBy('created_at', 'desc')
+                             ->paginate(12)
+                             ->withQueryString();
 
-        // Statistics
-        $stats = [
-            'total' => Ambulance::count(),
-            'active' => Ambulance::where('is_active', true)->count(),
-            'emergency' => Ambulance::where('type', 'emergency')->count(),
-            'hospital' => Ambulance::where('type', 'hospital')->count(),
-            'private' => Ambulance::where('type', 'private')->count(),
-        ];
-
-        // Check if request wants JSON response (for AJAX/API calls)
-        if ($request->wantsJson() || $request->has('json') || $request->ajax()) {
-            Log::info('Ambulance index API called', ['data_count' => $ambulances->count()]);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $ambulances->items(),
-                'stats' => $stats,
-                'pagination' => [
-                    'current_page' => $ambulances->currentPage(),
-                    'last_page' => $ambulances->lastPage(),
-                    'per_page' => $ambulances->perPage(),
-                    'total' => $ambulances->total(),
-                ]
-            ]);
-        }
-
-        return view('dashboardadmin.ambulance.index', compact('ambulances', 'stats'));
+        return view('dashboardadmin.management.destination.index', compact('destinations'));
     }
 
+    /**
+     * Show the form for creating a new destination
+     */
     public function create()
     {
-        return view('dashboardadmin.ambulance.create');
+        return view('dashboardadmin.management.destination.create');
     }
 
+    /**
+     * Store a newly created destination
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:emergency,hospital,private',
-            'phone' => 'required|string|max:20',
-            'whatsapp' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'coverage_area' => 'nullable|string|max:255',
-            'response_time' => 'nullable|string|max:50',
-            'tariff_range' => 'nullable|string|max:100',
-            'facilities' => 'nullable|array',
-            'distance_from_malioboro' => 'nullable|string|max:50',
-            'description' => 'nullable|string',
-            'is_active' => 'boolean'
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'map_url' => 'nullable|url|max:500',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0'
         ]);
 
         try {
             DB::beginTransaction();
 
-            $ambulance = Ambulance::create($validated);
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageData = base64_encode(file_get_contents($image->getRealPath()));
+                $validated['image'] = $imageData;
+                $validated['image_mime_type'] = $image->getMimeType();
+            }
+
+            // Set default values
+            $validated['is_active'] = $request->has('is_active');
+            
+            if (!isset($validated['sort_order'])) {
+                $validated['sort_order'] = (Destination::max('sort_order') ?? 0) + 1;
+            }
+
+            $destination = Destination::create($validated);
 
             DB::commit();
 
-            if ($request->wantsJson() || $request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ambulance created successfully!',
-                    'data' => $ambulance
-                ]);
-            }
+            return redirect()->route('dashboardadmin.management.destination.index')
+                           ->with('success', 'Destination created successfully!');
 
-            return redirect()->route('ambulance.index')
-                           ->with('success', 'Ambulance created successfully!');
         } catch (\Exception $e) {
             DB::rollback();
-            Log::error('Error creating ambulance: ' . $e->getMessage());
+            Log::error('Error creating destination: ' . $e->getMessage());
             
-            if ($request->wantsJson() || $request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to create ambulance: ' . $e->getMessage()
-                ], 500);
-            }
-
             return back()->withInput()
-                        ->with('error', 'Failed to create ambulance: ' . $e->getMessage());
+                        ->with('error', 'Failed to create destination: ' . $e->getMessage());
         }
     }
 
-    public function show(Ambulance $ambulance)
+    /**
+     * Display the specified destination
+     */
+    public function show(Destination $destination)
     {
-        return view('dashboardadmin.ambulance.show', compact('ambulance'));
+        return view('dashboardadmin.management.destination.show', compact('destination'));
     }
 
-    public function edit(Ambulance $ambulance)
+    /**
+     * Show the form for editing the specified destination
+     */
+    public function edit(Destination $destination)
     {
-        return view('dashboardadmin.ambulance.edit', compact('ambulance'));
+        return view('dashboardadmin.management.destination.edit', compact('destination'));
     }
 
-    public function update(Request $request, Ambulance $ambulance)
+    /**
+     * Update the specified destination
+     */
+    public function update(Request $request, Destination $destination)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:emergency,hospital,private',
-            'phone' => 'required|string|max:20',
-            'whatsapp' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'coverage_area' => 'nullable|string|max:255',
-            'response_time' => 'nullable|string|max:50',
-            'tariff_range' => 'nullable|string|max:100',
-            'facilities' => 'nullable|array',
-            'distance_from_malioboro' => 'nullable|string|max:50',
-            'description' => 'nullable|string',
-            'is_active' => 'boolean'
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'map_url' => 'nullable|url|max:500',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0'
         ]);
 
         try {
             DB::beginTransaction();
 
-            $ambulance->update($validated);
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageData = base64_encode(file_get_contents($image->getRealPath()));
+                $validated['image'] = $imageData;
+                $validated['image_mime_type'] = $image->getMimeType();
+            }
+
+            // Handle checkbox
+            $validated['is_active'] = $request->has('is_active');
+
+            $destination->update($validated);
 
             DB::commit();
 
-            if ($request->wantsJson() || $request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ambulance updated successfully!',
-                    'data' => $ambulance
-                ]);
-            }
+            return redirect()->route('dashboardadmin.management.destination.index')
+                           ->with('success', 'Destination updated successfully!');
 
-            return redirect()->route('ambulance.index')
-                           ->with('success', 'Ambulance updated successfully!');
         } catch (\Exception $e) {
             DB::rollback();
-            Log::error('Error updating ambulance: ' . $e->getMessage());
+            Log::error('Error updating destination: ' . $e->getMessage());
             
-            if ($request->wantsJson() || $request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to update ambulance: ' . $e->getMessage()
-                ], 500);
-            }
-
             return back()->withInput()
-                        ->with('error', 'Failed to update ambulance: ' . $e->getMessage());
+                        ->with('error', 'Failed to update destination: ' . $e->getMessage());
         }
     }
 
-    public function destroy(Ambulance $ambulance)
+    /**
+     * Remove the specified destination
+     */
+    public function destroy(Destination $destination)
     {
         try {
             DB::beginTransaction();
 
-            $ambulance->delete();
+            $destination->delete();
 
             DB::commit();
 
-            return redirect()->route('ambulance.index')
-                           ->with('success', 'Ambulance deleted successfully!');
+            return redirect()->route('dashboardadmin.management.destination.index')
+                           ->with('success', 'Destination deleted successfully!');
+
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->with('error', 'Failed to delete ambulance: ' . $e->getMessage());
+            Log::error('Error deleting destination: ' . $e->getMessage());
+            
+            return back()->with('error', 'Failed to delete destination: ' . $e->getMessage());
         }
     }
 
-    public function emergencyContacts(Request $request)
+    /**
+     * Toggle destination status
+     */
+    public function toggleStatus(Destination $destination)
     {
-        $contacts = EmergencyContact::active()->latest()->get();
-        
-        Log::info('Emergency contacts API called', ['contacts_count' => $contacts->count()]);
-        
-        // Check if request wants JSON response
-        if ($request->wantsJson() || $request->has('json') || $request->ajax()) {
+        try {
+            $destination->update(['is_active' => !$destination->is_active]);
+            
+            $status = $destination->is_active ? 'activated' : 'deactivated';
+            
             return response()->json([
                 'success' => true,
-                'data' => $contacts
+                'message' => "Destination {$status} successfully!",
+                'is_active' => $destination->is_active
             ]);
-        }
-        
-        $contacts = EmergencyContact::active()->latest()->paginate(10);
-        return view('dashboardadmin.ambulance.emergency-contacts', compact('contacts'));
-    }
 
-    public function hospitals(Request $request)
-    {
-        $hospitals = Ambulance::active()->where('type', 'hospital')->latest()->get();
-        
-        Log::info('Hospital ambulances API called', ['hospitals_count' => $hospitals->count()]);
-        
-        // Check if request wants JSON response
-        if ($request->wantsJson() || $request->has('json') || $request->ajax()) {
+        } catch (\Exception $e) {
+            Log::error('Error toggling destination status: ' . $e->getMessage());
+            
             return response()->json([
-                'success' => true,
-                'data' => $hospitals
-            ]);
+                'success' => false,
+                'message' => 'Failed to update destination status'
+            ], 500);
         }
-        
-        $hospitals = Ambulance::active()->where('type', 'hospital')->latest()->paginate(10);
-        return view('dashboardadmin.ambulance.hospitals', compact('hospitals'));
-    }
-
-    public function privateServices(Request $request)
-    {
-        $privateServices = Ambulance::active()->where('type', 'private')->latest()->get();
-        
-        Log::info('Private ambulances API called', ['private_count' => $privateServices->count()]);
-        
-        // Check if request wants JSON response
-        if ($request->wantsJson() || $request->has('json') || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'data' => $privateServices
-            ]);
-        }
-        
-        $privateServices = Ambulance::active()->where('type', 'private')->latest()->paginate(10);
-        return view('dashboardadmin.ambulance.private-services', compact('privateServices'));
     }
 }

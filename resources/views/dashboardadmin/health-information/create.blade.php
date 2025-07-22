@@ -1087,6 +1087,11 @@ function setupFormValidation() {
             alert('Mohon lengkapi semua field yang wajib diisi');
             return false;
         }
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+        submitBtn.disabled = true;
     });
 }
 

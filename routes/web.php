@@ -300,12 +300,10 @@ Route::resource('destinations', DestinationController::class)->names([
     'destroy' => 'backend.destinations.destroy',
 ]);
 
-// Dashboard Admin Routes - hanya menggunakan auth middleware
 // Dashboard Admin Routes - tanpa middleware, cek auth di controller
 Route::get('/dashboardadmin', [DashboardAdminController::class, 'index'])->name('dashboardadmin.index');
 Route::post('/dashboardadmin/send-message', [DashboardAdminController::class, 'sendMessage'])->name('dashboardadmin.send-message'); 
 
-// Dashboard Admin Routes
 // Dashboard Admin Routes
 Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('index');
@@ -368,19 +366,18 @@ Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
         ]);
 
         
-        // Other service routes
-        Route::get('/medical-education', [DashboardAdminController::class, 'medicalEducation'])->name('medicaleducation');
     });
 
-    // Chat Routes
+    // Chat Management Routes
     Route::prefix('chat')->name('chat.')->group(function () {
         Route::get('/', [ChatController::class, 'index'])->name('index');
         Route::get('/messages/{userId}', [ChatController::class, 'getMessages'])->name('messages');
         Route::post('/send', [ChatController::class, 'sendMessage'])->name('send');
         Route::post('/mark-read/{userId}', [ChatController::class, 'markAsRead'])->name('mark-read');
         Route::delete('/session/{sessionId}', [ChatController::class, 'deleteSession'])->name('delete-session');
+        Route::get('/unread-count', [ChatController::class, 'getUnreadCount'])->name('unread-count');
+        Route::post('/assign/{sessionId}', [ChatController::class, 'assignToAdmin'])->name('assign');
     });
-
     // Management routes
     Route::prefix('management')->name('management.')->group(function () {
         // Destination CRUD Routes
@@ -424,10 +421,12 @@ Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
     Route::resource('articles', ArticleController::class);
     Route::patch('articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggle-status');
 
-    // Health Information Management
+    // Health Information routes
     Route::resource('health-information', HealthInformationController::class);
-    Route::patch('health-information/{healthInformation}/toggle-status', [HealthInformationController::class, 'toggleStatus'])
-        ->name('health-information.toggle-status');
+    Route::patch('health-information/{healthInformation}/toggle-status', [HealthInformationController::class, 'toggleStatus'])->name('health-information.toggle-status');
+    Route::post('health-information/bulk-action', [HealthInformationController::class, 'bulkAction'])->name('health-information.bulk-action');
+
+    
 });
 
 
