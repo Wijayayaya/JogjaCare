@@ -100,14 +100,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('type') border-red-500 @enderror" 
                             required>
                         <option value="">Select Service Type</option>
-                        <option value="General Care" {{ old('type') == 'General Care' ? 'selected' : '' }}>General Care</option>
-                        <option value="Emergency Care" {{ old('type') == 'Emergency Care' ? 'selected' : '' }}>Emergency Care</option>
-                        <option value="Specialized Care" {{ old('type') == 'Specialized Care' ? 'selected' : '' }}>Specialized Care</option>
-                        <option value="Preventive Care" {{ old('type') == 'Preventive Care' ? 'selected' : '' }}>Preventive Care</option>
-                        <option value="Rehabilitation" {{ old('type') == 'Rehabilitation' ? 'selected' : '' }}>Rehabilitation</option>
-                        <option value="Mental Health" {{ old('type') == 'Mental Health' ? 'selected' : '' }}>Mental Health</option>
-                        <option value="Pediatric Care" {{ old('type') == 'Pediatric Care' ? 'selected' : '' }}>Pediatric Care</option>
-                        <option value="Geriatric Care" {{ old('type') == 'Geriatric Care' ? 'selected' : '' }}>Geriatric Care</option>
+                        <option value="Primary Health Care" {{ old('type') == 'Primary Care' ? 'selected' : '' }}>Primary Health Care</option>
+                        <option value="Second Health Care" {{ old('type') == 'Second Care' ? 'selected' : '' }}>Second Health Care</option>
+                        <option value="Tertiary Health Care" {{ old('type') == 'Tertiary Care' ? 'selected' : '' }}>Tertiary Health Care</option>
                     </select>
                     @error('type')
                         <p class="mt-2 text-sm text-red-600 flex items-center">
