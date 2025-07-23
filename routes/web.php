@@ -365,6 +365,8 @@ Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
             'destroy' => 'medicalcost.destroy',
         ]);
 
+        Route::get('/medical-education', [DashboardAdminController::class, 'medicalEducation'])->name('medicaleducation');
+
         
     });
 
