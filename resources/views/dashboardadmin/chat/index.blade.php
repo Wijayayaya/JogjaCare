@@ -166,12 +166,129 @@
         border: 2px solid #fbbf24;
         box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.3);
     }
+
+    /* Missing styles that need to be added */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .stats-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 8px 12px;
+        backdrop-filter: blur(10px);
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .avatar-user {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .avatar-admin {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        color: white;
+    }
+
+    .online-status {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
+    .chat-header {
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        resize: none;
+        outline: none;
+    }
+
+    .message-input:focus {
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+
+    .send-button {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(66, 153, 225, 0.3);
+    }
+
+    .send-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(66, 153, 225, 0.4);
+    }
+
+    .send-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .chat-input-area {
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        margin-top: 4px;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        .chat-container {
+            height: calc(100vh - 120px);
+        }
+        
+        .w-80 {
+            width: 100%;
+            max-width: 320px;
+        }
+        
+        .message-bubble {
+            max-width: 85%;
+        }
+    }
 </style>
 @endpush
 
 @section('content')
 <div class="mb-6">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between flex-wrap gap-4">
         <div>
             <h1 class="text-3xl font-bold text-gray-900 flex items-center">
                 <i class="fas fa-comments text-blue-600 mr-3"></i>
@@ -185,7 +302,7 @@
                 </span>
             </p>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4 flex-wrap">
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
                 <i class="fas fa-users mr-2"></i>
                 {{ $chatSessions->count() }} Active Conversations
@@ -203,7 +320,7 @@
 <div class="bg-white rounded-2xl shadow-2xl chat-container overflow-hidden">
     <div class="flex h-full">
         <!-- Chat Sessions Sidebar -->
-        <div class="w-80 chat-sidebar">
+        <div class="w-80 chat-sidebar flex-shrink-0">
             <div class="p-6 border-b border-white border-opacity-20">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-bold text-white flex items-center">
@@ -232,7 +349,7 @@
             <div class="chat-list">
                 @forelse($chatSessions as $session)
                 <div class="chat-list-item p-4 cursor-pointer {{ $session->admin_id == Auth::id() ? 'current-admin' : '' }}" 
-                     onclick="selectChat({{ $session->user_id }}, '{{ $session->user->name ?? 'Unknown User' }}', '{{ $session->user->email ?? '' }}')">
+                     onclick="selectChat({{ $session->user_id }}, '{{ addslashes($session->user->name ?? 'Unknown User') }}', '{{ addslashes($session->user->email ?? '') }}')">
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0 relative">
                             <div class="avatar avatar-user">
@@ -296,26 +413,26 @@
         </div>
 
         <!-- Chat Messages Area -->
-        <div class="flex-1 flex flex-col bg-gray-50">
+        <div class="flex-1 flex flex-col bg-gray-50 min-w-0">
             <!-- Chat Header -->
             <div id="chatHeader" class="chat-header p-6 hidden">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <div class="avatar avatar-user" id="chatUserAvatar">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div class="flex items-center space-x-4 min-w-0">
+                        <div class="avatar avatar-user flex-shrink-0" id="chatUserAvatar">
                             U
                         </div>
-                        <div>
-                            <h4 id="chatUserName" class="text-xl font-bold text-gray-900"></h4>
+                        <div class="min-w-0">
+                            <h4 id="chatUserName" class="text-xl font-bold text-gray-900 truncate"></h4>
                             <div class="flex items-center space-x-2">
-                                <p id="chatUserEmail" class="text-sm text-gray-600"></p>
-                                <div class="flex items-center space-x-1">
+                                <p id="chatUserEmail" class="text-sm text-gray-600 truncate"></p>
+                                <div class="flex items-center space-x-1 flex-shrink-0">
                                     <div class="online-status"></div>
                                     <span class="text-xs text-green-600 font-medium">Online</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 flex-shrink-0">
                         <div class="admin-badge">
                             <i class="fas fa-user-shield mr-1"></i>
                             Replying as: {{ Auth::user()->name }}
@@ -348,12 +465,12 @@
                         <div class="flex items-center justify-between mt-2 px-2">
                             <div class="flex items-center space-x-4 text-xs text-gray-500">
                                 <span>Press Enter to send</span>
-                                <span>Shift + Enter for new line</span>
+                                <span class="hidden sm:inline">Shift + Enter for new line</span>
                             </div>
                             <span id="charCount" class="text-xs text-gray-400">0/1000</span>
                         </div>
                     </div>
-                    <button type="submit" class="send-button text-white hover:bg-blue-600 transition-all duration-200">
+                    <button type="submit" class="send-button text-white hover:bg-blue-600 transition-all duration-200 flex-shrink-0">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
@@ -412,7 +529,7 @@ function loadMessages(userId) {
                     <div class="empty-state">
                         <i class="fas fa-comment-dots text-6xl text-gray-400 mb-6"></i>
                         <h3 class="text-2xl font-bold text-gray-700 mb-2">No messages yet</h3>
-                        <p class="text-gray-500">Start the conversation by sending a message to ${data.user_name}</p>
+                        <p class="text-gray-500">Start the conversation by sending a message to ${escapeHtml(data.user_name)}</p>
                     </div>
                 `;
                 return;
@@ -437,7 +554,7 @@ function loadMessages(userId) {
                         <div class="message-bubble ${bubbleClass} px-4 py-3 rounded-2xl">
                             <p class="text-sm leading-relaxed">${escapeHtml(message.message)}</p>
                             <div class="message-time flex items-center justify-between mt-2">
-                                <span class="font-medium">${senderName}</span>
+                                <span class="font-medium">${escapeHtml(senderName)}</span>
                                 <span>${messageTime}</span>
                             </div>
                         </div>
@@ -589,17 +706,17 @@ function escapeHtml(text) {
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full max-w-sm`;
     
     if (type === 'success') {
         notification.classList.add('bg-green-500', 'text-white');
-        notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+        notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${escapeHtml(message)}`;
     } else if (type === 'error') {
         notification.classList.add('bg-red-500', 'text-white');
-        notification.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${message}`;
+        notification.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${escapeHtml(message)}`;
     } else {
         notification.classList.add('bg-blue-500', 'text-white');
-        notification.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${message}`;
+        notification.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${escapeHtml(message)}`;
     }
     
     document.body.appendChild(notification);
@@ -658,6 +775,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }
     });
+    
+    // Initialize character count
+    updateCharCount();
 });
 </script>
 @endpush
