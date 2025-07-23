@@ -46,18 +46,17 @@
                     <i class="fas fa-chevron-down ml-1 text-gray-400 text-xs hidden md:block"></i>
                 </button>
 
-                <!-- User Dropdown Menu -->
+                <!-- User Dropdown Menu - Simplified with only logout -->
                 <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 hidden">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-user-circle mr-2"></i>Profile
-                    </a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-cog mr-2"></i>Settings
-                    </a>
-                    <div class="border-t border-gray-100"></div>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Sign out
-                    </a>
+                    <form method="POST" action="{{ route('dashboardadmin.logout') }}" class="w-full">
+                        @csrf
+                        <button type="submit" 
+                                class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                                onclick="return confirm('Are you sure you want to logout?')">
+                            <i class="fas fa-sign-out-alt mr-2 text-red-500"></i>
+                            <span class="text-red-600 font-medium">Sign out</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -92,8 +91,22 @@ document.addEventListener('click', function(event) {
     const userMenu = document.getElementById('userMenu');
     const userButton = event.target.closest('button');
     
-    if (!userButton || !userButton.onclick || userButton.onclick.toString().indexOf('toggleUserMenu') === -1) {
-        userMenu.classList.add('hidden');
+    // Check if the clicked element is not the toggle button or logout button
+    if (!userButton || (!userButton.onclick || userButton.onclick.toString().indexOf('toggleUserMenu') === -1)) {
+        // Don't close if clicking the logout button
+        if (!event.target.closest('form')) {
+            userMenu.classList.add('hidden');
+        }
+    }
+});
+
+// Close menu after logout confirmation
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.querySelector('button[type="submit"]');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            document.getElementById('userMenu').classList.add('hidden');
+        });
     }
 });
 </script>

@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\ArticleController as ApiArticleController;
 use App\Http\Controllers\Admin\HealthInformationController;
 use App\Http\Controllers\Frontend\ExpertSystemController;
 use App\Http\Controllers\Admin\AmbulanceController;
+use App\Http\Controllers\Frontend\AmbulanceServiceController;
 use Laravel\Socialite\Facades\Socialite;
 
 
@@ -184,8 +185,17 @@ Route::get('/botman/tinker', [BotManController::class, 'tinker']);
 Route::get('/chatai', [ChatAIController::class, 'index'])->name('frontend.chatai');
 Route::post('/chatai/message', [ChatAIController::class, 'processMessage'])->name('frontend.chatai.message');
 Route::post('/chatai/clear', [ChatAIController::class, 'clearHistory'])->name('frontend.chatai.clear');
-
 Route::get('/deepseek-chat', [DeepSeekChatController::class, 'index'])->name('frontend.deepseek-chat');
+
+// Ambulance Service API routes for Chat Widget
+Route::prefix('api/ambulance')->name('ambulance.')->group(function () {
+    Route::get('/', [AmbulanceServiceController::class, 'getAmbulances'])->name('index');
+    Route::get('/type/{type}', [AmbulanceServiceController::class, 'getAmbulancesByType'])->name('by-type');
+    Route::get('/emergency', [AmbulanceServiceController::class, 'getEmergencyContacts'])->name('emergency');
+    Route::get('/search', [AmbulanceServiceController::class, 'searchAmbulances'])->name('search');
+    Route::get('/statistics', [AmbulanceServiceController::class, 'getStatistics'])->name('statistics');
+});
+
 
 // Medical Education Routes
 Route::get('/medical-education', [MedicalEducationController::class, 'index'])->name('frontend.medicaleducation.index');
@@ -300,9 +310,12 @@ Route::resource('destinations', DestinationController::class)->names([
     'destroy' => 'backend.destinations.destroy',
 ]);
 
-// Dashboard Admin Routes - tanpa middleware, cek auth di controller
-Route::get('/dashboardadmin', [DashboardAdminController::class, 'index'])->name('dashboardadmin.index');
-Route::post('/dashboardadmin/send-message', [DashboardAdminController::class, 'sendMessage'])->name('dashboardadmin.send-message'); 
+// Dashboard Admin Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboardadmin.index');
+    // Logout route
+    Route::post('/dashboard-admin/logout', [DashboardAdminController::class, 'logout'])->name('dashboardadmin.logout');
+});
 
 // Dashboard Admin Routes
 Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {

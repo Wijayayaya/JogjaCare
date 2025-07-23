@@ -96,21 +96,7 @@
         </div>
     </a>
 
-    <!-- Medical Education Card -->
-    <a href="{{ route('dashboardadmin.services.medicaleducation') }}" class="block">
-        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer">
-            <div class="flex items-center">
-                <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                    <i class="fas fa-graduation-cap text-2xl"></i>
-                </div>
-                <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Medical Education</h3>
-                    <p class="text-3xl font-bold text-indigo-600">{{ number_format($serviceData['medical_education']) }}</p>
-                    <p class="text-sm text-gray-500">Students enrolled</p>
-                </div>
-            </div>
-        </div>
-    </a>
+    
 </div>
 
 <!-- Charts Section -->
@@ -233,7 +219,7 @@
                     {{ $serviceData['medical_center'] }},
                     {{ $serviceData['medical_alter'] }},
                     {{ $serviceData['medical_cost'] }},
-                    {{ $serviceData['medical_education'] }}
+                    
                 ],
                 backgroundColor: [
                     'rgba(59, 130, 246, 0.8)',
@@ -274,7 +260,7 @@
     const pieChart = new Chart(ctx2, {
         type: 'pie',
         data: {
-            labels: ['Medical Care', 'Medical Point', 'Medical Center', 'Medical Alter', 'Medical Cost', 'Medical Education'],
+            labels: ['Medical Care', 'Medical Point', 'Medical Center', 'Medical Alter', 'Medical Cost'],
             datasets: [{
                 data: [
                     {{ $serviceData['medical_care'] }},
@@ -282,7 +268,7 @@
                     {{ $serviceData['medical_center'] }},
                     {{ $serviceData['medical_alter'] }},
                     {{ $serviceData['medical_cost'] }},
-                    {{ $serviceData['medical_education'] }}
+                    
                 ],
                 backgroundColor: [
                     'rgba(59, 130, 246, 0.8)',
@@ -339,13 +325,6 @@
                     data: {!! json_encode(array_column($monthlyData, 'medical_cost')) !!},
                     borderColor: 'rgba(239, 68, 68, 1)',
                     backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    tension: 0.4
-                },
-                {
-                    label: 'Medical Education',
-                    data: {!! json_encode(array_column($monthlyData, 'medical_education')) !!},
-                    borderColor: 'rgba(99, 102, 241, 1)',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
                     tension: 0.4
                 }
             ]
