@@ -306,7 +306,7 @@ Route::post('/dashboardadmin/send-message', [DashboardAdminController::class, 's
 
 // Dashboard Admin Routes
 Route::prefix('dashboardadmin')->name('dashboardadmin.')->group(function () {
-    Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboardadmin.index');
+    Route::get('/', [DashboardAdminController::class, 'index'])->name('index');
     
     // Services Routes
     Route::prefix('services')->name('services.')->group(function () {
